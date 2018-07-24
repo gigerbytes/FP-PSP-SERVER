@@ -378,5 +378,15 @@
     <changeSet id="2018-07-09T10:30" author="rvillalba">
         <sqlFile path="sql/2018-07-09T10:30.sql" relativeToChangelogFile="true" />
     </changeSet>
+  
+    <!-- Add required column 'locale' to TermCondPol with default value 'en_US' -->
+    <changeSet id="2018-07-18T11:00" author="gcarballude">
+        <sqlFile path="sql/2018-07-18T11:00.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <!-- Add support for additional_properties in Person table-->
+    <changeSet id="2018-07-23T11:30" author="cbenitez">
+        <sqlFile path="sql/2018-07-23T11:30.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 
 </databaseChangeLog>

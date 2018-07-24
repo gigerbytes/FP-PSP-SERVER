@@ -2,8 +2,10 @@ package py.org.fundacionparaguaya.pspserver.util;
 
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
+import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTOBuilder;
+import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
@@ -20,13 +22,21 @@ public class TestMockFactory {
     public static final Long SURVEY_ID = 333L;
     public static final Long USER_ID = 444L;
 
-    private static PersonEntity MOCK_PERSON = aPerson();
+    private static PersonEntity mockPerson = aPerson();
+    private static UserEntity mockUserEntity = new UserEntity();
+    private static OrganizationEntity mockOrg = new OrganizationEntity();
+
+    private TestMockFactory() {
+    }
 
     public static FamilyEntity aFamily() {
         FamilyEntity familyEntity = new FamilyEntity();
         familyEntity.setFamilyId(FAMILY_ID);
+        familyEntity.setCode("123L");
+        familyEntity.setPerson(mockPerson);
+        familyEntity.setUser(mockUserEntity);
+        familyEntity.setOrganization(mockOrg);
         return familyEntity;
-
     }
 
     public static PersonEntity aPerson() {
@@ -41,8 +51,8 @@ public class TestMockFactory {
     }
 
     public static Snapshot aSnapshot() {
-        return new Snapshot().snapshotEconomicId(ECONOMIC_ID).surveyId(SURVEY_ID)
-                .userId(USER_ID).personalSurveyData(MOCK_PERSON.asSurveyData());
+        return new Snapshot().snapshotEconomicId(ECONOMIC_ID).surveyId(SURVEY_ID).userId(USER_ID)
+                .personalSurveyData(mockPerson.asSurveyData());
     }
 
     public static UserDetailsDTO aUser() {
@@ -51,7 +61,7 @@ public class TestMockFactory {
 
     public static NewSnapshot aNewSnapshot() {
         NewSnapshot s = new NewSnapshot();
-        s.setEconomicSurveyData(MOCK_PERSON.asSurveyData());
+        s.setEconomicSurveyData(mockPerson.asSurveyData());
         return s;
     }
 }

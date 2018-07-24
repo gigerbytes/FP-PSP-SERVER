@@ -1,6 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.surveys.dtos;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -32,6 +33,7 @@ import java.util.function.Function;
  */
 @ApiModel(description = "Holds info representing the definition of the field")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Property implements Serializable {
 
     @JsonProperty("type")
@@ -39,6 +41,9 @@ public class Property implements Serializable {
 
     @JsonProperty("title")
     private PropertyTitle title = null;
+
+    @JsonProperty(value = "shortName", required = false)
+    private PropertyTitle shortName = null;
 
     @JsonProperty("description")
     private PropertyTitle description = null;
@@ -102,6 +107,11 @@ public class Property implements Serializable {
         return this;
     }
 
+    public Property shortName(PropertyTitle shortName) {
+        this.shortName = shortName;
+        return this;
+    }
+
     public Property description(PropertyTitle description) {
         this.description = description;
         return this;
@@ -120,6 +130,22 @@ public class Property implements Serializable {
 
     public void setTitle(PropertyTitle title) {
         this.title = title;
+    }
+
+    /**
+     * The short name of this field
+     * This field is used for Reports headers and filter names
+     *
+     * @return shortName
+     **/
+    @JsonProperty("shortName")
+    @ApiModelProperty(value = "The short name of this field")
+    public PropertyTitle getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(PropertyTitle shortName) {
+        this.shortName = shortName;
     }
 
     /**

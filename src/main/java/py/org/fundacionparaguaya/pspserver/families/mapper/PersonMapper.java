@@ -71,6 +71,7 @@ public class PersonMapper implements BaseMapper<PersonEntity, PersonDTO> {
                     .findByAlfa2Code(personalInformation.getAsString("countryOfBirth"));
             personalInformation.put("countryOfBirth", country.orElse(null));
         }
+        personalInformation.put("additionalProperties", new SurveyData());
 
         PersonEntity pe = new PersonEntity().staticProperties(personalInformation);
 

@@ -3,6 +3,7 @@ package py.org.fundacionparaguaya.pspserver.surveys.mapper;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Component;
 import py.org.fundacionparaguaya.pspserver.common.mapper.BaseMapper;
+import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
 import py.org.fundacionparaguaya.pspserver.security.entities.TermCondPolEntity;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 import py.org.fundacionparaguaya.pspserver.security.repositories.TermCondPolRepository;
@@ -52,17 +53,18 @@ public class SnapshotEconomicMapper implements
 
     @Override
     public Snapshot entityToDto(SnapshotEconomicEntity entity) {
-        return new Snapshot().snapshotEconomicId(entity.getId())
-            .surveyId(entity.getSurveyDefinition().getId())
-            .createdAt(entity.getCreatedAtAsISOString())
-            .economicSurveyData(getAllProperties(entity,
-                propertyAttributeSupport
-                .getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)))
+        return new Snapshot()
+                .snapshotEconomicId(entity.getId())
+                .surveyId(entity.getSurveyDefinition().getId())
+                .createdAt(entity.getCreatedAtAsISOString())
+                .economicSurveyData(getAllProperties(entity,
+                        propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)))
                 .indicatorSurveyData(getAllProperties(
-                    Optional.ofNullable(entity.getSnapshotIndicator())
-                    .orElse(new SnapshotIndicatorEntity()),
-                    propertyAttributeSupport.
-                    getPropertyAttributesByGroup(StopLightGroup.INDICATOR)));
+                        Optional.ofNullable(entity.getSnapshotIndicator()).orElse(new SnapshotIndicatorEntity()),
+                        propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)))
+                .personalSurveyData(getAllProperties(
+                        Optional.ofNullable(entity.getFamily().getPerson()).orElse(new PersonEntity()),
+                        propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.PERSONAL)));
     }
 
     @Override
