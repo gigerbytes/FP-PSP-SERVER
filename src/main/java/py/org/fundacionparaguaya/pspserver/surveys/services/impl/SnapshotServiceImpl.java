@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byApplication;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byLoggedUser;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byOrganization;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byUser;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.createdAtLess2Months;
@@ -271,9 +272,10 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     @Override
     public List<Snapshot> getSnapshotsByFilters(Long surveyId, Long applicationId, Long organizationId,
-                                                Long userId, Long familyId) {
+                                                Long userId, Long familyId, UserDetailsDTO user) {
         return economicRepository
-                .findAll(where(forSurvey(surveyId))
+                .findAll(where(byLoggedUser(user))
+                        .and(forSurvey(surveyId))
                         .and(byApplication(applicationId))
                         .and(byOrganization(organizationId))
                         .and(byUser(userId))

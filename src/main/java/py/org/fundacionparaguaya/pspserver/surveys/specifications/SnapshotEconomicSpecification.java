@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,7 +16,10 @@ import javax.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity_;
+import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
+import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity_;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity_;
@@ -30,8 +34,20 @@ public class SnapshotEconomicSpecification {
 
     private static final long MONTH_AGO = 12;
 
-    private SnapshotEconomicSpecification() {
-        // not called
+    private SnapshotEconomicSpecification() {}
+
+    public static Specification<SnapshotEconomicEntity> byLoggedUser(UserDetailsDTO user) {
+        return (root, query, builder) ->
+                builder.and(
+                        byApplication(Optional.ofNullable(user)
+                                .map(UserDetailsDTO::getApplication).map(ApplicationDTO::getId)
+                                .orElse(null))
+                                .toPredicate(root, query, builder),
+                        byOrganization(Optional.ofNullable(user)
+                                .map(UserDetailsDTO::getOrganization)
+                                .map(OrganizationDTO::getId)
+                                .orElse(null))
+                                .toPredicate(root, query, builder));
     }
 
     public static Specification<SnapshotEconomicEntity> byApplication(Long applicationId) {
@@ -54,7 +70,7 @@ public class SnapshotEconomicSpecification {
     public static Specification<SnapshotEconomicEntity> byOrganization(Long organizationId) {
         return (Root<SnapshotEconomicEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
             if (organizationId == null) {
-                return null;
+                return builder.conjunction();
             }
             Expression<Long> organizationIdExpression =
                     root.join(SnapshotEconomicEntity_.getFamily())

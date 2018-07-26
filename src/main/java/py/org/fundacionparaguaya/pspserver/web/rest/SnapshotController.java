@@ -62,10 +62,10 @@ public class SnapshotController {
             @RequestParam(value = "family_id", required = false) Long familyId,
             @RequestParam(value = "application_id", required = false) Long applicationId,
             @RequestParam(value = "organization_id", required = false) Long organizationId,
-            @RequestParam(value = "user_id", required = false) Long userId
-    ) {
+            @RequestParam(value = "user_id", required = false) Long userId,
+            @AuthenticationPrincipal UserDetailsDTO user) {
         List<Snapshot> snapshots =
-                snapshotService.getSnapshotsByFilters(surveyId, applicationId, organizationId, userId, familyId);
+                snapshotService.getSnapshotsByFilters(surveyId, applicationId, organizationId, userId, familyId, user);
         return ResponseEntity.ok(snapshots);
     }
 
