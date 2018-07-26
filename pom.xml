@@ -294,31 +294,15 @@
 				<configuration>
 					<gitFlowConfig>
 						<versionTagPrefix>v</versionTagPrefix>
+						
+						<!-- Uncomment this out when new workflow is used
+						<developmentBranch>master</developmentBranch>
+						<productionBranch>master</productionBranch> -->
 					</gitFlowConfig>
 				</configuration>
        		</plugin>
 
-			<!-- Maven release -->
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.4.2</version>
-				<configuration>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Keep changes in the local repo, push will be done afterwards -->
-					<pushChanges>false</pushChanges>
-					<localCheckout>true</localCheckout>
-					<!-- Use a better name for the tag -->
-					<tagNameFormat>v@{project.version}</tagNameFormat>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.scm</groupId>
-						<artifactId>maven-scm-provider-gitexe</artifactId>
-						<version>1.9</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-
+			
 			
 		</plugins>
 
