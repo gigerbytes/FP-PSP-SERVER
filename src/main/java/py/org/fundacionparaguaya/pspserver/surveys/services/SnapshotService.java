@@ -24,7 +24,7 @@ public interface SnapshotService {
     List<SurveyData> findBySurveyId(Long surveyId);
 
     List<Snapshot> getSnapshotsByFilters(Long surveyId, Long applicationId, Long organizationId,
-                                         Long userId, Long familyId);
+                                         Long userId, Long familyId, UserDetailsDTO user);
 
     SnapshotIndicators getSnapshotIndicators(Long snapshotId);
 
