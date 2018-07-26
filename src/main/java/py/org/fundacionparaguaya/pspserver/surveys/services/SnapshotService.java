@@ -19,9 +19,12 @@ public interface SnapshotService {
     Snapshot addSurveySnapshot(UserDetailsDTO userDetails,
                                NewSnapshot snapshot);
 
-    List<Snapshot> find(Long surveyId, Long familiyId);
+    List<Snapshot> find(Long surveyId, Long familyId);
 
     List<SurveyData> findBySurveyId(Long surveyId);
+
+    List<Snapshot> getSnapshotsByFilters(Long surveyId, Long applicationId, Long organizationId,
+                                         Long userId, Long familyId);
 
     SnapshotIndicators getSnapshotIndicators(Long snapshotId);
 

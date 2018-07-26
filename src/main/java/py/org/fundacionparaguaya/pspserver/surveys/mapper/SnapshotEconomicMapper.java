@@ -4,8 +4,10 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.stereotype.Component;
 import py.org.fundacionparaguaya.pspserver.common.mapper.BaseMapper;
 import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
+import py.org.fundacionparaguaya.pspserver.families.mapper.FamilyMapper;
 import py.org.fundacionparaguaya.pspserver.security.entities.TermCondPolEntity;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
+import py.org.fundacionparaguaya.pspserver.security.mapper.UserMapper;
 import py.org.fundacionparaguaya.pspserver.security.repositories.TermCondPolRepository;
 import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 
@@ -35,14 +37,20 @@ public class SnapshotEconomicMapper implements
     private final PropertyAttributeSupport propertyAttributeSupport;
     private UserRepository userRepository;
     private TermCondPolRepository termCondPolRepository;
+    private final UserMapper userMapper;
+    private final FamilyMapper familyMapper;
 
     public SnapshotEconomicMapper(
         PropertyAttributeSupport propertyAttributeSupport,
         UserRepository userRepository,
-        TermCondPolRepository termCondPolRepository) {
+        TermCondPolRepository termCondPolRepository,
+        UserMapper userMapper,
+        FamilyMapper familyMapper) {
         this.propertyAttributeSupport = propertyAttributeSupport;
         this.userRepository = userRepository;
         this.termCondPolRepository = termCondPolRepository;
+        this.userMapper = userMapper;
+        this.familyMapper = familyMapper;
     }
 
     @Override
@@ -64,7 +72,9 @@ public class SnapshotEconomicMapper implements
                         propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)))
                 .personalSurveyData(getAllProperties(
                         Optional.ofNullable(entity.getFamily().getPerson()).orElse(new PersonEntity()),
-                        propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.PERSONAL)));
+                        propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.PERSONAL)))
+                .user(userMapper.entityToDto(entity.getUser()))
+                .family(familyMapper.entityToDto(entity.getFamily()));
     }
 
     @Override

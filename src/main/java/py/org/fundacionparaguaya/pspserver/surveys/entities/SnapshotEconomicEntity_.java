@@ -6,6 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
+import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 
 /**
  * @author mgonzalez
@@ -17,6 +18,7 @@ public class SnapshotEconomicEntity_ {
     private static volatile SingularAttribute<SnapshotEconomicEntity, LocalDateTime> createdAt;
     private static volatile SingularAttribute<SnapshotEconomicEntity, FamilyEntity> family;
     private static volatile SingularAttribute<SnapshotEconomicEntity, SnapshotIndicatorEntity> snapshotIndicator;
+    private static volatile SingularAttribute<SnapshotEconomicEntity, UserEntity> user;
 
     private SnapshotEconomicEntity_() {
     }
@@ -33,4 +35,7 @@ public class SnapshotEconomicEntity_ {
         return snapshotIndicator;
     }
 
+    public static SingularAttribute<SnapshotEconomicEntity, UserEntity> getUser() {
+        return user;
+    }
 }

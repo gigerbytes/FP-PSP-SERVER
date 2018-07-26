@@ -45,12 +45,27 @@ public class SnapshotController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @io.swagger.annotations.ApiOperation(value = "Retrieves all snapshots for a  survery", notes = "A `GET` request with a survey parameter will return a list of snapshots for the that survey.", response = List.class, tags = {})
-    @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 200, message = "List of available surveys", response = Snapshot.class, responseContainer = "List") })
-    public ResponseEntity getSnapshots(@RequestParam("survey_id") Long surveyId,
-            @RequestParam(value = "family_id", required = false) Long familiyId) {
-        List<Snapshot> snapshots = snapshotService.find(surveyId, familiyId);
+    @io.swagger.annotations.ApiOperation(
+            value = "Retrieves snapshots filtered by several parameters",
+            notes = "A `GET` request with filters will return a list of snapshots that comply with the parameters. "
+                    + "Filter are optional and can be combined",
+            response = List.class,
+            tags = {})
+    @io.swagger.annotations.ApiResponses(
+            value = {@io.swagger.annotations.ApiResponse(
+                    code = 200,
+                    message = "List of available surveys",
+                    response = Snapshot.class,
+                    responseContainer = "List")})
+    public ResponseEntity getSnapshots(
+            @RequestParam(value = "survey_id", required = false) Long surveyId,
+            @RequestParam(value = "family_id", required = false) Long familyId,
+            @RequestParam(value = "application_id", required = false) Long applicationId,
+            @RequestParam(value = "organization_id", required = false) Long organizationId,
+            @RequestParam(value = "user_id", required = false) Long userId
+    ) {
+        List<Snapshot> snapshots =
+                snapshotService.getSnapshotsByFilters(surveyId, applicationId, organizationId, userId, familyId);
         return ResponseEntity.ok(snapshots);
     }
 

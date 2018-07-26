@@ -389,4 +389,9 @@
         <sqlFile path="sql/2018-07-23T11:30.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <!-- Added NOT NULL user_id for Snapshot Economics -->
+    <changeSet id="2018-07-24T11:00" author="gcarballude">
+        <sqlFile path="sql/2018-07-24T11:00.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
