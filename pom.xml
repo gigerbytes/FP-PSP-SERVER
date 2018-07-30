@@ -294,9 +294,15 @@
 				<configuration>
 					<gitFlowConfig>
 						<versionTagPrefix>v</versionTagPrefix>
+						
+						<!-- Uncomment this out when new workflow is used
+						<developmentBranch>master</developmentBranch>
+						<productionBranch>master</productionBranch> -->
 					</gitFlowConfig>
 				</configuration>
        		</plugin>
+
+			
 			
 		</plugins>
 

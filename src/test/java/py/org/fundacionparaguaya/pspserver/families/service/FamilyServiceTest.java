@@ -42,119 +42,104 @@ import static py.org.fundacionparaguaya.pspserver.util.TestMockFactory.aUser;
 @RunWith(MockitoJUnitRunner.class)
 public class FamilyServiceTest {
 
+        private static final Long FAMILY_ID = 111L;
 
-    private static final Long FAMILY_ID = 111L;
+        private FamilyService familyService;
 
-    private FamilyService familyService;
+        @Mock
+        private FamilyRepository familyRepository;
 
-    @Mock
-    private FamilyRepository familyRepository;
+        @Mock
+        private FamilyMapper familyMapper;
 
-    @Mock
-    private FamilyMapper familyMapper;
+        @Mock
+        private UserRepository userRepo;
 
-    @Mock
-    private UserRepository userRepo;
+        @Mock
+        private ApplicationProperties applicationProperties;
 
-    @Mock
-    private ApplicationProperties applicationProperties;
+        @Mock
+        private ImageUploadService imageUploadService;
 
-    @Mock
-    private ImageUploadService imageUploadService;
+        @Mock
+        private ActivityFeedManager activityFeedManager;
 
-    @Mock
-    private ActivityFeedManager activityFeedManager;
+        @Mock
+        private I18n i18n;
 
-    @Mock
-    private I18n i18n;
+        @Mock
+        private FamilyLocationService familyLocationService;
 
-    @Mock
-    private FamilyLocationService familyLocationService;
+        @Mock
+        private FamilyOrganizationService familyOrganizationService;
 
-    @Mock
-    private FamilyOrganizationService familyOrganizationService;
+        private final FamilyEntity mockFamilyEntity = aFamily();
 
-    private final FamilyEntity mockFamilyEntity = aFamily();
+        private PersonEntity personMock = aPerson();
 
-    private PersonEntity personMock = aPerson();
+        private NewSnapshot snapshotMock = aNewSnapshot();
 
-    private NewSnapshot snapshotMock = aNewSnapshot();
+        private UserDetailsDTO userMock = aUser();
 
-    private UserDetailsDTO userMock = aUser();
+        private final FamilyDTO mockFamilyDto = new FamilyDTO();
 
+        @Before
+        public void setUp() {
+                this.familyService = new FamilyServiceImpl(familyRepository, familyMapper, userRepo, i18n,
+                                applicationProperties, imageUploadService, activityFeedManager, familyLocationService,
+                                familyOrganizationService);
+        }
 
-    private final FamilyDTO mockFamilyDto = new FamilyDTO();
+        @Test
+        public void updateFamilyByIdShouldChangeLastModified() {
+                when(familyRepository.findOne(FAMILY_ID)).thenReturn(mockFamilyEntity);
+                when(familyRepository.save(mockFamilyEntity)).thenReturn(mockFamilyEntity);
+                when(familyMapper.entityToDto(mockFamilyEntity)).thenReturn(mockFamilyDto);
 
-    @Before
-    public void setUp() {
-        this.familyService = new FamilyServiceImpl(familyRepository,
-                familyMapper,
-                userRepo,
-                i18n,
-                applicationProperties,
-                imageUploadService,
-                activityFeedManager,
-                familyLocationService,
-                familyOrganizationService);
-    }
+                FamilyDTO familyDTO = familyService.updateFamily(FAMILY_ID);
 
+                assertThat(familyDTO).isEqualTo(mockFamilyDto);
+                verify(familyRepository).save(mockFamilyEntity);
+        }
 
-    @Test
-    public void updateFamilyByIdShouldChangeLastModified() {
-        when(familyRepository.findOne(FAMILY_ID)).thenReturn(mockFamilyEntity);
-        when(familyRepository.save(mockFamilyEntity)).thenReturn(mockFamilyEntity);
-        when(familyMapper.entityToDto(mockFamilyEntity)).thenReturn(mockFamilyDto);
+        @Test
+        public void getOrCreateFamilyFromSnapshotShouldCreateFamilyWithCode() {
 
-        FamilyDTO familyDTO = familyService.updateFamily(FAMILY_ID);
+                when(familyRepository.findByCode(anyString())).thenReturn(Optional.empty());
 
-        assertThat(familyDTO).isEqualTo(mockFamilyDto);
-        verify(familyRepository).save(mockFamilyEntity);
-    }
+                when(familyOrganizationService.getFamilyOrganization(userMock, snapshotMock))
+                                .thenReturn(FamilyOrganizationDTO.empty());
+                when(familyLocationService.getFamilyLocationFromSnapshot(snapshotMock))
+                                .thenReturn(FamilyLocationDTO.empty());
+                when(familyRepository.save(any(FamilyEntity.class))).thenReturn(mockFamilyEntity);
 
+                FamilyEntity createdFamilyEntity = familyService.getOrCreateFamilyFromSnapshot(userMock, snapshotMock,
+                                personMock);
 
-    @Test
-    public void getOrCreateFamilyFromSnapshotShouldCreateFamilyWithCode() {
+                assertThat(createdFamilyEntity).isEqualTo(mockFamilyEntity);
+                assertThat(createdFamilyEntity.getCode()).isNotEmpty();
+                assertThat(createdFamilyEntity.getOrganization()).isNotNull();
+                assertThat(createdFamilyEntity.getPerson()).isNotNull();
+                assertThat(createdFamilyEntity.getUser()).isNotNull();
 
-        when(familyRepository.findByCode(anyString()))
-                .thenReturn(Optional.empty());
+                verify(familyRepository).save(any(FamilyEntity.class));
 
-        when(familyOrganizationService.getFamilyOrganization(userMock, snapshotMock))
-                .thenReturn(FamilyOrganizationDTO.empty());
-        when(familyLocationService.getFamilyLocationFromSnapshot(snapshotMock))
-                .thenReturn(FamilyLocationDTO.empty());
-        when(familyRepository.save(any(FamilyEntity.class)))
-                .thenReturn(mockFamilyEntity);
+        }
 
-        FamilyEntity createdFamilyEntity = familyService.getOrCreateFamilyFromSnapshot(userMock,
-                snapshotMock,
-                personMock);
+        @Test
+        public void getOrCreateFamilyFromSnapshotShouldReturnExistingFamilyWithCode() {
 
-        assertThat(createdFamilyEntity).isEqualTo(mockFamilyEntity);
-        assertThat(createdFamilyEntity.getCode()).isNotEmpty();
-        assertThat(createdFamilyEntity.getOrganization()).isNotNull();
-        assertThat(createdFamilyEntity.getPerson()).isNotNull();
-        assertThat(createdFamilyEntity.getUser()).isNotNull();
+                when(familyRepository.findByCode(anyString())).thenReturn(Optional.of(mockFamilyEntity));
 
-        verify(familyRepository).save(any(FamilyEntity.class));
+                FamilyEntity createdFamilyEntity = familyService.getOrCreateFamilyFromSnapshot(userMock, snapshotMock,
+                                personMock);
 
-    }
+                assertThat(createdFamilyEntity).isEqualTo(mockFamilyEntity);
+                assertThat(createdFamilyEntity.getCode()).isNotEmpty();
+                assertThat(createdFamilyEntity.getOrganization()).isNotNull();
+                assertThat(createdFamilyEntity.getPerson()).isNotNull();
+                assertThat(createdFamilyEntity.getUser()).isNotNull();
 
-    @Test
-    public void getOrCreateFamilyFromSnapshotShouldReturnExistingFamilyWithCode() {
-
-        when(familyRepository.findByCode(anyString())).thenReturn(Optional.of(mockFamilyEntity));
-
-        FamilyEntity createdFamilyEntity = familyService.getOrCreateFamilyFromSnapshot(userMock,
-                snapshotMock,
-                personMock);
-
-        assertThat(createdFamilyEntity).isEqualTo(mockFamilyEntity);
-        assertThat(createdFamilyEntity.getCode()).isNotEmpty();
-        assertThat(createdFamilyEntity.getOrganization()).isNotNull();
-        assertThat(createdFamilyEntity.getPerson()).isNotNull();
-        assertThat(createdFamilyEntity.getUser()).isNotNull();
-
-    }
-
+        }
 
 }

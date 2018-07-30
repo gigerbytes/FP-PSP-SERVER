@@ -26,7 +26,8 @@ public class TestMockFactory {
     private static UserEntity mockUserEntity = new UserEntity();
     private static OrganizationEntity mockOrg = new OrganizationEntity();
 
-    private TestMockFactory() {}
+    private TestMockFactory() {
+    }
 
     public static FamilyEntity aFamily() {
         FamilyEntity familyEntity = new FamilyEntity();
@@ -50,8 +51,8 @@ public class TestMockFactory {
     }
 
     public static Snapshot aSnapshot() {
-        return new Snapshot().snapshotEconomicId(ECONOMIC_ID).surveyId(SURVEY_ID)
-                .userId(USER_ID).personalSurveyData(mockPerson.asSurveyData());
+        return new Snapshot().snapshotEconomicId(ECONOMIC_ID).surveyId(SURVEY_ID).userId(USER_ID)
+                .personalSurveyData(mockPerson.asSurveyData());
     }
 
     public static UserDetailsDTO aUser() {

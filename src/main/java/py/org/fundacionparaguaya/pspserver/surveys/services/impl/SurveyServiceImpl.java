@@ -291,12 +291,12 @@ public class SurveyServiceImpl implements SurveyService {
                                         .and(byOrganization(organizationId))
                                         .and(lastModifiedGt(lastModifiedGt)))
                                 .stream().map(e -> e.getSurvey())
+                                .distinct()
                                 .collect(Collectors.toList()));
 
         List<SurveyDefinition> toRet = new ArrayList<>();
 
-        for (SurveyDefinition survey : lista.stream().distinct()
-                .collect(Collectors.toList())) {
+        for (SurveyDefinition survey : lista.stream().collect(Collectors.toList())) {
             survey.setOrganizations(organizationMapper.entityListToDtoList(
                     surveyOrganizationRepo.findBySurveyId(survey.getId())
                             .stream().map(o -> o.getOrganization())

@@ -5,11 +5,14 @@ import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
 import py.org.fundacionparaguaya.pspserver.common.entities.BaseEntity;
 import py.org.fundacionparaguaya.pspserver.families.constants.Gender;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.StoreableSnapshot;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType;
 import py.org.fundacionparaguaya.pspserver.system.entities.CityEntity;
 import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
 
@@ -30,7 +33,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "person", schema = "ps_families")
-public class PersonEntity extends BaseEntity {
+public class PersonEntity extends BaseEntity implements StoreableSnapshot {
 
     private static final long serialVersionUID = 1762584396723284335L;
 
@@ -100,6 +103,13 @@ public class PersonEntity extends BaseEntity {
 
     @Column(name = "post_code")
     private String postCode;
+
+    @Column(name = "additional_properties")
+    @Type(type = "py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType",
+            parameters = {
+            @Parameter(name = SecondJSONBUserType.CLASS,
+                    value = "py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData")})
+    private SurveyData additionalProperties;
 
     public FamilyEntity getFamily() {
         return family;
@@ -227,6 +237,15 @@ public class PersonEntity extends BaseEntity {
 
     public void setPostCode(String postCode) {
         this.postCode = postCode;
+    }
+
+    @Override
+    public SurveyData getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    public void setAdditionalProperties(SurveyData additionalProperties) {
+        this.additionalProperties = additionalProperties;
     }
 
     @Override
