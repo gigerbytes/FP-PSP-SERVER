@@ -24,17 +24,9 @@ public interface FamilyService {
 
     FamilyDTO getFamilyById(Long familyId);
 
-    List<FamilyDTO> getAllFamilies();
-
     void deleteFamily(Long familyId);
 
-    String generateFamilyCode(PersonEntity person);
-
-    FamilyEntity createOrReturnFamilyFromSnapshot(UserDetailsDTO details,
-            NewSnapshot snapshot, String code, PersonEntity person);
-
-    List<FamilyDTO> listFamilies(FamilyFilterDTO filter,
-            UserDetailsDTO userDetails);
+    List<FamilyDTO> listFamilies(FamilyFilterDTO filter, UserDetailsDTO userDetails);
 
     Long countFamiliesByDetails(UserDetailsDTO userDetails);
 
@@ -42,8 +34,7 @@ public interface FamilyService {
 
     List<FamilyEntity> findByOrganizationId(Long organizationId);
 
-    FamilyEntity getOrCreateFamilyFromSnapshot(UserDetailsDTO details,
-            NewSnapshot snapshot, PersonEntity personEntity);
+    FamilyEntity getOrCreateFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot, PersonEntity personEntity);
 
     List<FamilyDTO> listDistinctFamiliesByUser(UserDetailsDTO details, String name);
 

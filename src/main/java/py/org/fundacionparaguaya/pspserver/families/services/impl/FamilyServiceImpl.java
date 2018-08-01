@@ -14,33 +14,29 @@ import py.org.fundacionparaguaya.pspserver.config.ApplicationProperties;
 import py.org.fundacionparaguaya.pspserver.config.I18n;
 import py.org.fundacionparaguaya.pspserver.families.dtos.FamilyDTO;
 import py.org.fundacionparaguaya.pspserver.families.dtos.FamilyFilterDTO;
+import py.org.fundacionparaguaya.pspserver.families.dtos.FamilyLocationDTO;
+import py.org.fundacionparaguaya.pspserver.families.dtos.FamilyOrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
 import py.org.fundacionparaguaya.pspserver.families.mapper.FamilyMapper;
 import py.org.fundacionparaguaya.pspserver.families.repositories.FamilyRepository;
+import py.org.fundacionparaguaya.pspserver.families.services.FamilyLocationService;
+import py.org.fundacionparaguaya.pspserver.families.services.FamilyOrganizationService;
 import py.org.fundacionparaguaya.pspserver.families.services.FamilyService;
+import py.org.fundacionparaguaya.pspserver.families.utils.FamilyHelper;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
-import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
-import py.org.fundacionparaguaya.pspserver.network.mapper.ApplicationMapper;
-import py.org.fundacionparaguaya.pspserver.network.mapper.OrganizationMapper;
-import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepository;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageParser;
-import py.org.fundacionparaguaya.pspserver.system.entities.CityEntity;
-import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
-import py.org.fundacionparaguaya.pspserver.system.repositories.CityRepository;
-import py.org.fundacionparaguaya.pspserver.system.repositories.CountryRepository;
 import py.org.fundacionparaguaya.pspserver.system.services.ActivityFeedManager;
 import py.org.fundacionparaguaya.pspserver.system.services.ImageUploadService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,99 +48,78 @@ import static py.org.fundacionparaguaya.pspserver.families.specifications.Family
 @Service
 public class FamilyServiceImpl implements FamilyService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FamilyServiceImpl.class);
+
     private final ApplicationProperties applicationProperties;
 
     private final ImageUploadService imageUploadService;
 
     private final I18n i18n;
 
-    private static final Logger LOG = LoggerFactory.getLogger(FamilyServiceImpl.class);
-
     private final FamilyMapper familyMapper;
 
     private final FamilyRepository familyRepository;
-
-    private final CountryRepository countryRepository;
-
-    private final CityRepository cityRepository;
-
-    private final OrganizationRepository organizationRepository;
-
-    private final ApplicationMapper applicationMapper;
-
-    private final OrganizationMapper organizationMapper;
 
     private final UserRepository userRepo;
 
     private final ActivityFeedManager activityFeedManager;
 
-    private static final String SPACE = " ";
+    private final FamilyLocationService familyLocationService;
+
+    private final FamilyOrganizationService familyOrganizationService;
 
     @Autowired
-    public FamilyServiceImpl(FamilyRepository familyRepository,
-            FamilyMapper familyMapper, CountryRepository countryRepository,
-            CityRepository cityRepository,
-            OrganizationRepository organizationRepository,
-            ApplicationMapper applicationMapper,
-            OrganizationMapper organizationMapper,
-            UserRepository userRepo, I18n i18n, ApplicationProperties applicationProperties,
-            ImageUploadService imageUploadService,
-            ActivityFeedManager activityFeedManager) {
+    public FamilyServiceImpl(FamilyRepository familyRepository, FamilyMapper familyMapper, UserRepository userRepo,
+            I18n i18n, ApplicationProperties applicationProperties, ImageUploadService imageUploadService,
+            ActivityFeedManager activityFeedManager, FamilyLocationService familyLocationService,
+            FamilyOrganizationService familyOrganizationService) {
 
         this.familyRepository = familyRepository;
         this.familyMapper = familyMapper;
-        this.countryRepository = countryRepository;
-        this.cityRepository = cityRepository;
-        this.organizationRepository = organizationRepository;
-        this.applicationMapper = applicationMapper;
-        this.organizationMapper = organizationMapper;
         this.userRepo = userRepo;
         this.i18n = i18n;
-        this.applicationProperties=applicationProperties;
+        this.applicationProperties = applicationProperties;
         this.imageUploadService = imageUploadService;
         this.activityFeedManager = activityFeedManager;
+        this.familyLocationService = familyLocationService;
+        this.familyOrganizationService = familyOrganizationService;
     }
 
+    // FIXME
+    // Remove this method
     @Override
     public FamilyDTO updateFamily(Long familyId, FamilyDTO familyDTO) {
         checkArgument(familyId > 0, i18n.translate("argument.nonNegative", familyId));
 
-        return Optional.ofNullable(familyRepository.findOne(familyId))
-                .map(family -> {
-                    // Update family assigned survey user
-                    UserEntity user = userRepo.findById(familyDTO.getUser().getUserId());
-                    family.setUser(user);
-                    return familyRepository.save(family);
-                })
-                .map(familyMapper::entityToDto)
+        return Optional.ofNullable(familyRepository.findOne(familyId)).map(family -> {
+            // Update family assigned survey user
+            UserEntity user = userRepo.findById(familyDTO.getUser().getUserId());
+            family.setUser(user);
+            return familyRepository.save(family);
+        }).map(familyMapper::entityToDto)
                 .orElseThrow(() -> new UnknownResourceException(i18n.translate("family.notExist")));
     }
 
     @Override
     public FamilyDTO updateFamily(Long familyId) {
 
-        checkArgument(familyId > 0,
-                i18n.translate("argument.nonNegative", familyId)
-        );
+        checkArgument(familyId > 0, i18n.translate("argument.nonNegative", familyId));
 
         LOG.debug("Updating family with id: {}", familyId);
 
-        return Optional.ofNullable(familyRepository.findOne(familyId))
-                .map(family -> {
-                    family.setLastModifiedAt(LocalDateTime.now());
-                    return familyRepository.save(family);
-                })
-                .map(familyMapper::entityToDto)
-                .orElseThrow(() ->
-                        new UnknownResourceException(i18n.translate("family.notExist")));
+        return Optional.ofNullable(familyRepository.findOne(familyId)).map(family -> {
+            family.setLastModifiedAt(LocalDateTime.now());
+            FamilyEntity savedFamily = familyRepository.save(family);
+            return familyMapper.entityToDto(savedFamily);
+        }).orElseThrow(() -> new UnknownResourceException(i18n.translate("family.notExist")));
     }
 
     @Override
     public String imageUpload(Long idFamily, MultipartFile multipartFile) throws IOException {
 
-        FamilyEntity familyEntity= familyRepository.findOne(idFamily);
+        FamilyEntity familyEntity = familyRepository.findOne(idFamily);
 
-        if (familyEntity==null){
+        if (familyEntity == null) {
             throw new UnknownResourceException(i18n.translate("family.notExist"));
         }
 
@@ -152,17 +127,16 @@ public class FamilyServiceImpl implements FamilyService {
 
         ImageDTO image = ImageParser.parse(multipartFile, familiesImageDirectory);
 
-        //control if image already exists: if so, deletes the old image
-        if (familyEntity.getImageURL()!= null){
+        // control if image already exists: if so, deletes the old image
+        if (familyEntity.getImageURL() != null) {
             imageUploadService.deleteImage(familyEntity.getImageURL(), familiesImageDirectory);
         }
 
-        //uploads the image and obtains its URL
+        // uploads the image and obtains its URL
         String url = imageUploadService.uploadImage(image);
         familyEntity.setImageURL(url);
 
-        LOG.debug("Updating family {} with image {}", familyEntity.getFamilyId(),
-                familyEntity.getImageURL());
+        LOG.debug("Updating family {} with image {}", familyEntity.getFamilyId(), familyEntity.getImageURL());
 
         familyRepository.save(familyEntity);
         return url;
@@ -174,6 +148,9 @@ public class FamilyServiceImpl implements FamilyService {
         return this.updateFamily(familyId);
     }
 
+    // TODO Remove this method
+    // when is verified that is no longer
+    // used
     @Override
     public FamilyDTO addFamily(FamilyDTO familyDTO) {
         FamilyEntity family = new FamilyEntity();
@@ -185,66 +162,37 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public FamilyDTO getFamilyById(Long familyId) {
 
-        checkArgument(familyId > 0,
-                i18n.translate("argument.nonNegative", familyId));
+        checkArgument(familyId > 0, i18n.translate("argument.nonNegative", familyId));
 
-        return Optional.ofNullable(familyRepository.findOne(familyId))
-                .map(familyMapper::entityToDto)
-                .orElseThrow(() -> new UnknownResourceException(
-                        i18n
-                        .translate("family.notExist")));
-    }
-
-    @Override
-    public List<FamilyDTO> getAllFamilies() {
-        List<FamilyEntity> families = familyRepository.findAll();
-        return familyMapper.entityListToDtoList(families);
+        return Optional.ofNullable(familyRepository.findOne(familyId)).map(familyMapper::entityToDto)
+                .orElseThrow(() -> new UnknownResourceException(i18n.translate("family.notExist")));
     }
 
     @Override
     public void deleteFamily(Long familyId) {
 
-        checkArgument(familyId > 0,
-                i18n.translate("argument.nonNegative", familyId));
+        checkArgument(familyId > 0, i18n.translate("argument.nonNegative", familyId));
 
-        Optional.ofNullable(familyRepository.findOne(familyId))
-                .ifPresent(family -> {
-                    family.setActive(false);
-                    familyRepository.save(family);
-                    LOG.debug("Deleted Family: {}", family);
+        Optional.ofNullable(familyRepository.findOne(familyId)).ifPresent(family -> {
+            family.setActive(false);
+            familyRepository.save(family);
+            LOG.debug("Deleted Family: {}", family);
 
-                });
+        });
     }
 
     @Override
-    public String generateFamilyCode(PersonEntity person) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        String birthdate = person.getBirthdate().format(formatter);
-
-        String code = person.getCountryOfBirth().getAlfa2Code().concat(".")
-                .concat(person.getFirstName().substring(0, 1).toUpperCase())
-                .concat(person.getLastName().substring(0, 1).toUpperCase())
-                .concat(".").concat(birthdate);
-
-        return code;
-    }
-
-    @Override
-    public List<FamilyDTO> listFamilies(FamilyFilterDTO filter,
-            UserDetailsDTO userDetails) {
+    public List<FamilyDTO> listFamilies(FamilyFilterDTO filter, UserDetailsDTO userDetails) {
         FamilyFilterDTO newFilter = buildFilterFromFilterAndUser(filter, userDetails);
 
-        List<FamilyEntity> entityList = familyRepository
-                .findAll(where(byFilter(newFilter)));
+        List<FamilyEntity> entityList = familyRepository.findAll(where(byFilter(newFilter)));
 
         return familyMapper.entityListToDtoList(entityList);
     }
 
     @Override
     public Long countFamiliesByDetails(UserDetailsDTO userDetails) {
-        return familyRepository
-                .count(byFilter(buildFilterFromUser(userDetails)));
+        return familyRepository.count(byFilter(buildFilterFromUser(userDetails)));
     }
 
     @Override
@@ -256,28 +204,17 @@ public class FamilyServiceImpl implements FamilyService {
         return buildFilterFromFilterAndUser(FamilyFilterDTO.builder().build(), userDetails);
     }
 
-    private FamilyFilterDTO buildFilterFromFilterAndUser(FamilyFilterDTO fromFilter,
-                                     UserDetailsDTO userDetails) {
-        Long userAppId = Optional.ofNullable(userDetails.getApplication())
-                                .map(ApplicationDTO::getId)
-                                .orElse(null);
+    private FamilyFilterDTO buildFilterFromFilterAndUser(FamilyFilterDTO fromFilter, UserDetailsDTO userDetails) {
+        Long userAppId = Optional.ofNullable(userDetails.getApplication()).map(ApplicationDTO::getId).orElse(null);
 
-        Long userOrgId = Optional.ofNullable(userDetails.getOrganization())
-                .map(OrganizationDTO::getId)
+        Long userOrgId = Optional.ofNullable(userDetails.getOrganization()).map(OrganizationDTO::getId)
                 .orElse(fromFilter.getOrganizationId());
 
-        return FamilyFilterDTO.builder()
-                .cityId(fromFilter.getCityId())
-                .lastModifiedGt(fromFilter.getLastModifiedGt())
-                .isActive(fromFilter.getIsActive())
-                .name(fromFilter.getName())
-                .countryId(fromFilter.getCountryId())
-                .applicationId(userAppId)
-                .organizationId(userOrgId)
-                .build();
+        return FamilyFilterDTO.builder().cityId(fromFilter.getCityId()).lastModifiedGt(fromFilter.getLastModifiedGt())
+                .isActive(fromFilter.getIsActive()).name(fromFilter.getName()).countryId(fromFilter.getCountryId())
+                .applicationId(userAppId).organizationId(userOrgId).build();
 
     }
-
 
     @Override
     public List<FamilyEntity> findByOrganizationId(Long organizationId) {
@@ -285,79 +222,68 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public FamilyEntity getOrCreateFamilyFromSnapshot(UserDetailsDTO details,
-            NewSnapshot snapshot, PersonEntity personEntity) {
-        String code = this.generateFamilyCode(personEntity);
+    public FamilyEntity getOrCreateFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot,
+            PersonEntity personEntity) {
+        String code = FamilyHelper.generateFamilyCode(personEntity);
 
-        return createOrReturnFamilyFromSnapshot(details, snapshot, code,
-               personEntity);
+        FamilyEntity familyEntity = familyRepository.findByCode(code)
+                .orElseGet(() -> createFamilyFromSnapshot(details, snapshot, code, personEntity));
 
+        activityFeedManager.createHouseholdFirstSnapshotActivity(details, familyEntity);
+
+        return familyEntity;
     }
 
-    @Override
-    public FamilyEntity createOrReturnFamilyFromSnapshot(UserDetailsDTO details,
-            NewSnapshot snapshot, String code, PersonEntity person) {
+    private FamilyEntity createFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot, String code,
+            PersonEntity person) {
 
-        Optional<FamilyEntity> family = familyRepository.findByCode(code);
-        if (family.isPresent()) {
-            activityFeedManager.createHouseholdSnapshotActivity(details, family.get());
-            return family.get();
-        }
+        FamilyEntity newFamily = createFamilyEntity(details, snapshot, code, person);
 
+        FamilyEntity savedFamily = familyRepository.save(newFamily);
+
+        LOG.info("User '{}' created a new Family, family_id={}", details.getUsername(), savedFamily.getFamilyId());
+        LOG.info("Family = {}", savedFamily);
+
+        return savedFamily;
+    }
+
+    // This method may belong in FamilyMapper
+    private FamilyEntity createFamilyEntity(UserDetailsDTO details, NewSnapshot snapshot, String code,
+            PersonEntity person) {
         FamilyEntity newFamily = new FamilyEntity();
-        newFamily.setPerson(person);
+        newFamily.setActive(true);
         newFamily.setCode(code);
         newFamily.setUser(userRepo.findByUsername(details.getUsername()));
-        newFamily.setName(person.getFirstName().concat(SPACE)
-                .concat(person.getLastName()));
-        newFamily.setLocationPositionGps(snapshot.getEconomicSurveyData()
-                .getAsString("familyUbication"));
-        if (details.getApplication() != null) {
-            newFamily.setApplication(
-                    applicationMapper.dtoToEntity(details.getApplication()));
-        }
-        if (details.getOrganization() != null) {
-            newFamily.setOrganization(
-                    organizationMapper.dtoToEntity(details.getOrganization()));
-        }
-        newFamily.setActive(true);
+        newFamily.setName(person.getFullName());
+        newFamily.setPerson(person);
 
-        Optional<CountryEntity> country = countryRepository.findByCountry(
-                snapshot.getEconomicSurveyData().getAsString("familyCountry"));
-        newFamily.setCountry(country.orElse(null));
-
-        Optional<CityEntity> city = cityRepository.findByCity(
-                snapshot.getEconomicSurveyData().getAsString("familyCity"));
-        newFamily.setCity(city.orElse(null));
-
-        if (snapshot.getOrganizationId() != null) {
-            OrganizationEntity organization = organizationRepository
-                    .findOne(snapshot.getOrganizationId());
-            newFamily.setOrganization(organization);
-            newFamily.setApplication(organization.getApplication());
-        }
-
-        newFamily = familyRepository.save(newFamily);
-
-        //if its the first snapshot
-        activityFeedManager.createHouseholdFirstSnapshotActivity(details, newFamily);
-
-        LOG.info("User '{}' created a new Family, family_id={}", details.getUsername(), newFamily.getFamilyId());
-        LOG.info("Family = {}", newFamily);
+        setOrgAndApplication(details, snapshot, newFamily);
+        setFamilyLocationFromSnapshot(snapshot, newFamily);
 
         return newFamily;
+    }
+
+    private void setOrgAndApplication(UserDetailsDTO details, NewSnapshot snapshot, FamilyEntity newFamily) {
+        FamilyOrganizationDTO familyOrganization = familyOrganizationService.getFamilyOrganization(details, snapshot);
+        newFamily.setOrganization(familyOrganization.getOrganizationEntity());
+        newFamily.setApplication(familyOrganization.getApplicationEntity());
+    }
+
+    private void setFamilyLocationFromSnapshot(NewSnapshot snapshot, FamilyEntity newFamily) {
+        FamilyLocationDTO locationDTO = familyLocationService.getFamilyLocationFromSnapshot(snapshot);
+        newFamily.setLocationPositionGps(locationDTO.getLocationPositionGps());
+        newFamily.setCountry(locationDTO.getCountry());
+        newFamily.setCity(locationDTO.getCity());
     }
 
     @Override
     public List<FamilyDTO> listDistinctFamiliesByUser(UserDetailsDTO details, String name) {
 
-        List<FamilyEntity> families = familyRepository.findDistinctByUserId(
-                userRepo.findOneByUsername(details.getUsername()).get().getId())
-                .stream()
+        List<FamilyEntity> families = familyRepository
+                .findDistinctByUserId(userRepo.findOneByUsername(details.getUsername()).get().getId()).stream()
                 .filter(s -> StringUtils.containsIgnoreCase(s.getName(), name)
                         || StringUtils.containsIgnoreCase(s.getCode(), name))
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().collect(Collectors.toList());
 
         return familyMapper.entityListToDtoList(families);
     }

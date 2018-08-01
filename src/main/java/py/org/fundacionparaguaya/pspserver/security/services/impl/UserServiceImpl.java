@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
         userRepository
                 .findOneByUsername(userRoleApplicationDTO.getUsername())
                 .ifPresent(user -> {
-                    throw new CustomParameterizedException("User already exists.",
+                    throw new CustomParameterizedException(i18n.translate("user.userAlreadyExists"),
                             new ImmutableMultimap.Builder<String, String>()
                                     .put("username", user.getUsername())
                                     .build()
@@ -122,23 +122,46 @@ public class UserServiceImpl implements UserService {
                 });
 
         UserEntity user = new UserEntity();
+
+        if (userRoleApplicationDTO.getUsername().length()>30){
+
+            throw new CustomParameterizedException(
+                    i18n.translate("user.userNameTooLong"),
+                    new ImmutableMultimap.Builder<String, String>()
+                            .put("username", userRoleApplicationDTO.getUsername())
+                            .build()
+                            .asMap());
+
+        }
+
         user.setUsername(userRoleApplicationDTO.getUsername());
         user.setEmail(userRoleApplicationDTO.getEmail());
         user.setPass(new BCryptPasswordEncoder().encode(userRoleApplicationDTO.getPass()));
         user.setActive(true);
-        UserEntity newUser = userRepository.save(user);
 
-        if (userRoleApplicationDTO.getRole() != null) {
-            createUserRole(newUser, userRoleApplicationDTO.getRole());
+        try {
+            UserEntity newUser = userRepository.save(user);
+
+            if (userRoleApplicationDTO.getRole() != null) {
+                createUserRole(newUser, userRoleApplicationDTO.getRole());
+            }
+
+            if (userRoleApplicationDTO.getOrganizationId() != null) {
+                createUserOrganization(newUser, userRoleApplicationDTO);
+            } else if (userRoleApplicationDTO.getApplicationId() != null) {
+                createUserApplication(newUser, userRoleApplicationDTO);
+            }
+
+
+            return userMapper.entityToDto(newUser);
+        }catch (RuntimeException e){
+            throw new CustomParameterizedException(
+                    i18n.translate("user.creationFailure"),
+                    new ImmutableMultimap.Builder<String, String>()
+                            .put("username", userRoleApplicationDTO.getUsername())
+                            .build()
+                            .asMap());
         }
-
-        if (userRoleApplicationDTO.getOrganizationId() != null) {
-            createUserOrganization(newUser, userRoleApplicationDTO);
-        } else if (userRoleApplicationDTO.getApplicationId() != null) {
-            createUserApplication(newUser, userRoleApplicationDTO);
-        }
-
-        return userMapper.entityToDto(newUser);
     }
 
     private UserRoleEntity createUserRole(UserEntity user, Role role) {
@@ -235,7 +258,8 @@ public class UserServiceImpl implements UserService {
         //find out what kind of role our targetUser has
         boolean targetIsHubAdmin = roleUserTarget.equals(Role.ROLE_HUB_ADMIN.getSecurityName());
         boolean targetIsOrgAdmin = roleUserTarget.equals(Role.ROLE_APP_ADMIN.getSecurityName());
-        boolean targetIsUser = roleUserTarget.equals(Role.ROLE_SURVEY_USER.getSecurityName());
+        boolean targetIsUserSurvey = roleUserTarget.equals(Role.ROLE_SURVEY_USER.getSecurityName());
+        boolean targetIsUser = roleUserTarget.equals(Role.ROLE_USER.getSecurityName());
 
         //The UserApplicationEntities help to determine if the targetUser depends on the responsibleUser
         UserApplicationEntity userTargetApplicationEntity =
@@ -273,7 +297,8 @@ public class UserServiceImpl implements UserService {
             }
 
             //Check if the UserTarget role is inmmediatly under the level of the responsibleUser role
-            if (roleResponsible.equals(Role.ROLE_APP_ADMIN.getSecurityName()) && targetIsUser){
+            if (roleResponsible.equals(Role.ROLE_APP_ADMIN.getSecurityName()) &&
+                    (targetIsUserSurvey || targetIsUser )){
                 long idOrgTarget = userTargetApplicationEntity.getOrganization().getId();
                 long idOrgResponsible = userResponsibleApplicationEntity.getOrganization().getId();
 

@@ -223,7 +223,7 @@ public class FamilyDTO implements Serializable {
         return application;
     }
 
-    public void setApplicationId(ApplicationDTO application) {
+    public void setApplication(ApplicationDTO application) {
         this.application = application;
     }
 
