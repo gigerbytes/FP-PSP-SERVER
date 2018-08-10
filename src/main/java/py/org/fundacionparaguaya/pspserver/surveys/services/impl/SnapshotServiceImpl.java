@@ -32,7 +32,6 @@ import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomic
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotIndicatorPriorityService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SurveyService;
-import py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification;
 import py.org.fundacionparaguaya.pspserver.surveys.validation.DependencyValidation;
 import py.org.fundacionparaguaya.pspserver.surveys.validation.DependencyValidationOneOf;
 import py.org.fundacionparaguaya.pspserver.surveys.validation.ValidationResults;
@@ -45,7 +44,12 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byApplication;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byLoggedUser;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byOrganization;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byUser;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.createdAtLess2Months;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.forFamily;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.forSurvey;
 
 /**
  * Created by rodrigovillalba on 9/14/17.
@@ -192,7 +196,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     @Transactional
     public Snapshot addSurveySnapshot(UserDetailsDTO details, NewSnapshot snapshot) {
-        checkNotNull(snapshot);
+        checkNotNull(snapshot, "Snapshot parameter is null");
+        checkNotNull(details, "UserDetails parameter is null");
 
         ValidationResults results = surveyService.checkSchemaCompliance(snapshot);
 
@@ -251,8 +256,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     public List<Snapshot> find(Long surveyId, Long familyId) {
         return economicRepository
-                .findAll(where(SnapshotEconomicSpecification.forSurvey(surveyId))
-                        .and(SnapshotEconomicSpecification.forFamily(familyId)))
+                .findAll(where(forSurvey(surveyId))
+                        .and(forFamily(familyId)))
                 .stream().map(economicMapper::entityToDto).collect(Collectors.toList());
     }
 
@@ -264,6 +269,21 @@ public class SnapshotServiceImpl implements SnapshotService {
                 .map(surveyData -> mapToNumericIndicators(surveyData)).collect(Collectors.toList());
 
         return surveyDataList;
+    }
+
+    @Override
+    public List<Snapshot> getSnapshotsByFilters(Long surveyId, Long applicationId, Long organizationId,
+                                                Long userId, Long familyId, UserDetailsDTO user) {
+        return economicRepository
+                .findAll(where(byLoggedUser(user))
+                        .and(forSurvey(surveyId))
+                        .and(byApplication(applicationId))
+                        .and(byOrganization(organizationId))
+                        .and(byUser(userId))
+                        .and(forFamily(familyId)))
+                .stream()
+                .map(economicMapper::entityToDto)
+                .collect(Collectors.toList());
     }
 
     public SurveyData getSurveyDataFromSnapShot(Snapshot snapshot) {
@@ -399,7 +419,7 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     @Override
     public List<Snapshot> getSnapshotsByFamily(Long familyId) {
-        return economicRepository.findAll(where(SnapshotEconomicSpecification.forFamily(familyId))).stream()
+        return economicRepository.findAll(where(forFamily(familyId))).stream()
                 .map(economicMapper::entityToDto).collect(Collectors.toList());
     }
 

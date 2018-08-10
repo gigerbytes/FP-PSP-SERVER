@@ -5,11 +5,14 @@ import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
 import py.org.fundacionparaguaya.pspserver.common.entities.BaseEntity;
 import py.org.fundacionparaguaya.pspserver.families.constants.Gender;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.StoreableSnapshot;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType;
 import py.org.fundacionparaguaya.pspserver.system.entities.CityEntity;
 import py.org.fundacionparaguaya.pspserver.system.entities.CountryEntity;
 
@@ -23,13 +26,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
 @Table(name = "person", schema = "ps_families")
-public class PersonEntity extends BaseEntity {
+public class PersonEntity extends BaseEntity implements StoreableSnapshot {
 
     private static final long serialVersionUID = 1762584396723284335L;
 
@@ -99,6 +103,13 @@ public class PersonEntity extends BaseEntity {
 
     @Column(name = "post_code")
     private String postCode;
+
+    @Column(name = "additional_properties")
+    @Type(type = "py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType",
+            parameters = {
+            @Parameter(name = SecondJSONBUserType.CLASS,
+                    value = "py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData")})
+    private SurveyData additionalProperties;
 
     public FamilyEntity getFamily() {
         return family;
@@ -229,6 +240,15 @@ public class PersonEntity extends BaseEntity {
     }
 
     @Override
+    public SurveyData getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    public void setAdditionalProperties(SurveyData additionalProperties) {
+        this.additionalProperties = additionalProperties;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -286,11 +306,20 @@ public class PersonEntity extends BaseEntity {
     }
 
     // WARNING! Only for testing purposes for now.
+    @Transient
     public SurveyData asSurveyData() {
         Map<String, Object> map = Maps.newHashMap();
         map.put("one", 1);
         map.put("two", 2);
         map.put("three", 3);
+        map.put("familyUbication", "1233");
         return new SurveyData(map);
     }
+
+    @Transient
+    public String getFullName() {
+        return this.getFirstName().concat(" ")
+                .concat(this.getLastName());
+    }
+
 }
