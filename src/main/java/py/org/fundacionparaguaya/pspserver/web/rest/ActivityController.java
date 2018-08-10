@@ -1,5 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.web.rest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +48,7 @@ public class ActivityController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<ActivityFeedDTO>> showActivityFeed(@AuthenticationPrincipal UserDetailsDTO details) {
-        return ResponseEntity.ok(activityFeedManager.showActivityFeedByUserDetails(details));
+    public Page<ActivityFeedDTO> showActivityFeed(@AuthenticationPrincipal UserDetailsDTO details, Pageable pageable) {
+        return activityFeedManager.showActivityFeedByUserDetails(pageable, details);
     }
 }

@@ -1,5 +1,8 @@
 package py.org.fundacionparaguaya.pspserver.system.services.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
@@ -11,8 +14,6 @@ import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityFeedDTO;
 import py.org.fundacionparaguaya.pspserver.system.mapper.ActivityParamMapper;
 import py.org.fundacionparaguaya.pspserver.system.services.ActivityFeedManager;
 import py.org.fundacionparaguaya.pspserver.system.services.ActivityService;
-
-import java.util.List;
 
 import static py.org.fundacionparaguaya.pspserver.system.constants.ActivityMessage.*;
 
@@ -84,8 +85,10 @@ public class ActivityFeedManagerImpl implements ActivityFeedManager {
     }
 
     @Override
-    public List<ActivityFeedDTO> showActivityFeedByUserDetails(UserDetailsDTO details) {
+    public Page<ActivityFeedDTO> showActivityFeedByUserDetails(Pageable pageable, UserDetailsDTO details) {
         Sort sortByDate = new Sort(Sort.Direction.DESC, "createdAt");
-        return activityService.getActivitiesByUserDetails(details, sortByDate);
+        PageRequest pageRequest =
+                new PageRequest(pageable.getPageNumber(), pageable.getPageSize(),sortByDate);
+        return activityService.getActivitiesByUserDetails(pageRequest, details);
     }
 }

@@ -1,6 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.system.services;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityFeedDTO;
@@ -14,5 +15,5 @@ public interface ActivityService {
 
     List<ActivityDTO> getAllActivities();
 
-    List<ActivityFeedDTO> getActivitiesByUserDetails(UserDetailsDTO userDetails, Sort sortBy);
+    Page<ActivityFeedDTO> getActivitiesByUserDetails(Pageable pageable, UserDetailsDTO userDetails);
 }

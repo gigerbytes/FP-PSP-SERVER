@@ -1,7 +1,9 @@
 package py.org.fundacionparaguaya.pspserver.system.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
@@ -53,9 +55,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<ActivityFeedDTO> getActivitiesByUserDetails(UserDetailsDTO userDetails, Sort sortBy) {
-        List<ActivityEntity> activities = activityRepository.findAll(byDetails(userDetails), sortBy);
-        return activityMapper.entityListToActivityFeed(activities);
+    public Page<ActivityFeedDTO> getActivitiesByUserDetails(Pageable pageable, UserDetailsDTO userDetails) {
+        Page<ActivityEntity> activities = activityRepository.findAll(byDetails(userDetails), pageable);
+        Page<ActivityFeedDTO> activityFeedDTOPage = new PageImpl<ActivityFeedDTO>(
+                activityMapper.entityListToActivityFeed(activities.getContent()), pageable, activities.getTotalElements());
+        return activityFeedDTOPage;
     }
 
 }
