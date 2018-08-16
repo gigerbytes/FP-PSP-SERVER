@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity_;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
+import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity_;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity_;
@@ -19,6 +20,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.Instant;
@@ -78,6 +80,14 @@ public class SnapshotEconomicSpecification {
 
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             }
+        };
+    }
+
+    public static Specification<SnapshotEconomicEntity> byApplications(List<Long> applications) {
+        return (root, query, builder) -> {
+            Path<Long> applicationIdPath = root.join(SnapshotEconomicEntity_.getFamily())
+                    .get(FamilyEntity_.getApplication()).get(ApplicationEntity_.getId());
+            return applicationIdPath.in(applications);
         };
     }
 

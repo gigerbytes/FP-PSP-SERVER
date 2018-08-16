@@ -11,8 +11,8 @@ public class ReportFiltersDTO {
 
     public ReportFiltersDTO() {}
 
-    @JsonProperty("application_id")
-    private Long applicationId;
+    @JsonProperty("applications")
+    private List<Long> applications;
 
     @JsonProperty("organizations")
     private List<Long> organizations;
@@ -38,12 +38,12 @@ public class ReportFiltersDTO {
     @JsonProperty("matchQuantifier")
     private String matchQuantifier;
 
-    public Long getApplicationId() {
-        return applicationId;
+    public List<Long> getApplications() {
+        return applications;
     }
 
-    public void setApplicationId(Long applicationId) {
-        this.applicationId = applicationId;
+    public void setApplications(List<Long> applications) {
+        this.applications = applications;
     }
 
     public List<Long> getOrganizations() {

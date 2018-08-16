@@ -39,8 +39,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
-import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byApplication;
 import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byOrganization;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byApplication;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byApplications;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byIndicatorsFilters;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byLoggedUser;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byMultipleSnapshots;
@@ -108,7 +109,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
         families = familyRepository.findAll(where(byOrganization(filters.getOrganizationId()))
               .and(dateRange)
-              .and(byApplication(filters.getApplicationId()))
+              .and(FamilySpecification.byApplication(filters.getApplicationId()))
               .and(dateRange), sort);
 
         Map<OrganizationEntity, List<FamilyEntity>> groupByOrganization = families
@@ -269,8 +270,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                             filters.getDateTo());
 
             snapshots = snapshotRepository.findAll(
-                    where(SnapshotEconomicSpecification
-                            .byApplication(filters.getApplicationId()))
+                    where(byApplication(filters.getApplicationId()))
                             .and(dateRange)
                             .and(byOrganizations(filters.getOrganizationId())), sort);
         }
@@ -287,7 +287,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
         List<SnapshotEconomicEntity> snapshots = snapshotRepository.findAll(
                 where(byLoggedUser(user))
-                        .and(SnapshotEconomicSpecification.byApplication(filters.getApplicationId()))
+                        .and(byApplications(filters.getApplications()))
                         .and(byOrganizations(filters.getOrganizations()))
                         .and(forSurvey(filters.getSurveyId()))
                         .and(byTimePeriod(filters.getFromDate(), filters.getToDate()))
@@ -358,7 +358,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
             snapshots = snapshotRepository.findAll(
                     where(forSurvey(filters.getSurveyId()))
-                            .and(SnapshotEconomicSpecification.byApplication(filters.getApplicationId()))
+                            .and(byApplication(filters.getApplicationId()))
                             .and(dateRange)
                             .and(byOrganizations(filters.getOrganizationId())), sort);
         }
