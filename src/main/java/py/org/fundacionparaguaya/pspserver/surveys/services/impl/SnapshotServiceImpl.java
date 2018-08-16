@@ -393,8 +393,6 @@ public class SnapshotServiceImpl implements SnapshotService {
                             .orElse(getNameFromCamelCase(indicator)));
                     sd.put(INDICATOR_VALUE, indicators.get(indicator));
                     countIndicators(toRet, sd.get(INDICATOR_VALUE));
-                    System.out.println(indicator);
-                    System.out.println(INDICATOR_KEY);
                     sd.put(INDICATOR_KEY, indicator);
                     indicatorsToRet.add(sd);
                 }
