@@ -17,7 +17,7 @@ public class ReportFiltersDTO {
     @JsonProperty("organizations")
     private List<Long> organizations;
 
-    @JsonProperty("survey_id")
+    @JsonProperty(value = "survey_id", required = true)
     private Long surveyId;
 
     @JsonProperty("fromDate")
