@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import py.org.fundacionparaguaya.pspserver.common.pagination.PaginableList;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ActivityFeedDTO;
@@ -48,7 +49,9 @@ public class ActivityController {
     }
 
     @GetMapping("/feed")
-    public Page<ActivityFeedDTO> showActivityFeed(@AuthenticationPrincipal UserDetailsDTO details, Pageable pageable) {
-        return activityFeedManager.showActivityFeedByUserDetails(pageable, details);
+    public ResponseEntity<PaginableList<ActivityFeedDTO>> showActivityFeed(@AuthenticationPrincipal UserDetailsDTO details, Pageable pageable) {
+        Page<ActivityFeedDTO> pageProperties = activityFeedManager.showActivityFeedByUserDetails(pageable, details);
+        PaginableList<ActivityFeedDTO> response = new PaginableList<>(pageProperties, pageProperties.getContent());
+        return ResponseEntity.ok(response);
     }
 }
