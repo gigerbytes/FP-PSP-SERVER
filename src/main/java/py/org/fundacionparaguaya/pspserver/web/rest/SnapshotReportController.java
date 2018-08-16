@@ -7,16 +7,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import py.org.fundacionparaguaya.pspserver.reports.dtos.OrganizationFamilyDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportDTO;
+import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportFiltersDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.SnapshotFilterDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.FamilySnapshotDTO;
 import py.org.fundacionparaguaya.pspserver.reports.services.SnapshotReportManager;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 
 /**
  *
@@ -109,5 +115,27 @@ public class SnapshotReportController {
                 new SnapshotFilterDTO(applicationId, organizations, familyId, dateFrom, dateTo, null);
         ReportDTO report = familyReportService.getSnapshotsReportByOrganizationAndCreatedDate(filters);
         return ResponseEntity.ok(report);
+    }
+
+    @PostMapping(path = "/snapshots/json",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Snapshot>> getSnapshotsByEnhancedFilters(@RequestBody ReportFiltersDTO filters,
+                                                                   @AuthenticationPrincipal UserDetailsDTO user) {
+        List<Snapshot> snapshots = familyReportService.getSnapshotsJSONByEnhancedFilters(filters, user);
+        return ResponseEntity.ok(snapshots);
+    }
+
+    @PostMapping(path = "/snapshots/csv",
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public void downloadCSVReportByEnhancedFilters(@RequestBody ReportFiltersDTO filters,
+                                                   @AuthenticationPrincipal UserDetailsDTO user,
+                                                   HttpServletResponse response) throws IOException {
+        String csv = familyReportService.downloadSnapshotsCSVReportByEnhancedFilters(filters, user);
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=\"snapshots.csv\"");
+        response.getWriter().write(csv);
+        response.getWriter().close();
     }
 }

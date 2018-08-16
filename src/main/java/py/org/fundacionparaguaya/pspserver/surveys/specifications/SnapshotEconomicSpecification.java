@@ -1,46 +1,60 @@
 package py.org.fundacionparaguaya.pspserver.surveys.specifications;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.data.jpa.domain.Specification;
-
+import org.springframework.stereotype.Component;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity_;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity_;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.PropertyAttributeEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity_;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotIndicatorEntity;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.StopLightGroup;
+import py.org.fundacionparaguaya.pspserver.surveys.mapper.PropertyAttributeSupport;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author mcespedes
  *
  */
+@Component
 public class SnapshotEconomicSpecification {
 
     private static final String SHORT_DATE_FORMAT = "dd/MM/yyyy";
 
     private static final long MONTH_AGO = 12;
 
-    private SnapshotEconomicSpecification() {}
+    private static PropertyAttributeSupport propertyAttributeSupport;
+
+    private SnapshotEconomicSpecification(PropertyAttributeSupport propertyAttributeSupport) {
+        this.propertyAttributeSupport = propertyAttributeSupport;
+    }
 
     public static Specification<SnapshotEconomicEntity> byLoggedUser(UserDetailsDTO user) {
         return (root, query, builder) ->
                 builder.and(
                         byApplication(Optional.ofNullable(user)
-                                .map(UserDetailsDTO::getApplication).map(ApplicationDTO::getId)
+                                .map(UserDetailsDTO::getApplication)
+                                .map(ApplicationDTO::getId)
                                 .orElse(null))
                                 .toPredicate(root, query, builder),
                         byOrganization(Optional.ofNullable(user)
@@ -140,6 +154,117 @@ public class SnapshotEconomicSpecification {
                             LocalDate.parse(dateTo, formatter).plusDays(1).atStartOfDay()));
                 }
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        };
+    }
+
+    public static Specification<SnapshotEconomicEntity> byTimePeriod(Long fromDate, Long toDate) {
+        return (root, query, builder) -> {
+            if (fromDate != null && toDate != null) {
+                return builder.and(
+                        builder.greaterThanOrEqualTo(root.get(SnapshotEconomicEntity_.getCreatedAt()),
+                                LocalDateTime.ofInstant(Instant.ofEpochMilli(fromDate), ZoneId.of("UTC"))),
+                        builder.lessThanOrEqualTo(root.get(SnapshotEconomicEntity_.getCreatedAt()),
+                                LocalDateTime.ofInstant(Instant.ofEpochMilli(toDate), ZoneId.of("UTC"))));
+            } else {
+                return builder.conjunction();
+            }
+        };
+    }
+
+    public static Specification<SnapshotEconomicEntity> byMultipleSnapshots(Boolean multipleSnapshots) {
+        return (root, query, builder) -> {
+            if (multipleSnapshots) {
+                return builder.conjunction();
+            } else {
+                return builder.conjunction();
+            }
+        };
+    }
+
+    public static Specification<SnapshotEconomicEntity> bySocioeconomicFilters(
+            Map<String, List<String>> socioeconomicFilters) {
+        return (root, query, builder) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+//            Join<SnapshotEconomicEntity, SurveyEntity> survey = root.join(SnapshotEconomicEntity_.getSurvey());
+//
+//            Expression<Map<String, Property>> propertiesMap = survey.get(SurveyEntity_.getSurveyDefinition())
+//                    .get(SurveyDefinition_.getSurveySchema())
+//                    .get(SurveySchema_.getProperties());
+//
+//            List<Selection<?>> propertiesList = propertiesMap.getCompoundSelectionItems();
+//
+//            List<String> economics = propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)
+//                    .stream()
+//                    .map(PropertyAttributeEntity::getPropertySchemaName)
+//                    .collect(Collectors.toList());
+//
+//            socioeconomicFilters.forEach((key, filters) -> {
+//
+//                if (economics.contains(key)) {
+//
+//                    for (Selection<?> property : propertiesList) {
+//                        if (property.getAlias().equals(key)) {
+//
+//                            // if property is of number format
+//                            if (property.get("format").equals("number")) {
+//                                Expression<String> valueStored = root.get(key);
+//                                Predicate predicate = builder.and(
+//                                        builder.greaterThanOrEqualTo(valueStored, filters.get(0)),
+//                                        builder.lessThanOrEqualTo(valueStored, filters.get(1)));
+//                                predicates.add(predicate);
+//                            }
+//
+//                            // if property is of dropdown format
+//                            if (property.get("format").equals("string")) {
+//                                Expression<String> valueStored = root.get(key);
+//                                Predicate predicate = valueStored.in(filters);
+//                                predicates.add(predicate);
+//                            }
+//
+//                        }
+//                    }
+//
+//
+//                }
+//
+//            });
+
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public static Specification<SnapshotEconomicEntity> byIndicatorsFilters(
+            Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
+        return (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            List<String> indicators = propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)
+                    .stream()
+                    .map(PropertyAttributeEntity::getPropertySchemaName)
+                    .collect(Collectors.toList());
+
+            indicatorsFilters.forEach((key, colorsFilters) -> {
+                Join<SnapshotEconomicEntity, SnapshotIndicatorEntity> snapshotIndicator =
+                        root.join(SnapshotEconomicEntity_.getSnapshotIndicator());
+                Expression<String> indicatorValue;
+                if (indicators.contains(key)) {
+                    indicatorValue = snapshotIndicator.get(key);
+                    predicates.add(indicatorValue.in(colorsFilters));
+                }
+//                else {
+//                    // Not core indicators should be managed here
+//                }
+            });
+
+            if (matchQuantifier.equals("ALL")) {
+                return builder.and(predicates.toArray(new Predicate[0]));
+            } else if (matchQuantifier.equals("ANY")) {
+                return builder.or(predicates.toArray(new Predicate[0]));
+            } else {
+                return builder.conjunction();
             }
         };
     }

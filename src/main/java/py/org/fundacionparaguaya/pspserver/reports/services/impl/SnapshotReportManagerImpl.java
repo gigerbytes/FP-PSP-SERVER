@@ -14,15 +14,19 @@ import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.FamilySnapshotDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.OrganizationFamilyDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportDTO;
+import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportFiltersDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.SnapshotFilterDTO;
 import py.org.fundacionparaguaya.pspserver.reports.mapper.FamilyDTOMapper;
 import py.org.fundacionparaguaya.pspserver.reports.services.SnapshotReportManager;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.Property;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveySchema;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.enums.SurveyStoplightEnum;
+import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotEconomicMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotIndicatorMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
@@ -37,7 +41,14 @@ import java.util.stream.Collectors;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byApplication;
 import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byOrganization;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byIndicatorsFilters;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byLoggedUser;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byMultipleSnapshots;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byOrganizations;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.bySocioeconomicFilters;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byTimePeriod;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.forFamily;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.forSurvey;
 
 /**
  *
@@ -58,7 +69,9 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     private final SnapshotEconomicRepository snapshotRepository;
 
-    private final SnapshotIndicatorMapper snapshotMapper;
+    private final SnapshotEconomicMapper snapshotEconomicMapper;
+
+    private final SnapshotIndicatorMapper snapshotIndicatorMapper;
 
     private final SurveyRepository surveyRepository;
 
@@ -67,13 +80,15 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
     public SnapshotReportManagerImpl(FamilyRepository familyRepository,
                                      FamilyDTOMapper familyReportMapper,
                                      SnapshotEconomicRepository snapshotRepository,
-                                     SnapshotIndicatorMapper snapshotMapper,
+                                     SnapshotEconomicMapper snapshotEconomicMapper,
+                                     SnapshotIndicatorMapper snapshotIndicatorMapper,
                                      SurveyRepository surveyRepository,
                                      I18n i18n) {
         this.familyRepository = familyRepository;
         this.familyReportMapper = familyReportMapper;
+        this.snapshotEconomicMapper = snapshotEconomicMapper;
         this.snapshotRepository = snapshotRepository;
-        this.snapshotMapper = snapshotMapper;
+        this.snapshotIndicatorMapper = snapshotIndicatorMapper;
         this.surveyRepository = surveyRepository;
         this.i18n = i18n;
     }
@@ -98,7 +113,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
         Map<OrganizationEntity, List<FamilyEntity>> groupByOrganization = families
                 .stream()
-                .filter(f -> f != null && f.getOrganization() != null )
+                .filter(f -> f != null && f.getOrganization() != null)
                 .collect(Collectors.groupingBy(f -> f.getOrganization()));
 
         List<OrganizationFamilyDTO> toRet = new ArrayList<>();
@@ -159,7 +174,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
         List<SurveyData> rows = new ArrayList<>();
 
-        report.getHeaders().addAll(snapshotMapper.getStaticPropertiesNames());
+        report.getHeaders().addAll(snapshotIndicatorMapper.getStaticPropertiesNames());
 
         for (SnapshotEconomicEntity s : snapshots) {
 
@@ -171,7 +186,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                                     StringConverter.getNameFromCamelCase(k));
                         }
                     });
-            SurveyData data = snapshotMapper
+            SurveyData data = snapshotIndicatorMapper
                     .entityToDto(s.getSnapshotIndicator());
             data.put("createdAt", s.getCreatedAtLocalDateString());
             rows.add(data);
@@ -191,7 +206,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
         List<SurveyData> rows = new ArrayList<>();
 
-        report.getHeaders().addAll(snapshotMapper.getStaticPropertiesNames());
+        report.getHeaders().addAll(snapshotIndicatorMapper.getStaticPropertiesNames());
 
         for (SnapshotEconomicEntity s : snapshots) {
 
@@ -202,7 +217,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                             report.getHeaders().add(headerName);
                         }
                     });
-            SurveyData data = snapshotMapper
+            SurveyData data = snapshotIndicatorMapper
                     .entityToDto(s.getSnapshotIndicator());
             data.put("organizationName",
                     s.getFamily().getOrganization().getName());
@@ -257,12 +272,53 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                     where(SnapshotEconomicSpecification
                             .byApplication(filters.getApplicationId()))
                             .and(dateRange)
-                            .and(SnapshotEconomicSpecification
-                            .byOrganizations(filters.getOrganizationId())), sort);
+                            .and(byOrganizations(filters.getOrganizationId())), sort);
         }
 
         ReportDTO report = getOrganizationAndFamilyData(snapshots);
         return report;
+    }
+
+    private List<SnapshotEconomicEntity> getSnapshotsByEnhancedFilters(ReportFiltersDTO filters, UserDetailsDTO user) {
+        Sort sortOrder = new Sort(
+                new Sort.Order(Direction.ASC, "family.organization.name"),
+                new Sort.Order(Direction.ASC, "family.name"),
+                new Sort.Order(Direction.ASC, "createdAt"));
+
+        List<SnapshotEconomicEntity> snapshots = snapshotRepository.findAll(
+                where(byLoggedUser(user))
+                        .and(SnapshotEconomicSpecification.byApplication(filters.getApplicationId()))
+                        .and(byOrganizations(filters.getOrganizations()))
+                        .and(forSurvey(filters.getSurveyId()))
+                        .and(byTimePeriod(filters.getFromDate(), filters.getToDate()))
+                        .and(byMultipleSnapshots(filters.getMultipleSnapshots()))
+                        .and(bySocioeconomicFilters(filters.getSocioeconomicFilters()))
+                        .and(byIndicatorsFilters(filters.getIndicatorsFilters(), filters.getMatchQuantifier())),
+                sortOrder);
+
+        return snapshots;
+    }
+
+    @Override
+    public List<Snapshot> getSnapshotsJSONByEnhancedFilters(ReportFiltersDTO filters, UserDetailsDTO user) {
+        List<SnapshotEconomicEntity> snapshots = getSnapshotsByEnhancedFilters(filters, user);
+
+        return snapshots.stream().map(snapshotEconomicMapper::entityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public String downloadSnapshotsCSVReportByEnhancedFilters(ReportFiltersDTO filters, UserDetailsDTO user) {
+        List<SnapshotEconomicEntity> snapshots = getSnapshotsByEnhancedFilters(filters, user);
+
+        SurveyEntity survey = surveyRepository.findById(filters.getSurveyId());
+        ReportDTO report = new ReportDTO();
+        List<String> keys = getSortedKeys(survey);
+        List<String> headers = getHeadersFromKeys(keys, survey);
+        report.setHeaders(headers);
+        List<List<String>> rows = getRows(survey, snapshots, keys);
+        report.setRows(rows);
+
+        return reportToCsv(report);
     }
 
     @Override
@@ -301,10 +357,10 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                             filters.getDateTo());
 
             snapshots = snapshotRepository.findAll(
-                    where(SnapshotEconomicSpecification.forSurvey(filters.getSurveyId()))
+                    where(forSurvey(filters.getSurveyId()))
                             .and(SnapshotEconomicSpecification.byApplication(filters.getApplicationId()))
                             .and(dateRange)
-                            .and(SnapshotEconomicSpecification.byOrganizations(filters.getOrganizationId())), sort);
+                            .and(byOrganizations(filters.getOrganizationId())), sort);
         }
 
         return snapshots;
@@ -506,7 +562,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                 additionalSocioEconomicInformation.forEach((key, value) -> data.put(key, value.toString()));
             }
 
-            SurveyData indicators = snapshotMapper.entityToDto(snapshot.getSnapshotIndicator());
+            SurveyData indicators = snapshotIndicatorMapper.entityToDto(snapshot.getSnapshotIndicator());
             indicators.forEach((key, value) -> data.put(key, value));
 
             rows.add(data);

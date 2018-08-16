@@ -4,8 +4,11 @@ import java.util.List;
 
 import py.org.fundacionparaguaya.pspserver.reports.dtos.OrganizationFamilyDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportDTO;
+import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportFiltersDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.SnapshotFilterDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.FamilySnapshotDTO;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 
 /**
  *
@@ -27,4 +30,7 @@ public interface SnapshotReportManager {
 
     String downloadSnapshotsCSV(SnapshotFilterDTO filters);
 
+    List<Snapshot> getSnapshotsJSONByEnhancedFilters(ReportFiltersDTO filters, UserDetailsDTO user);
+
+    String downloadSnapshotsCSVReportByEnhancedFilters(ReportFiltersDTO filters, UserDetailsDTO user);
 }
