@@ -308,13 +308,17 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     @Override
     public String downloadSnapshotsCSVReportByEnhancedFilters(ReportFiltersDTO filters, UserDetailsDTO user) {
-        List<SnapshotEconomicEntity> snapshots = getSnapshotsByEnhancedFilters(filters, user);
+        if (filters.getSurveyId() == null) {
+            return new String();
+        }
 
         SurveyEntity survey = surveyRepository.findById(filters.getSurveyId());
         ReportDTO report = new ReportDTO();
         List<String> keys = getSortedKeys(survey);
         List<String> headers = getHeadersFromKeys(keys, survey);
         report.setHeaders(headers);
+
+        List<SnapshotEconomicEntity> snapshots = getSnapshotsByEnhancedFilters(filters, user);
         List<List<String>> rows = getRows(survey, snapshots, keys);
         report.setRows(rows);
 

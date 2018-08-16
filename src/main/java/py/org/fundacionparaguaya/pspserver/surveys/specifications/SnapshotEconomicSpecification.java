@@ -85,6 +85,9 @@ public class SnapshotEconomicSpecification {
 
     public static Specification<SnapshotEconomicEntity> byApplications(List<Long> applications) {
         return (root, query, builder) -> {
+            if (applications == null) {
+                return builder.conjunction();
+            }
             Path<Long> applicationIdPath = root.join(SnapshotEconomicEntity_.getFamily())
                     .get(FamilyEntity_.getApplication()).get(ApplicationEntity_.getId());
             return applicationIdPath.in(applications);
@@ -184,6 +187,10 @@ public class SnapshotEconomicSpecification {
 
     public static Specification<SnapshotEconomicEntity> byMultipleSnapshots(Boolean multipleSnapshots) {
         return (root, query, builder) -> {
+            if (multipleSnapshots == null) {
+                return builder.conjunction();
+            }
+
             if (multipleSnapshots) {
                 return builder.conjunction();
             } else {
@@ -195,6 +202,9 @@ public class SnapshotEconomicSpecification {
     public static Specification<SnapshotEconomicEntity> bySocioeconomicFilters(
             Map<String, List<String>> socioeconomicFilters) {
         return (root, query, builder) -> {
+            if (socioeconomicFilters == null) {
+                return builder.conjunction();
+            }
 
             List<Predicate> predicates = new ArrayList<>();
 
@@ -249,6 +259,10 @@ public class SnapshotEconomicSpecification {
     public static Specification<SnapshotEconomicEntity> byIndicatorsFilters(
             Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
         return (root, query, builder) -> {
+            if (indicatorsFilters == null) {
+                return builder.conjunction();
+            }
+
             List<Predicate> predicates = new ArrayList<>();
 
             List<String> indicators = propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)
@@ -269,12 +283,13 @@ public class SnapshotEconomicSpecification {
 //                }
             });
 
-            if (matchQuantifier.equals("ALL")) {
+            if (matchQuantifier == null
+                    || matchQuantifier.equalsIgnoreCase("ALL")) {
                 return builder.and(predicates.toArray(new Predicate[0]));
-            } else if (matchQuantifier.equals("ANY")) {
+            } else if (matchQuantifier.equalsIgnoreCase("ANY")) {
                 return builder.or(predicates.toArray(new Predicate[0]));
             } else {
-                return builder.conjunction();
+                return builder.and(predicates.toArray(new Predicate[0]));
             }
         };
     }
@@ -292,7 +307,7 @@ public class SnapshotEconomicSpecification {
     public static Specification<SnapshotEconomicEntity> forSurvey(Long surveyId) {
         return (root, query, cb) -> {
             if (surveyId == null) {
-                return null;
+                return cb.disjunction();
             }
             // FIXME These join expressions are not typesafe and can lead to errors, use metamodels to avoid this
             return cb.equal(root.join("surveyDefinition").get("id"), surveyId);
