@@ -40,9 +40,10 @@ import java.util.stream.Collectors;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification.byOrganization;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byAdditionalIndicatorsFilters;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byApplication;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byApplications;
-import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byIndicatorsFilters;
+import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byCoreIndicatorsFilters;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byLoggedUser;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byMultipleSnapshots;
 import static py.org.fundacionparaguaya.pspserver.surveys.specifications.SnapshotEconomicSpecification.byOrganizations;
@@ -293,8 +294,15 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                         .and(byTimePeriod(filters.getFromDate(), filters.getToDate()))
                         .and(byMultipleSnapshots(filters.getMultipleSnapshots()))
                         .and(bySocioeconomicFilters(filters.getSocioeconomicFilters()))
-                        .and(byIndicatorsFilters(filters.getIndicatorsFilters(), filters.getMatchQuantifier())),
-                sortOrder);
+                        .and(byCoreIndicatorsFilters(
+                                    filters.getIndicatorsFilters(),
+                                    filters.getMatchQuantifier())),
+                sortOrder)
+                .stream()
+                .filter(byAdditionalIndicatorsFilters(
+                                filters.getIndicatorsFilters(),
+                                filters.getMatchQuantifier()))
+                .collect(Collectors.toList());
 
         return snapshots;
     }

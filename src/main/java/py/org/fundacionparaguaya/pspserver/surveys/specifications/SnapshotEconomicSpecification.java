@@ -9,6 +9,7 @@ import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity_;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity_;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.PropertyAttributeEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity_;
@@ -256,31 +257,28 @@ public class SnapshotEconomicSpecification {
         };
     }
 
-    public static Specification<SnapshotEconomicEntity> byIndicatorsFilters(
-            Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
+    public static Specification<SnapshotEconomicEntity> byCoreIndicatorsFilters(
+                                                Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
         return (root, query, builder) -> {
             if (indicatorsFilters == null) {
                 return builder.conjunction();
             }
 
-            List<Predicate> predicates = new ArrayList<>();
+            List<String> coreIndicators =
+                    propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)
+                            .stream()
+                            .map(PropertyAttributeEntity::getPropertySchemaName)
+                            .collect(Collectors.toList());
 
-            List<String> indicators = propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)
-                    .stream()
-                    .map(PropertyAttributeEntity::getPropertySchemaName)
-                    .collect(Collectors.toList());
+            List<Predicate> predicates = new ArrayList<>();
 
             indicatorsFilters.forEach((key, colorsFilters) -> {
                 Join<SnapshotEconomicEntity, SnapshotIndicatorEntity> snapshotIndicator =
                         root.join(SnapshotEconomicEntity_.getSnapshotIndicator());
-                Expression<String> indicatorValue;
-                if (indicators.contains(key)) {
-                    indicatorValue = snapshotIndicator.get(key);
+                if (coreIndicators.contains(key)) {
+                    Path<String> indicatorValue = snapshotIndicator.get(key);
                     predicates.add(indicatorValue.in(colorsFilters));
                 }
-//                else {
-//                    // Not core indicators should be managed here
-//                }
             });
 
             if (matchQuantifier == null
@@ -288,9 +286,53 @@ public class SnapshotEconomicSpecification {
                 return builder.and(predicates.toArray(new Predicate[0]));
             } else if (matchQuantifier.equalsIgnoreCase("ANY")) {
                 return builder.or(predicates.toArray(new Predicate[0]));
-            } else {
-                return builder.and(predicates.toArray(new Predicate[0]));
             }
+
+            // Default to quantifier ALL
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public static java.util.function.Predicate<SnapshotEconomicEntity> byAdditionalIndicatorsFilters(
+                                                Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
+        return snapshot -> {
+            if (indicatorsFilters == null) {
+                return true;
+            }
+
+            List<String> coreIndicators =
+                    propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.INDICATOR)
+                            .stream()
+                            .map(PropertyAttributeEntity::getPropertySchemaName)
+                            .collect(Collectors.toList());
+
+            SurveyData additionalProperties = snapshot.getSnapshotIndicator().getAdditionalProperties();
+
+            for (Map.Entry<String, List<String>> indicatorsFilter : indicatorsFilters.entrySet()) {
+                if (!coreIndicators.contains(indicatorsFilter.getKey())) {
+                    List<String> filtersArray = indicatorsFilter.getValue();
+                    String valueStored = additionalProperties.getAsString(indicatorsFilter.getKey());
+                    boolean match = filtersArray.contains(valueStored);
+                    // If matchQuantifier is NULL, default to ALL
+                    if (!match && (matchQuantifier == null
+                            || matchQuantifier.equalsIgnoreCase("ALL"))) {
+                        return false;
+                    }
+                    if (match && matchQuantifier.equalsIgnoreCase("ANY")) {
+                        return true;
+                    }
+                }
+            }
+
+            if (matchQuantifier.equalsIgnoreCase("ALL")) {
+                return true;
+            }
+            if (matchQuantifier.equalsIgnoreCase("ANY")) {
+                return false;
+            }
+
+            // Default to quantifier ALL
+            return true;
         };
     }
 
