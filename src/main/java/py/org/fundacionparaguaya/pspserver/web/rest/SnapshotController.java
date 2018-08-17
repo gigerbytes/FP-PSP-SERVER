@@ -123,4 +123,27 @@ public class SnapshotController {
         List<Snapshot> snapshots = snapshotService.getSnapshotsByFamily(familyId);
         return ResponseEntity.ok(snapshots);
     }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, path = "/{snapshotId}")
+    @io.swagger.annotations.ApiOperation(
+            value = "Retrieves one snapshot by its id",
+            notes = "A `GET` request that returns a single snapshot given its id. "
+                    + "Filter are optional and can be combined")
+    @io.swagger.annotations.ApiResponses(
+            value = {@io.swagger.annotations.ApiResponse(
+                    code = 200,
+                    message = "Snapshot found by id",
+                    response = Snapshot.class,
+                    responseContainer = "List"), @io.swagger.annotations.ApiResponse(code = 404, message = "Snapshot not found")})
+    public ResponseEntity getSnapshotById(
+            @PathVariable(value = "snapshotId", required = true) Long snapshotId,
+            @AuthenticationPrincipal UserDetailsDTO user) {
+        Snapshot snapshot =
+                snapshotService.getSnapshotsById(snapshotId, user);
+        if (snapshot != null) {
+            return ResponseEntity.ok(snapshot);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

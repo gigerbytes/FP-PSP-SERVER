@@ -30,4 +30,7 @@ public interface SnapshotEconomicRepository
     List<SnapshotEconomicEntity> findDistinctFamilyByUserId(Long userId);
 
     SnapshotEconomicEntity findBySnapshotIndicator(SnapshotIndicatorEntity indicator);
+
+    SnapshotEconomicEntity findById(Long snapshotId);
+
 }

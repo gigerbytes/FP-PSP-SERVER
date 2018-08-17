@@ -609,4 +609,18 @@ public class SnapshotServiceImpl implements SnapshotService {
         }
     }
 
+    @Override
+    public Snapshot getSnapshotsById(Long snapshotId, UserDetailsDTO user) {
+        Snapshot result = null;
+        if (!user.hasRole(Role.ROLE_SURVEY_USER)) {
+            LOG.warn("[OPERATION_NOT_ALLOWED] Only {} can remove snapshots", Role.ROLE_SURVEY_USER);
+            return result;
+        } else {
+            SnapshotEconomicEntity economicEntity = economicRepository.findById(snapshotId);
+            if (economicEntity != null) {
+                result = economicMapper.entityToDto(economicEntity);
+            }
+        }
+        return result;
+    }
 }

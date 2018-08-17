@@ -404,4 +404,9 @@
         <sqlFile path="sql/2018-08-07T10:00.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <!-- Added DUMMY survey for developer use -->
+    <changeSet id="2018-08-14T17:00" author="nvaldez">
+        <sqlFile path="sql/2018-08-14T17:00.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+    
 </databaseChangeLog>

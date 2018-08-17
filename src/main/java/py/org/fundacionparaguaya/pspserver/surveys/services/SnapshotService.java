@@ -43,4 +43,7 @@ public interface SnapshotService {
     List<SurveyData> getIndicatorsValue(SurveyData indicators);
 
     List<Snapshot> getSnapshotsByFamily(Long familyId);
+
+    Snapshot getSnapshotsById(Long snapshotId, UserDetailsDTO user);
+
 }
