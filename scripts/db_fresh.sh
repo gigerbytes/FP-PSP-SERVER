@@ -1,0 +1,13 @@
+# FRESH DB INSTALL SCRIPT
+TITLE='\033[34m'
+YELLOW='\033[33m'
+GREEN='\033[32m'
+NC='\033[0m' # No Color
+
+echo -e " ${TITLE}INSTALLING DB${NC}"
+
+./scripts/updater fresh
+echo -e " ${YELLOW}DATABASE INSTALLED${NC}"
+
+echo -e " ${GREEN}FRESH INSTALATION COMPLETED${NC}"
+
