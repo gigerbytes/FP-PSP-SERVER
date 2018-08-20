@@ -40,6 +40,17 @@ This will generate the initial database, and from this point any DB related chan
 Liquibase runs automatically during server startup and update the DB (if 
 needed).
 
+
+#### Step 1.1 Database ready for Development Environment
+Scripts to generate a fresh database are included. Once you have user with `createdb` ROLE; this line allows you to rename current database and create a new one so Liquibase can generate a fresh database with enough data to login with `survey_user` to complete a basic survey.
+```shell
+export RUN_PROFILE=dev; scripts/updater fresh && java -jar target/*.war --spring.profiles.active=$RUN_PROFILE
+[PGSQL] Renaming DB: fp_psp_db to fp_psp_db-2018-08-20_17_26
+ALTER DATABASE
+[PGSQL] Creating new DB: fp_psp_db
+CREATE DATABASE
+```
+
 ### Step 2, compile the application
 
 From the fp-psp-server directory, run:
