@@ -225,9 +225,12 @@ public class FamilyServiceImpl implements FamilyService {
     public FamilyEntity getOrCreateFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot,
             PersonEntity personEntity) {
         String code = FamilyHelper.generateFamilyCode(personEntity);
+        LOG.debug("Familiy code {}", code);
 
         FamilyEntity familyEntity = familyRepository.findByCode(code)
                 .orElseGet(() -> createFamilyFromSnapshot(details, snapshot, code, personEntity));
+
+        LOG.debug("Familiy entity {}", familyEntity);
 
         activityFeedManager.createHouseholdFirstSnapshotActivity(details, familyEntity);
 

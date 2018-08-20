@@ -216,7 +216,9 @@ public class SnapshotServiceImpl implements SnapshotService {
         // FIXME Boiler plate code to build family
         // 1. Creates a family record, or gets a family if already exists
         PersonEntity personEntity = personMapper.snapshotPersonalToEntity(snapshot);
+        LOG.debug("Person {}", personEntity);
         FamilyEntity family = familyService.getOrCreateFamilyFromSnapshot(details, snapshot, personEntity);
+        LOG.debug("Family {}", family);
 
         // 2. Creates the economic entity from the snapshot parameter
         // and from the indicator entity
