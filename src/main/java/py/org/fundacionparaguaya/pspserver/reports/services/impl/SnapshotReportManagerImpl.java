@@ -293,7 +293,6 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                         .and(forSurvey(filters.getSurveyId()))
                         .and(byTimePeriod(filters.getFromDate(), filters.getToDate()))
                         .and(byMultipleSnapshots(filters.getMultipleSnapshots()))
-                        .and(bySocioeconomicFilters(filters.getSocioeconomicFilters()))
                         .and(byCoreIndicatorsFilters(
                                     filters.getIndicatorsFilters(),
                                     filters.getMatchQuantifier())),
@@ -302,6 +301,8 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                 .filter(byAdditionalIndicatorsFilters(
                                 filters.getIndicatorsFilters(),
                                 filters.getMatchQuantifier()))
+                .filter(bySocioeconomicFilters(
+                                filters.getSocioeconomicFilters()))
                 .collect(Collectors.toList());
 
         return snapshots;

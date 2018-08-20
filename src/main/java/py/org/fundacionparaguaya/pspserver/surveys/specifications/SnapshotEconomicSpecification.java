@@ -1,5 +1,6 @@
 package py.org.fundacionparaguaya.pspserver.surveys.specifications;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity_;
@@ -9,6 +10,7 @@ import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity_;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity_;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity_;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Property;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.PropertyAttributeEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
@@ -200,63 +202,6 @@ public class SnapshotEconomicSpecification {
         };
     }
 
-    public static Specification<SnapshotEconomicEntity> bySocioeconomicFilters(
-            Map<String, List<String>> socioeconomicFilters) {
-        return (root, query, builder) -> {
-            if (socioeconomicFilters == null) {
-                return builder.conjunction();
-            }
-
-            List<Predicate> predicates = new ArrayList<>();
-
-//            Join<SnapshotEconomicEntity, SurveyEntity> survey = root.join(SnapshotEconomicEntity_.getSurvey());
-//
-//            Expression<Map<String, Property>> propertiesMap = survey.get(SurveyEntity_.getSurveyDefinition())
-//                    .get(SurveyDefinition_.getSurveySchema())
-//                    .get(SurveySchema_.getProperties());
-//
-//            List<Selection<?>> propertiesList = propertiesMap.getCompoundSelectionItems();
-//
-//            List<String> economics = propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)
-//                    .stream()
-//                    .map(PropertyAttributeEntity::getPropertySchemaName)
-//                    .collect(Collectors.toList());
-//
-//            socioeconomicFilters.forEach((key, filters) -> {
-//
-//                if (economics.contains(key)) {
-//
-//                    for (Selection<?> property : propertiesList) {
-//                        if (property.getAlias().equals(key)) {
-//
-//                            // if property is of number format
-//                            if (property.get("format").equals("number")) {
-//                                Expression<String> valueStored = root.get(key);
-//                                Predicate predicate = builder.and(
-//                                        builder.greaterThanOrEqualTo(valueStored, filters.get(0)),
-//                                        builder.lessThanOrEqualTo(valueStored, filters.get(1)));
-//                                predicates.add(predicate);
-//                            }
-//
-//                            // if property is of dropdown format
-//                            if (property.get("format").equals("string")) {
-//                                Expression<String> valueStored = root.get(key);
-//                                Predicate predicate = valueStored.in(filters);
-//                                predicates.add(predicate);
-//                            }
-//
-//                        }
-//                    }
-//
-//
-//                }
-//
-//            });
-
-            return builder.and(predicates.toArray(new Predicate[0]));
-        };
-    }
-
     public static Specification<SnapshotEconomicEntity> byCoreIndicatorsFilters(
                                                 Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
         return (root, query, builder) -> {
@@ -309,10 +254,14 @@ public class SnapshotEconomicSpecification {
             SurveyData additionalProperties = snapshot.getSnapshotIndicator().getAdditionalProperties();
 
             for (Map.Entry<String, List<String>> indicatorsFilter : indicatorsFilters.entrySet()) {
-                if (!coreIndicators.contains(indicatorsFilter.getKey())) {
+                String filterKey = indicatorsFilter.getKey();
+                // We can check here if the survey definition contains filterKey to continue,
+                // but its not necessary as match will result false, and its a costly operation
+
+                if (!coreIndicators.contains(filterKey)) {
                     List<String> filtersArray = indicatorsFilter.getValue();
-                    String valueStored = additionalProperties.getAsString(indicatorsFilter.getKey());
-                    boolean match = filtersArray.contains(valueStored);
+                    String storedValue = (String) additionalProperties.get(filterKey);
+                    boolean match = filtersArray.contains(storedValue);
                     // If matchQuantifier is NULL, default to ALL
                     if (!match && (matchQuantifier == null
                             || matchQuantifier.equalsIgnoreCase("ALL"))) {
@@ -332,6 +281,87 @@ public class SnapshotEconomicSpecification {
             }
 
             // Default to quantifier ALL
+            return true;
+        };
+    }
+
+    public static java.util.function.Predicate<SnapshotEconomicEntity> bySocioeconomicFilters(
+                                                                    Map<String, List<String>> socioeconomicFilters) {
+        return snapshot -> {
+            if (socioeconomicFilters == null) {
+                return true;
+            }
+
+            List<String> coreSocioeconomics =
+                    propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)
+                            .stream()
+                            .map(PropertyAttributeEntity::getPropertySchemaName)
+                            .collect(Collectors.toList());
+
+            SurveyData additionalProperties = snapshot.getAdditionalProperties();
+
+            Map<String, Property> surveyProperties =
+                    snapshot.getSurveyDefinition().getSurveyDefinition().getSurveySchema().getProperties();
+
+            for (Map.Entry<String, List<String>> socioeconomicFilter : socioeconomicFilters.entrySet()) {
+
+                String filterKey = socioeconomicFilter.getKey();
+                List<String> filterValues = socioeconomicFilter.getValue();
+                if (!surveyProperties.containsKey(filterKey)) {
+                    continue;
+                }
+
+                Property.TypeEnum type = surveyProperties.get(filterKey).getType();
+
+                if (type.name().equalsIgnoreCase("Number")) {
+                    Number numberValue;
+                    if (coreSocioeconomics.contains(filterKey)) {
+                        try {
+                            // Use reflection to get the value from the attribute column in the table
+                            numberValue = (Number) PropertyUtils.getProperty(snapshot, filterKey);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Could not get property '" + filterKey + "' from Snapshot", e);
+                        }
+                    } else {
+                        // Get the value from the additional properties JSON
+                        numberValue = (Number) additionalProperties.get(filterKey);
+                    }
+                    Double storedValue = 0.0;
+                    // Number got from the table is always Double, Number got from JSON can be Integer or Double
+                    if (numberValue instanceof Double) {
+                        storedValue = (Double) numberValue;
+                    } else if (numberValue instanceof Integer) {
+                        storedValue = numberValue.doubleValue();
+                    }
+
+                    Double minimumFilter = Double.parseDouble(filterValues.get(0));
+                    Double maximumFilter = Double.parseDouble(filterValues.get(1));
+
+                    if (!(storedValue >= minimumFilter && storedValue <= maximumFilter)) {
+                        return false;
+                    }
+                }
+
+                if (type.name().equalsIgnoreCase("String")) {
+                    String storedValue;
+                    if (coreSocioeconomics.contains(filterKey)) {
+                        try {
+                            // Use reflection to get the value from the attribute column in the table
+                            storedValue = (String) PropertyUtils.getProperty(snapshot, filterKey);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Could not get property '" + filterKey + "' from Snapshot", e);
+                        }
+                    } else {
+                        // Get the value from the additional properties JSON
+                        storedValue = (String) additionalProperties.get(filterKey);
+                    }
+
+                    if (!filterValues.contains(storedValue)) {
+                        return false;
+                    }
+                }
+            }
+
             return true;
         };
     }
