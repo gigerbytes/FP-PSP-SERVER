@@ -79,7 +79,11 @@ public class ReportFiltersDTO {
     }
 
     public Boolean getMultipleSnapshots() {
-        return multipleSnapshots;
+        if (multipleSnapshots != null) {
+            return multipleSnapshots;
+        } else {
+            return false;
+        }
     }
 
     public void setMultipleSnapshots(Boolean multipleSnapshots) {

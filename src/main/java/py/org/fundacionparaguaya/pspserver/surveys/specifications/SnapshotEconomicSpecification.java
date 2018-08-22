@@ -188,20 +188,6 @@ public class SnapshotEconomicSpecification {
         };
     }
 
-    public static Specification<SnapshotEconomicEntity> byMultipleSnapshots(Boolean multipleSnapshots) {
-        return (root, query, builder) -> {
-            if (multipleSnapshots == null) {
-                return builder.conjunction();
-            }
-
-            if (multipleSnapshots) {
-                return builder.conjunction();
-            } else {
-                return builder.conjunction();
-            }
-        };
-    }
-
     public static Specification<SnapshotEconomicEntity> byCoreIndicatorsFilters(
                                                 Map<String, List<String>> indicatorsFilters, String matchQuantifier) {
         return (root, query, builder) -> {
@@ -363,6 +349,23 @@ public class SnapshotEconomicSpecification {
             }
 
             return true;
+        };
+    }
+
+    public static java.util.function.Predicate<SnapshotEconomicEntity> byMultipleSnapshots(
+                                                    Boolean multipleSnapshots, List<SnapshotEconomicEntity> snapshots) {
+        return snapshot -> {
+            if (multipleSnapshots) {
+                return true;
+            } else {
+                LocalDateTime maxDate = snapshots
+                        .stream()
+                        .filter(s -> s.getFamily().getCode().equals(snapshot.getFamily().getCode()))
+                        .map(SnapshotEconomicEntity::getCreatedAt)
+                        .max(LocalDateTime::compareTo).get();
+
+                return snapshot.getCreatedAt().compareTo(maxDate) == 0;
+            }
         };
     }
 
