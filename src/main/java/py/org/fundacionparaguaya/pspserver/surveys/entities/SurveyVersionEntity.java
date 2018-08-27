@@ -5,7 +5,6 @@ import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import py.org.fundacionparaguaya.pspserver.common.entities.LocalDateTimeConverter;
-import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType;
 
@@ -13,10 +12,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by rodrigovillalba on 10/16/17.
@@ -57,10 +52,6 @@ public class SurveyVersionEntity implements Serializable {
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 
-    @Column(name = "survey_id")
-    @ManyToOne
-    private SurveyEntity surveyEntity;
-
     public Long getId() {
         return id;
     }
@@ -91,14 +82,6 @@ public class SurveyVersionEntity implements Serializable {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public SurveyEntity getSurveyEntity() {
-        return surveyEntity;
-    }
-
-    public void setSurveyEntity(SurveyEntity surveyEntity) {
-        this.surveyEntity = surveyEntity;
     }
 
     @PrePersist

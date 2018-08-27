@@ -4,14 +4,15 @@ CREATE TABLE data_collect.survey_version (
 	created_at timestamp without time zone,
 	survey_definition jsonb,
 	current boolean,
-	survey_id bigint NOT NULL,
+	survey_id bigint,
 	PRIMARY KEY (id),
-	CONSTRAINT fk_survey_version_survey_id FOREIGN KEY (survey_id) REFERENCES data_collect.surveys (id)
+	CONSTRAINT fk_survey_id FOREIGN KEY (survey_id) REFERENCES data_collect.surveys (id)
+
 );
 
 ---Sequence for the survey_version ids
 CREATE SEQUENCE data_collect.survey_version_id_seq;
-ALTER TABLE data_collect.survey_version ALTER COLUMN id SET DEFAULT nextval('data_collect.survey_version_id_seq')
+ALTER TABLE data_collect.survey_version ALTER COLUMN id SET DEFAULT nextval('data_collect.survey_version_id_seq');
 
 ---The creation date of the survey_version will correspond to the last_modified _at of the surveys
 INSERT INTO data_collect.survey_version (created_at,survey_definition,survey_id)
