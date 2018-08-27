@@ -1,6 +1,7 @@
 package py.org.fundacionparaguaya.pspserver.families.entities;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.annotations.GenericGenerator;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateConverter;
 import py.org.fundacionparaguaya.pspserver.common.entities.BaseEntity;
+import py.org.fundacionparaguaya.pspserver.common.utils.DateUtils;
 import py.org.fundacionparaguaya.pspserver.families.constants.Gender;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.StoreableSnapshot;
@@ -30,6 +32,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 @Entity
 @Table(name = "person", schema = "ps_families")
@@ -110,6 +114,9 @@ public class PersonEntity extends BaseEntity implements StoreableSnapshot {
             @Parameter(name = SecondJSONBUserType.CLASS,
                     value = "py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData")})
     private SurveyData additionalProperties;
+
+    private String generatedCode;
+
 
     public FamilyEntity getFamily() {
         return family;
@@ -318,8 +325,46 @@ public class PersonEntity extends BaseEntity implements StoreableSnapshot {
 
     @Transient
     public String getFullName() {
-        return this.getFirstName().concat(" ")
+        return this.getFirstName()
+                .concat(" ")
                 .concat(this.getLastName());
     }
+
+    @Transient
+    public String getFamilyCode() {
+        if (generatedCode != null) {
+            return generatedCode;
+        }
+
+        this.generatedCode = generateFamilyCode();
+        return this.generatedCode;
+    }
+
+    private String generateFamilyCode() {
+        checkArgument(this.getBirthdate() != null, "Person birthdate is null");
+        checkArgument(this.getCountryOfBirth() != null, "Person country of birth is null");
+        checkArgument(!Strings.isNullOrEmpty(this.getFirstName()), "Person firstname is null or empty");
+        checkArgument(!Strings.isNullOrEmpty(this.getLastName()), "Person lastname is null or empty");
+
+        return this.getCountryOfBirth().getAlfa2Code()
+                .concat(".")
+                .concat(this.getFirstNameInitial())
+                .concat(this.getLastNameInitial())
+                .concat(".")
+                .concat(this.getFormattedBirthDate());
+    }
+
+    private String getFirstNameInitial() {
+        return this.getFirstName().substring(0, 1).toUpperCase();
+    }
+
+    private String getLastNameInitial() {
+        return this.getLastName().substring(0, 1).toUpperCase();
+    }
+
+    private String getFormattedBirthDate() {
+        return this.getBirthdate().format(DateUtils.getShortDateFormatter());
+    }
+
 
 }

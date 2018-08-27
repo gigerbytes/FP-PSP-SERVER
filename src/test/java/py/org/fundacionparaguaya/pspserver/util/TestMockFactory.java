@@ -2,6 +2,7 @@ package py.org.fundacionparaguaya.pspserver.util;
 
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
+import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTOBuilder;
@@ -56,7 +57,10 @@ public class TestMockFactory {
     }
 
     public static UserDetailsDTO aUser() {
-        return new UserDetailsDTOBuilder().username("jdoe").build();
+        return new UserDetailsDTOBuilder()
+                .username("jdoe")
+                .organization(OrganizationDTO.builder().build())
+                .build();
     }
 
     public static NewSnapshot aNewSnapshot() {

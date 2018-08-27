@@ -99,7 +99,9 @@ public class ApplicationIT {
         assertThat(familyDTO).isNotNull();
         assertThat(familyDTO.getOrganization()).isNotNull();
         assertThat(familyDTO.getUser()).isNotNull();
+        assertThat(familyDTO.getUser().getUserId()).isNotNull();
         assertThat(familyDTO.getPerson()).isNotNull();
+        assertThat(familyDTO.getPerson().getPersonId()).isNotNull();
         assertThat(familyDTO.getCode()).isNotNull();
     }
 
