@@ -405,7 +405,7 @@
     </changeSet>
 
     <!-- Added DUMMY survey for developer use -->
-    <changeSet id="2018-08-14T17:00" author="nvaldez">
+    <changeSet id="2018-08-14T17:00" author="nvaldez" context="dev">
         <sqlFile path="sql/2018-08-14T17:00.sql" relativeToChangelogFile="true"/>
     </changeSet>
     
