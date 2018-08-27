@@ -57,8 +57,18 @@ public class PersonMapper implements BaseMapper<PersonEntity, PersonDTO> {
     // TODO Needs refactor
     public PersonEntity snapshotPersonalToEntity(NewSnapshot snapshot) {
 
-        SurveyData personalInformation = snapshot.getMappedPersonalSurveyData(propertyAttributeSupport.staticPersonal(),
-                propertyAttributeSupport::propertySchemaToSystemName);
+        SurveyData personalInformation = getPersonInfoAsSurveyData(snapshot);
+
+        PersonEntity pe = new PersonEntity().staticProperties(personalInformation);
+
+        return pe;
+    }
+
+    private SurveyData getPersonInfoAsSurveyData(NewSnapshot snapshot) {
+        SurveyData personalInformation = snapshot
+                .getMappedPersonalSurveyData(propertyAttributeSupport.staticPersonal(),
+                    propertyAttributeSupport::propertySchemaToSystemName);
+
         if (personalInformation.get("birthdate") != null) {
             personalInformation.put("birthdate", LocalDate.parse(personalInformation.getAsString("birthdate"),
                     DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -72,10 +82,7 @@ public class PersonMapper implements BaseMapper<PersonEntity, PersonDTO> {
             personalInformation.put("countryOfBirth", country.orElse(null));
         }
         personalInformation.put("additionalProperties", new SurveyData());
-
-        PersonEntity pe = new PersonEntity().staticProperties(personalInformation);
-
-        return pe;
+        return personalInformation;
     }
 
 }
