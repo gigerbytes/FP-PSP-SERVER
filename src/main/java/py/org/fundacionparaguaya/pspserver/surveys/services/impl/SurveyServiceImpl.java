@@ -13,7 +13,7 @@ import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValid
 import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValidator.requiredValue;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -280,31 +280,23 @@ public class SurveyServiceImpl implements SurveyService {
         Long applicationId = Optional.ofNullable(userDetails.getApplication())
                 .orElse(new ApplicationDTO()).getId();
 
+        List<SurveyEntity> surveys;
         if (userHasRole(userDetails, Role.ROLE_ROOT)) {
-            return mapper.entityListToDtoList(repo.findAll());
+            surveys = repo.findAll()
+                    .stream()
+                    .sorted(Comparator.comparing(SurveyEntity::getId))
+                    .collect(Collectors.toList());
+        } else {
+            surveys = surveyOrganizationRepo.findAll(where(byApplication(applicationId))
+                            .and(byOrganization(organizationId))
+                            .and(lastModifiedGt(lastModifiedGt)))
+                            .stream()
+                            .map(SurveyOrganizationEntity::getSurvey)
+                            .distinct()
+                            .sorted(Comparator.comparing(SurveyEntity::getId))
+                            .collect(Collectors.toList());
         }
-
-        List<SurveyDefinition> lista = mapper
-                .entityListToDtoList(
-                        surveyOrganizationRepo
-                                .findAll(where(byApplication(applicationId))
-                                        .and(byOrganization(organizationId))
-                                        .and(lastModifiedGt(lastModifiedGt)))
-                                .stream().map(e -> e.getSurvey())
-                                .distinct()
-                                .collect(Collectors.toList()));
-
-        List<SurveyDefinition> toRet = new ArrayList<>();
-
-        for (SurveyDefinition survey : lista.stream().collect(Collectors.toList())) {
-            survey.setOrganizations(organizationMapper.entityListToDtoList(
-                    surveyOrganizationRepo.findBySurveyId(survey.getId())
-                            .stream().map(o -> o.getOrganization())
-                            .collect(Collectors.toList())));
-            toRet.add(survey);
-        }
-
-        return toRet;
+        return mapper.entityListToDtoList(surveys);
     }
 
     @Override

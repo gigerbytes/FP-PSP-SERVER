@@ -179,4 +179,8 @@ public class OrganizationEntity {
             return Status.INACTIVE;
         }
     }
+
+    public static OrganizationEntity of() {
+        return new OrganizationEntity();
+    }
 }

@@ -3,6 +3,8 @@ package py.org.fundacionparaguaya.pspserver.families.dtos;
 import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by rodrigovillalba on 7/17/18.
  */
@@ -17,6 +19,9 @@ public class FamilyOrganizationDTO {
     }
 
     public static FamilyOrganizationDTO of(OrganizationEntity organizationEntity, ApplicationEntity applicationEntity) {
+        checkArgument(organizationEntity != null,
+                "OrganizationEntity should not be null");
+
         return new FamilyOrganizationDTO(organizationEntity, applicationEntity);
     }
 
@@ -29,6 +34,6 @@ public class FamilyOrganizationDTO {
     }
 
     public static FamilyOrganizationDTO empty() {
-        return of(null, null);
+        return of(OrganizationEntity.of(), null);
     }
 }
