@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
+import py.org.fundacionparaguaya.pspserver.config.I18n;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
@@ -74,6 +75,8 @@ public class SurveyServiceImpl implements SurveyService {
 
     private final SurveyOrganizationService surveyOrganizationService;
 
+    private final I18n i18n;
+
     public SurveyServiceImpl(SurveyRepository repo,
             PropertyAttributeSupport propertyAttributeSupport,
             SurveyMapper mapper,
@@ -82,7 +85,8 @@ public class SurveyServiceImpl implements SurveyService {
             OrganizationMapper organizationMapper,
             ApplicationRepository applicationRepo,
             ApplicationMapper applicationMapper,
-            SurveyOrganizationService surveyOrganizationService) {
+            SurveyOrganizationService surveyOrganizationService,
+                             I18n i18n) {
         this.repo = repo;
         this.propertyAttributeSupport = propertyAttributeSupport;
         this.mapper = mapper;
@@ -92,6 +96,7 @@ public class SurveyServiceImpl implements SurveyService {
         this.applicationRepo = applicationRepo;
         this.applicationMapper = applicationMapper;
         this.surveyOrganizationService = surveyOrganizationService;
+        this.i18n=i18n;
     }
 
     @Override
@@ -238,7 +243,9 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public void deleteSurvey(Long surveyId) {
-        try {
+
+        //Deleting surveys should not delete associated data (snapshots, families, etc)
+        /*try {
 
             Optional.ofNullable(repo.findOne(surveyId)).ifPresent(survey -> {
                 surveyOrganizationRepo.deleteBySurveyId(survey.getId());
@@ -248,7 +255,9 @@ public class SurveyServiceImpl implements SurveyService {
         } catch (Exception e) {
             throw new CustomParameterizedException(
                     "The survey can not be deleted!");
-        }
+        }*/
+
+        throw new CustomParameterizedException(i18n.translate("survey.delete.unsupported"));
     }
 
     @Override
