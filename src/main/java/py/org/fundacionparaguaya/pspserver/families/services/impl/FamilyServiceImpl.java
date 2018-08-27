@@ -23,7 +23,6 @@ import py.org.fundacionparaguaya.pspserver.families.repositories.FamilyRepositor
 import py.org.fundacionparaguaya.pspserver.families.services.FamilyLocationService;
 import py.org.fundacionparaguaya.pspserver.families.services.FamilyOrganizationService;
 import py.org.fundacionparaguaya.pspserver.families.services.FamilyService;
-import py.org.fundacionparaguaya.pspserver.families.utils.FamilyHelper;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
@@ -69,10 +68,15 @@ public class FamilyServiceImpl implements FamilyService {
     private final FamilyOrganizationService familyOrganizationService;
 
     @Autowired
-    public FamilyServiceImpl(FamilyRepository familyRepository, FamilyMapper familyMapper, UserRepository userRepo,
-            I18n i18n, ApplicationProperties applicationProperties, ImageUploadService imageUploadService,
-            ActivityFeedManager activityFeedManager, FamilyLocationService familyLocationService,
-            FamilyOrganizationService familyOrganizationService) {
+    public FamilyServiceImpl(FamilyRepository familyRepository,
+                             FamilyMapper familyMapper,
+                             UserRepository userRepo,
+                             I18n i18n,
+                             ApplicationProperties applicationProperties,
+                             ImageUploadService imageUploadService,
+                             ActivityFeedManager activityFeedManager,
+                             FamilyLocationService familyLocationService,
+                             FamilyOrganizationService familyOrganizationService) {
 
         this.familyRepository = familyRepository;
         this.familyMapper = familyMapper;
@@ -205,7 +209,8 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     private FamilyFilterDTO buildFilterFromFilterAndUser(FamilyFilterDTO fromFilter, UserDetailsDTO userDetails) {
-        Long userAppId = Optional.ofNullable(userDetails.getApplication()).map(ApplicationDTO::getId).orElse(null);
+        Long userAppId = Optional.ofNullable(userDetails.getApplication())
+                .map(ApplicationDTO::getId).orElse(null);
 
         Long userOrgId = Optional.ofNullable(userDetails.getOrganization()).map(OrganizationDTO::getId)
                 .orElse(fromFilter.getOrganizationId());
@@ -223,21 +228,23 @@ public class FamilyServiceImpl implements FamilyService {
 
     @Override
     public FamilyEntity getOrCreateFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot,
-            PersonEntity personEntity) {
-        String code = FamilyHelper.generateFamilyCode(personEntity);
+            PersonEntity person) {
+        checkArgument(person != null, "Person should not be null");
+
+        String code = person.getFamilyCode();
 
         FamilyEntity familyEntity = familyRepository.findByCode(code)
-                .orElseGet(() -> createFamilyFromSnapshot(details, snapshot, code, personEntity));
+                .orElseGet(() -> createFamilyFromSnapshot(details, snapshot, person));
 
         activityFeedManager.createHouseholdFirstSnapshotActivity(details, familyEntity);
 
         return familyEntity;
     }
 
-    private FamilyEntity createFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot, String code,
+    private FamilyEntity createFamilyFromSnapshot(UserDetailsDTO details, NewSnapshot snapshot,
             PersonEntity person) {
 
-        FamilyEntity newFamily = createFamilyEntity(details, snapshot, code, person);
+        FamilyEntity newFamily = createFamilyEntity(details, snapshot, person);
 
         FamilyEntity savedFamily = familyRepository.save(newFamily);
 
@@ -248,16 +255,19 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     // This method may belong in FamilyMapper
-    private FamilyEntity createFamilyEntity(UserDetailsDTO details, NewSnapshot snapshot, String code,
+    private FamilyEntity createFamilyEntity(UserDetailsDTO currentUser, NewSnapshot snapshot,
             PersonEntity person) {
+        checkArgument(currentUser != null, "User should not be null");
+        checkArgument(snapshot != null, "Snapshot should not be null");
+
         FamilyEntity newFamily = new FamilyEntity();
         newFamily.setActive(true);
-        newFamily.setCode(code);
-        newFamily.setUser(userRepo.findByUsername(details.getUsername()));
+        newFamily.setCode(person.getFamilyCode());
+        newFamily.setUser(userRepo.findByUsername(currentUser.getUsername()));
         newFamily.setName(person.getFullName());
         newFamily.setPerson(person);
 
-        setOrgAndApplication(details, snapshot, newFamily);
+        setOrgAndApplication(currentUser, snapshot, newFamily);
         setFamilyLocationFromSnapshot(snapshot, newFamily);
 
         return newFamily;
