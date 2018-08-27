@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -18,6 +19,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -56,7 +58,7 @@ public class SurveyEntity implements Serializable {
     private String description;
 
 
-    @Column(name = "survey_definition")
+    @Transient
     @Type(
          type = "py.org.fundacionparaguaya.pspserver."
                  + "surveys.entities.types.SecondJSONBUserType",
@@ -70,12 +72,20 @@ public class SurveyEntity implements Serializable {
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 
-    @Column(name = "last_modified_at")
-    @Convert(converter = LocalDateTimeConverter.class)
-    private LocalDateTime lastModifiedAt;
-
     @OneToMany(mappedBy = "survey")
     private List<SurveyOrganizationEntity> surveysOrganizations = new ArrayList<SurveyOrganizationEntity>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "surveyEntity")
+    private List<SurveyVersionEntity> surveyVersionEntityList = new ArrayList<SurveyVersionEntity>();
+
+    public List<SurveyVersionEntity> getSurveyVersionEntityList() {
+        return surveyVersionEntityList;
+    }
+
+    public void setSurveyVersionEntityList(List<SurveyVersionEntity> surveyVersionEntityList) {
+        this.surveyVersionEntityList = surveyVersionEntityList;
+    }
 
     public List<SurveyOrganizationEntity> getSurveysOrganizations() {
         return surveysOrganizations;
@@ -105,7 +115,16 @@ public class SurveyEntity implements Serializable {
     }
 
     public SurveyDefinition getSurveyDefinition() {
-        return surveyDefinition;
+
+        SurveyVersionEntity surveyVersionEntity =  this.getSurveyVersionEntityList().stream()
+                .filter(version -> version.getCurrent()==true)
+                .findAny()
+                .orElse(null);
+        if (surveyVersionEntity == null){
+            return null;
+        }
+
+        return surveyVersionEntity.getSurveyDefinition();
     }
 
     public void setSurveyDefinition(SurveyDefinition surveyDefinition) {
@@ -142,18 +161,10 @@ public class SurveyEntity implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getLastModifiedAt() {
-        return this.lastModifiedAt;
-    }
-
-    public void setLastModifiedAt(LocalDateTime lastModifiedAt) {
-        this.lastModifiedAt = lastModifiedAt;
-    }
 
     @PrePersist
     public void preSave() {
         this.createdAt = LocalDateTime.now();
-        this.lastModifiedAt = LocalDateTime.now();
     }
 
 
@@ -165,12 +176,5 @@ public class SurveyEntity implements Serializable {
         return null;
     }
 
-    @Transient
-    public String getLastModifiedAtAsISOString() {
-        if (this.lastModifiedAt != null) {
-            return lastModifiedAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        }
-        return null;
-    }
 
 }
