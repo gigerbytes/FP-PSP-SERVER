@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    // TODO remove this? It has no concept of Authority so it lets anyone delete anyone
     @Override
     public UserDTO addUser(UserDTO userDTO) {
         userRepository
@@ -92,6 +93,20 @@ public class UserServiceImpl implements UserService {
                                     .build()
                                     .asMap());
                 });
+        // Roles are stored as ROLE_APP_ADMIN but the Role Enum only counts APP_ADMIN as the actual
+        //  value so we need to cut our poor Role data into pieces or else it fails
+        userRoleRepository.
+                findUserByRoleAndUserEmailIgnoreCase(Role.valueOf(userDTO.getRole().toString().split("ROLE_")[1]),
+                                                     userDTO.getEmail())
+                .ifPresent(user -> {
+                    throw new CustomParameterizedException(i18n.translate("email.emailAlreadyLinkedToRole"),
+                            new ImmutableMultimap.Builder<String, String>()
+                                    .put("email", user.getUser().getEmail())
+                                    .build()
+                                    .asMap());
+                });
+
+
         UserEntity user = new UserEntity();
         BeanUtils.copyProperties(userDTO, user);
         UserEntity newUser = userRepository.save(user);
@@ -117,6 +132,16 @@ public class UserServiceImpl implements UserService {
                     throw new CustomParameterizedException(i18n.translate("user.userAlreadyExists"),
                             new ImmutableMultimap.Builder<String, String>()
                                     .put("username", user.getUsername())
+                                    .build()
+                                    .asMap());
+                });
+        userRoleRepository.
+                findUserByRoleAndUserEmailIgnoreCase(userRoleApplicationDTO.getRole(),
+                                                     userRoleApplicationDTO.getEmail())
+                .ifPresent(user -> {
+                    throw new CustomParameterizedException(i18n.translate("email.emailAlreadyLinkedToRole"),
+                            new ImmutableMultimap.Builder<String, String>()
+                                    .put("email", user.getUser().getEmail())
                                     .build()
                                     .asMap());
                 });
@@ -214,10 +239,24 @@ public class UserServiceImpl implements UserService {
         checkArgument(userTargetId > 0, "Argument was %s but expected nonnegative", userTargetId);
 
         UserEntity userTarget = userRepository.findOne(userTargetId);
+        UserRoleEntity userTargetRole = userRoleRepository.findByUserId(userTargetId);
 
-        //check if logged user can perform the update over the targeted user.
+        //check if logged user can perform the update over the targeted user (Has Authority).
         UserEntity responsibleUser = userRepository.findByUsername(requesterUserName);
         if (canPerformUpdateOverUser(userTarget, responsibleUser)){
+            if (!userTarget.getEmail().equals(userTargetDTO.getEmail())) {
+                userRoleRepository.
+                    findUserByRoleAndUserEmailIgnoreCase(userTargetRole.getRole(),
+                                                         userTargetDTO.getEmail())
+                    .ifPresent(user -> {
+                        throw new CustomParameterizedException(i18n.translate("email.emailAlreadyLinkedToRole"),
+                                new ImmutableMultimap.Builder<String, String>()
+                                        .put("email", user.getUser().getEmail())
+                                        .build()
+                                        .asMap());
+                    });
+            }
+
             userTarget.setEmail(userTargetDTO.getEmail());
             userTarget.setActive(userTargetDTO.isActive());
             userRepository.save(userTarget);
@@ -297,8 +336,8 @@ public class UserServiceImpl implements UserService {
             }
 
             //Check if the UserTarget role is inmmediatly under the level of the responsibleUser role
-            if (roleResponsible.equals(Role.ROLE_APP_ADMIN.getSecurityName()) &&
-                    (targetIsUserSurvey || targetIsUser )){
+            if (roleResponsible.equals(Role.ROLE_APP_ADMIN.getSecurityName())
+                    && (targetIsUserSurvey || targetIsUser)){
                 long idOrgTarget = userTargetApplicationEntity.getOrganization().getId();
                 long idOrgResponsible = userResponsibleApplicationEntity.getOrganization().getId();
 
@@ -313,6 +352,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(Long userId, UserDTO userDTO) {
         checkArgument(userId > 0, "Argument was %s but expected nonnegative", userId);
+
+        userRoleRepository.
+                findUserByRoleAndUserEmailIgnoreCase(Role.valueOf(userDTO.getRole().toString().split("ROLE_")[1]),
+                                                     userDTO.getEmail())
+                .ifPresent(user -> {
+                    if (userDTO.getUserId() != user.getUser().getId()) {
+                        throw new CustomParameterizedException(i18n.translate("email.emailAlreadyLinkedToRole"),
+                                new ImmutableMultimap.Builder<String, String>()
+                                        .put("email", user.getUser().getEmail())
+                                        .build()
+                                        .asMap());
+                    }
+                });
 
         return Optional.ofNullable(
                 userRepository.findOne(userId))
