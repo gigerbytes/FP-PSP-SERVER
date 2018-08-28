@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO addUser(UserDTO userDTO) {
         userRepository
-                .findOneByUsername(userDTO.getUsername())
+                .findOneByUsernameIgnoreCase(userDTO.getUsername())
                 .ifPresent(user -> {
                     throw new CustomParameterizedException("User already exists.",
                             new ImmutableMultimap.Builder<String, String>()
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO addUserWithRoleAndApplication(UserRoleApplicationDTO userRoleApplicationDTO,
                                                  UserDetailsDTO userDetails) {
         userRepository
-                .findOneByUsername(userRoleApplicationDTO.getUsername())
+                .findOneByUsernameIgnoreCase(userRoleApplicationDTO.getUsername())
                 .ifPresent(user -> {
                     throw new CustomParameterizedException(i18n.translate("user.userAlreadyExists"),
                             new ImmutableMultimap.Builder<String, String>()

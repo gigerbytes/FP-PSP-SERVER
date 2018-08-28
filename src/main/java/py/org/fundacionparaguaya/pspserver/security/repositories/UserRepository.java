@@ -15,11 +15,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findOneByUsername(String username);
 
+    Optional<UserEntity> findOneByUsernameIgnoreCase(String username);
+
     Optional<UserEntity> findUserByEmail(String userEmail);
 
     UserEntity findById(Long userId);
 
     UserEntity findByUsername(String username);
+
+    UserEntity findByUsernameIgnoreCase(String username);
 
     Page<UserEntity> findAll(Pageable page);
 

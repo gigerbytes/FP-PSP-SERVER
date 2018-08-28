@@ -30,8 +30,8 @@ import py.org.fundacionparaguaya.pspserver.web.rest.OrganizationController;
  */
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
-	
-	private static final Logger LOG = LoggerFactory.getLogger(OrganizationController.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(OrganizationController.class);
 
     private final UserRepository userRepository;
 
@@ -43,7 +43,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final ApplicationMapper applicationMapper;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepo, UserApplicationRepository userApplicationRepo, OrganizationMapper organizationMapper, ApplicationMapper applicationMapper) {
+    public UserDetailsServiceImpl(UserRepository userRepository,
+                                  UserRoleRepository userRoleRepo,
+                                  UserApplicationRepository userApplicationRepo,
+                                  OrganizationMapper organizationMapper,
+                                  ApplicationMapper applicationMapper) {
         this.userRepository = userRepository;
         this.userRoleRepo = userRoleRepo;
         this.userApplicationRepo = userApplicationRepo;
@@ -53,9 +57,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetailsDTO loadUserByUsername(String username) throws UsernameNotFoundException {
-    	LOG.info("Loading user details: {}", username);
+        LOG.info("Loading user details: {}", username);
 
-        UserEntity user = userRepository.findOneByUsername(username)
+        UserEntity user = userRepository.findOneByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found " + username));
 
         List<UserRoleEntity> roles =  userRoleRepo.findByUser(user);
