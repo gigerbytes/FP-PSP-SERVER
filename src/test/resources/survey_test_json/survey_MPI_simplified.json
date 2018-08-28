@@ -1,0 +1,93 @@
+{
+  "title": "survey with defaults",
+  "description": "A simple stoplight survey example with default values.",
+  "survey_schema": {
+    "title": "Repeated questions",
+    "type": "object",
+    "properties": {
+      "questionsPerFamilyMember": {
+        "type": "object",
+        "title": "family",
+        "required": ["numberOfFamilyMembers"],
+        "properties": {
+          "numberOfFamilyMembers": {
+            "type": "number",
+            "title": "Family members"
+          },
+          "questions": {
+            "type": "array",
+            "title": "Questions per member",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "personBeingAsked": {
+                  "type": "boolean",
+                  "title": "Are you the person being asked?"
+                },
+                "relationship": {
+                  "type": "string",
+                  "title": "Relationship with the household",
+                  "enum": ["married", "father", "other"]
+                },
+                "name": {
+                  "type": "string",
+                  "title": "Your name"
+                },
+                "age": {
+                  "type": "number",
+                  "title": "Age"
+                },
+                "gender": {
+                  "type": "string",
+                  "title": "Gender",
+                  "enum": ["male", "female", "other"]
+                },
+                "levelOfEducation": {
+                  "type": "string",
+                  "title": "Level of education",
+                  "enum": [
+                    "none",
+                    "pre-primaria",
+                    "primaria",
+                    "secundaria",
+                    "post - secundaria(no universitaria)",
+                    "universitaria",
+                    "post - grado",
+                    "no sé"
+                  ]
+                },
+                "gradeAchieved": {
+                  "type": "string",
+                  "title": "Grade achieved",
+                  "enum": [
+                    "Primaria 1ro",
+                    "Primaria 2do",
+                    "Primaria 9no",
+                    "Secundaria 1ro",
+                    "Secundaria 2do",
+                    "Secundaria 3ro",
+                    "Universitaria 1er nivel",
+                    "Universitaria 2do nivel"
+                  ]
+                },
+                "employmentStatus": {
+                  "type": "string",
+                  "title": "Do you have a job?",
+                  "enum": ["si", "no", "no se", "no aplica"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "survey_ui_schema": {
+    "questionsPerFamilyMember": {
+      "questions": {
+        "minItems": "numberOfFamilyMembers"
+      }
+    }
+  }
+}

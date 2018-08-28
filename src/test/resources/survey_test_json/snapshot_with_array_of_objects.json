@@ -1,0 +1,105 @@
+{
+  "personal_survey_data":{
+  	"firstName":"Juan",
+  	"lastName":"Perez",
+  	"birthdate":"1980-12-09",
+  	"countryOfBirth":"PY"
+  },
+  "economic_survey_data": {
+    "currency": "guaranies",
+    "activityMain": "worker",
+    "activitySecondary": "mechanic",
+    "householdMonthlyIncome": 1000000,
+    "salaryIncome": 1000000,
+    "benefitIncome": 1000000,
+    "pensionIncome": 1000000,
+    "savingsIncome": 500000,
+    "otherIncome": 50000,
+    "householdMonthlyOutgoing": 999999,
+    "netSuplus": 123123,
+    "educationClientLevel": "bachiller humanístico",
+    "educationPersonMostStudied": "universitario",
+    "educationLevelAttained": "ingeniero",
+    "housingSituation": "precaria",
+    "otherUsefulInfo": "no hay otra información de utilidad",
+    "areaOfResidence": "RURAL",
+    "employmentStatusPrimary": "Developer",
+    "employmentStatusSecondary": "mechanic",
+    "questionsPerFamilyMember": {
+      "numberOfFamilyMembers": 2,
+      "questions": [
+        {
+          "personBeingAsked": true,
+          "relationship": "father",
+          "name": "333",
+          "age": 2,
+          "gender": "male",
+          "levelOfEducation": "pre-primaria",
+          "gradeAchieved": "Primaria 2do",
+          "employmentStatus": "no"
+        },
+        {
+          "personBeingAsked": true,
+          "relationship": "married",
+          "name": "rrrr",
+          "age": 34,
+          "gender": "other",
+          "levelOfEducation": "post - secundaria(no universitaria)",
+          "gradeAchieved": "Primaria 2do",
+          "employmentStatus": "no aplica"
+        }
+      ]
+    }
+  },
+  "indicator_survey_data": {
+    "income": "normal income",
+    "documentation": "no tengo",
+    "drinkingWaterAccess": "red",
+    "nearbyHealthPost": "blue",
+    "alimentation": "red",
+    "garbageDisposal": "blue",
+    "safeHouse": "red",
+    "safeBathroom": "blue",
+    "electricityAccess": "blue",
+    "refrigerator": "red",
+    "separateBed": "red",
+    "separateBedrooms": "blue",
+    "properKitchen": "red",
+    "phone": "23123",
+    "security": "red",
+    "readAndWrite": "blue",
+    "middleEducation": "red",
+    "socialCapital": "red",
+    "informationAccess": "blue",
+    "influenceInPublicSector": "red",
+    "awarenessOfNeeds": "red",
+    "selfEsteem": "blue",
+    "autonomyDecisions": "blue"
+  },
+  "survey_id": 0,
+  "snapshot_economic_id": 0,
+  "snapshot_indicator_id": 0,
+  "user_id": 0,
+  "user" : {
+      "userId" : 0,
+      "username" : "survey_user",
+      "email" : "survey_user@povertysotplight.org",
+      "active" : true,
+      "application" : null,
+      "organization" : null,
+      "role" : null
+  },
+  "family": {
+      "familyId": 0,
+      "name": "Juan Perez",
+      "code": "PY.JP.20180101",
+      "locationPositionGps": "0.0, 0.0",
+      "person": null,
+      "application": null,
+      "organization": null,
+      "user": null,
+      "active": true
+  },
+  "term_cond_id": 0,
+  "priv_pol_id": 0
+}

@@ -22,19 +22,23 @@ import java.io.InputStream;
 public class TestHelper {
 
     public static final Long SURVEY_ID = 1L;
-    public static final String SURVEY_DEFAULTS = "/survey_defaults.json";
     public static final Long USER_ID = 3L;
     public static final Long TERM_COND_ID = 4L;
     public static final Long PRIV_POL_ID = 5L;
-    public static final String SNAPSHOT_JSON_FILE = "/snapshot.json";
-    private final static ObjectMapper mapper = new ObjectMapper();
     private static final Long SNAPSHOT_ID = 2L;
+
+    public static final String SURVEY_DEFAULTS = "/survey_test_json/survey_defaults_with_array_of_objects.json";
+    public static final String SNAPSHOT_JSON_FILE = "/survey_test_json/snapshot_with_array_of_objects.json";
+
+    private final static ObjectMapper mapper = new ObjectMapper();
+
 
     public static String mapToJson(Object obj) throws JsonProcessingException {
         return mapper.writeValueAsString(obj);
     }
 
-    public static Object mapToObject(String contentAsString, Class<?> clazz) throws JsonParseException, JsonMappingException, IOException {
+    public static Object mapToObject(String contentAsString, Class<?> clazz) throws JsonParseException,
+            JsonMappingException, IOException {
         return mapper.readValue(contentAsString, clazz);
     }
 
