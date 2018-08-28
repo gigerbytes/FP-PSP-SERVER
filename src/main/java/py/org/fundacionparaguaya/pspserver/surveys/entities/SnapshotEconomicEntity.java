@@ -157,6 +157,18 @@ public class SnapshotEconomicEntity implements StoreableSnapshot {
                             + "pspserver.surveys.dtos.SurveyData") })
     private SurveyData personalInformation;
 
+    @ManyToOne
+    @JoinColumn(name = "survey_version_id")
+    public SurveyVersionEntity surveyVersionEntity;
+
+    public SurveyVersionEntity getSurveyVersionEntity() {
+        return surveyVersionEntity;
+    }
+
+    public void setSurveyVersionEntity(SurveyVersionEntity surveyVersionEntity) {
+        this.surveyVersionEntity = surveyVersionEntity;
+    }
+
     public Long getId() {
         return id;
     }
@@ -439,6 +451,11 @@ public class SnapshotEconomicEntity implements StoreableSnapshot {
 
     public SnapshotEconomicEntity privPol(TermCondPolEntity privPol) {
         this.privPol = privPol;
+        return this;
+    }
+
+    public SnapshotEconomicEntity surveyVersion(SurveyVersionEntity surveyVersionEntity){
+        this.surveyVersionEntity = surveyVersionEntity;
         return this;
     }
 

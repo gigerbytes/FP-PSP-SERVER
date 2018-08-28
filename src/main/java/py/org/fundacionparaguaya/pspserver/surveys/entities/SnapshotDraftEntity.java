@@ -91,6 +91,23 @@ public class SnapshotDraftEntity extends BaseEntity {
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "survey_version_id")
+    public SurveyVersionEntity surveyVersionEntity;
+
+    public SurveyVersionEntity getSurveyVersionEntity() {
+        return surveyVersionEntity;
+    }
+
+    public void setSurveyVersionEntity(SurveyVersionEntity surveyVersionEntity) {
+        this.surveyVersionEntity = surveyVersionEntity;
+    }
+
+    public SnapshotDraftEntity surveyVersion(SurveyVersionEntity surveyVersionEntity){
+        this.surveyVersionEntity = surveyVersionEntity;
+        return this;
+    }
+
     public Long getId() {
         return id;
     }

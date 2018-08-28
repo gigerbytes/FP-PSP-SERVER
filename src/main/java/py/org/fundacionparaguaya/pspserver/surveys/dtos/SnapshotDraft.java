@@ -35,6 +35,22 @@ public class SnapshotDraft {
     @JsonProperty("created_at")
     private String createdAt;
 
+    @JsonProperty("survey_version_id")
+    private Long surveyVersionId;
+
+    public Long getSurveyVersionId() {
+        return surveyVersionId;
+    }
+
+    public void setSurveyVersionId(Long surveyVersionId) {
+        this.surveyVersionId = surveyVersionId;
+    }
+
+    public SnapshotDraft surveyVersion(Long surveyVersionId){
+        this.surveyVersionId = surveyVersionId;
+        return this;
+    }
+
     public Long getId() {
         return id;
     }

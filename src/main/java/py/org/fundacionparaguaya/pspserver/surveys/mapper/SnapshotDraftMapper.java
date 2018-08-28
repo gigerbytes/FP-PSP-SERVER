@@ -54,7 +54,8 @@ public class SnapshotDraftMapper implements
     public SnapshotDraft entityToDto(SnapshotDraftEntity entity) {
         SnapshotDraft dto = modelMapper.map(entity, SnapshotDraft.class);
         dto = dto.createdAt(entity.getCreatedAtAsISOString()).
-                surveyId(entity.getSurveyDefinition().getId());
+                surveyId(entity.getSurveyDefinition().getId())
+                .surveyVersion(entity.getSurveyVersionEntity().getId());
         return dto;
     }
 
@@ -80,6 +81,7 @@ public class SnapshotDraftMapper implements
         if (dto.getSurveyId()!=null) {
             entity.setSurveyDefinition(surveyRepository
                 .findOne(dto.getSurveyId()));
+            entity.setSurveyVersionEntity(entity.getSurveyDefinition().getCurrentVersion());
         }
 
         return entity;
