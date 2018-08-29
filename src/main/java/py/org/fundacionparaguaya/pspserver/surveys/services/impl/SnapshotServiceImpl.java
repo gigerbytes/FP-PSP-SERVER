@@ -1,13 +1,14 @@
 package py.org.fundacionparaguaya.pspserver.surveys.services.impl;
 
 import com.amazonaws.util.json.Jackson;
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
 import py.org.fundacionparaguaya.pspserver.config.I18n;
@@ -22,7 +23,15 @@ import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepo
 import py.org.fundacionparaguaya.pspserver.security.constants.Role;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
-import py.org.fundacionparaguaya.pspserver.surveys.dtos.*;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.PropertyTitle;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotIndicatorPriority;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotIndicators;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotTaken;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.TopOfIndicators;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotIndicatorEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.enums.SurveyStoplightEnum;
@@ -39,7 +48,12 @@ import py.org.fundacionparaguaya.pspserver.surveys.validation.ValidationResults;
 
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -317,6 +331,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         return surveyData;
     }
 
+    // TODO Needs refactor
     public SurveyData mapToNumericIndicators(SurveyData surveyData) {
 
         SurveyData outSurveyData = new SurveyData();

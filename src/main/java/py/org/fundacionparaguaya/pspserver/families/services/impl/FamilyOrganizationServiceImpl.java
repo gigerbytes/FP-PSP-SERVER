@@ -11,6 +11,8 @@ import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepo
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * Created by rodrigovillalba on 7/17/18.
  */
@@ -36,6 +38,9 @@ public class FamilyOrganizationServiceImpl implements FamilyOrganizationService 
 
     @Override
     public FamilyOrganizationDTO getFamilyOrganization(UserDetailsDTO currentUser, NewSnapshot snapshot) {
+        checkArgument(currentUser.getOrganization() != null || snapshot.getOrganizationId() != null,
+                "Either snapshot or user should have an organisation with a not null value");
+
         ApplicationEntity app = null;
         OrganizationEntity org = null;
 
