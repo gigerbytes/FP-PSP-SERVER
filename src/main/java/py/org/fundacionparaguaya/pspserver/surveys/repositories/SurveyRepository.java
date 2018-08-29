@@ -3,11 +3,7 @@ package py.org.fundacionparaguaya.pspserver.surveys.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import org.springframework.data.jpa.repository.Query;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
-
-import java.util.List;
-
 /**
  * Created by rodrigovillalba on 10/17/17.
  */
