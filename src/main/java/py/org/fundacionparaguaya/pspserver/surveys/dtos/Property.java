@@ -351,6 +351,9 @@ public class Property implements Serializable {
         @JsonProperty("enum")
         private List<Object> enumValues = null;
 
+        @JsonProperty("properties")
+        private Map<String, Property> properties = null;
+
         public TypeEnum getType() {
             return this.type;
         }
@@ -358,6 +361,8 @@ public class Property implements Serializable {
         public List<Object> getEnumValues() {
             return this.enumValues;
         }
+
+        public Map<String, Property> getProperties() {return this.properties;}
 
         /**
          * Valid if enumValues contains "value"
