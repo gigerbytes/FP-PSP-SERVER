@@ -87,8 +87,8 @@ public class SnapshotEconomicSpecification {
     }
 
     public static Specification<SnapshotEconomicEntity> byApplications(List<Long> applications) {
-        return (root, query, builder) -> {
-            if (applications == null) {
+        return (Root<SnapshotEconomicEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
+            if (applications == null || applications.size() == 0) {
                 return builder.conjunction();
             }
             Path<Long> applicationIdPath = root.join(SnapshotEconomicEntity_.getFamily())
@@ -112,19 +112,13 @@ public class SnapshotEconomicSpecification {
     }
 
     public static Specification<SnapshotEconomicEntity> byOrganizations(List<Long> organizations) {
-        return new Specification<SnapshotEconomicEntity>() {
-            @Override
-            public Predicate toPredicate(Root<SnapshotEconomicEntity> root, CriteriaQuery<?> query,
-                    CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-
-                if (organizations != null) {
-                    //FIXME These join expressions are not typesafe and can lead to errors, use metamodels to avoid this
-                    predicates.add(root.join("family").join("organization").get("id").in(organizations));
-                }
-
-                return cb.and(predicates.toArray(new Predicate[predicates.size()]));
+        return (Root<SnapshotEconomicEntity> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
+            if (organizations == null || organizations.size() == 0) {
+                return builder.conjunction();
             }
+            Path<Long> organizationPath = root.join(SnapshotEconomicEntity_.getFamily())
+                    .get(FamilyEntity_.getOrganization()).get(OrganizationEntity_.getId());
+            return organizationPath.in(organizations);
         };
     }
 
