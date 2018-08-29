@@ -393,6 +393,7 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
         keys.add(i18n.translate("snapshot.report.header.familyCode"));
         keys.add(i18n.translate("snapshot.report.header.familyName"));
         keys.add(i18n.translate("snapshot.report.header.createdAt"));
+        keys.add(i18n.translate("snapshot.report.header.surveyUser"));
 
         for (String orderKey : uiOrder) {
             for (String personalKey : personalInformationKeys) {
@@ -454,6 +455,9 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                 }
             }
             data.put(i18n.translate("snapshot.report.header.createdAt"), snapshot.getCreatedAtLocalDateString());
+            if (snapshot.getUser() != null) {
+                data.put(i18n.translate("snapshot.report.header.surveyUser"), snapshot.getUser().getUsername());
+            }
 
             PersonEntity person = snapshot.getFamily().getPerson();
 
