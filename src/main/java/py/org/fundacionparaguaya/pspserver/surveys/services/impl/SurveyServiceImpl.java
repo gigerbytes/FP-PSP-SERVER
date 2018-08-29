@@ -13,7 +13,6 @@ import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValid
 import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValidator.requiredValue;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -325,22 +324,29 @@ public class SurveyServiceImpl implements SurveyService {
                     .sorted(Comparator.comparing(SurveyEntity::getId))
                     .collect(Collectors.toList());
         } else {
+            surveys = surveyOrganizationRepo.findAll(where(byApplication(applicationId))
+                    .and(byOrganization(organizationId)))
+                    .stream()
+                    .map(SurveyOrganizationEntity::getSurvey)
+                    .distinct()
+                    .sorted(Comparator.comparing(SurveyEntity::getId))
+                    .collect(Collectors.toList());
 
-            surveys = repo.findByAppAndOrg(applicationId,organizationId)
-                        .stream()
-                        .sorted(Comparator.comparing(SurveyEntity::getId))
-                        .collect(Collectors.toList());
-            if (lastModifiedGt!=null){
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            if (lastModifiedGt!=null) {
+                /*Default format is yyyy-MM-dd'T'HH:mm --> yyyy-MM-ddTHH:mm
+                * DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'HH:mm");
+                * */
                 try {
-                    final LocalDateTime dateTimeParam = LocalDateTime.parse(lastModifiedGt,formatter);
+                    final LocalDateTime dateTimeParam = LocalDateTime.parse(lastModifiedGt);
                     surveys = surveys.stream()
                             .filter(survey -> survey.getCurrentVersion().getCreatedAt().isAfter(dateTimeParam))
                             .collect(Collectors.toList());
-                }catch (RuntimeException e){
-                    throw new CustomParameterizedException("Invalid Date: " + lastModifiedGt);
+                } catch (RuntimeException e) {
+                    throw new CustomParameterizedException("Invalid Date: " + lastModifiedGt
+                            + "Format should be: yyyy-MM-dd'T'HH:mm");
                 }
             }
+
         }
         return mapper.entityListToDtoList(surveys);
     }

@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,9 +15,4 @@ public interface SurveyRepository extends JpaRepository<SurveyEntity, Long>,
         JpaSpecificationExecutor<SurveyEntity> {
 
     SurveyEntity findById(Long id);
-
-    @Query("select distinct s from SurveyEntity s inner join s.surveysOrganizations so where" +
-            " so.application.id = ?1 and" +
-            " so.organization.id = ?2")
-    List<SurveyEntity> findByAppAndOrg(Long appId, Long orgId);
 }

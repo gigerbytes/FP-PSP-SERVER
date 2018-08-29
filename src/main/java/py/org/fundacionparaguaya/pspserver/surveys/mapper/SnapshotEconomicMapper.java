@@ -68,7 +68,7 @@ public class SnapshotEconomicMapper implements
                 .snapshotEconomicId(entity.getId())
                 .snapshotIndicatorId(entity.getSnapshotIndicator().getId())
                 .surveyId(entity.getSurveyDefinition().getId())
-                .surveyVersion(entity.getSurveyVersionEntity().getId())
+                .surveyVersionId(entity.getSurveyVersionEntity().getId())
                 .createdAt(entity.getCreatedAtAsISOString())
                 .economicSurveyData(getAllProperties(entity,
                         propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)))

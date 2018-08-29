@@ -316,7 +316,7 @@ public class Snapshot {
         return this;
     }
 
-    public Snapshot surveyVersion(Long surveyVersionId){
+    public Snapshot surveyVersionId(Long surveyVersionId){
         this.surveyVersionId = surveyVersionId;
         return this;
     }

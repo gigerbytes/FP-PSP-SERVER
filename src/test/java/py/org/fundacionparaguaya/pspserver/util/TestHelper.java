@@ -22,6 +22,7 @@ import java.io.InputStream;
 public class TestHelper {
 
     public static final Long SURVEY_ID = 1L;
+    public static final Long SURVEY_VERSION_ID = 6L;
     public static final String SURVEY_DEFAULTS = "/survey_defaults.json";
     public static final Long USER_ID = 3L;
     public static final Long TERM_COND_ID = 4L;
@@ -67,6 +68,7 @@ public class TestHelper {
         Snapshot snapshot = (Snapshot) mapToObjectFromFile(SNAPSHOT_JSON_FILE, Snapshot.class);
         return new Snapshot()
                 .surveyId(surveyId)
+                .surveyVersionId(SURVEY_VERSION_ID)
                 .snapshotEconomicId(SNAPSHOT_ID)
                 .userId(USER_ID)
                 .user(snapshot.getUser())
