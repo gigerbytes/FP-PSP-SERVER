@@ -27,8 +27,8 @@ public class TestHelper {
     public static final Long PRIV_POL_ID = 5L;
     private static final Long SNAPSHOT_ID = 2L;
 
-    public static final String SURVEY_DEFAULTS = "/survey_test_json/survey_defaults_with_array_of_objects.json";
-    public static final String SNAPSHOT_JSON_FILE = "/survey_test_json/snapshot_with_array_of_objects.json";
+    public static final String SURVEY_DEFAULTS = "/survey_test_json/survey_defaults.json";
+    public static final String SNAPSHOT_JSON_FILE = "/survey_test_json/snapshot.json";
 
     private final static ObjectMapper mapper = new ObjectMapper();
 
