@@ -203,6 +203,9 @@ public class Snapshot {
         sb.append("    surveyId: ")
         .append(toIndentedString(surveyId))
         .append("\n");
+        sb.append("    surveyVersionId: ")
+                .append(this.surveyVersionId)
+                .append("\n");
         sb.append("    snapshotEconomicId: ")
         .append(toIndentedString(snapshotEconomicId))
         .append("\n");
