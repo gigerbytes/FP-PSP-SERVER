@@ -276,7 +276,7 @@ public class SurveyServiceImpl implements SurveyService {
             survey.setTitle(surveyDefinition.getTitle());
 
             //comparisons to see if new version will be created
-            if (this.definitionUpdated(survey,surveyDefinition)){
+            if (this.definitionUpdated(survey, surveyDefinition)){
                 survey.getCurrentVersion().setCurrent(false);
 
                 SurveyVersionEntity surveyVersionEntity = new SurveyVersionEntity();
@@ -294,11 +294,11 @@ public class SurveyServiceImpl implements SurveyService {
                 () -> new UnknownResourceException("Survey does not exist"));
     }
 
-    private boolean definitionUpdated(SurveyEntity surveyEntity,SurveyDefinition surveyDefinition){
+    private boolean definitionUpdated(SurveyEntity surveyEntity, SurveyDefinition surveyDefinition){
         SurveyDefinition savedDefinition = surveyEntity.getCurrentVersion().getSurveyDefinition();
 
-        if (surveyDefinition.getSurveyUISchema().equals(savedDefinition.getSurveyUISchema()) &&
-                surveyDefinition.getSurveySchema().equals(savedDefinition.getSurveySchema())){
+        if (surveyDefinition.getSurveyUISchema().equals(savedDefinition.getSurveyUISchema())
+                && surveyDefinition.getSurveySchema().equals(savedDefinition.getSurveySchema())){
             return false;
         }
 

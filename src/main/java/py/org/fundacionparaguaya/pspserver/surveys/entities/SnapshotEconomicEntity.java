@@ -159,7 +159,7 @@ public class SnapshotEconomicEntity implements StoreableSnapshot {
 
     @ManyToOne
     @JoinColumn(name = "survey_version_id")
-    public SurveyVersionEntity surveyVersionEntity;
+    private SurveyVersionEntity surveyVersionEntity;
 
     public SurveyVersionEntity getSurveyVersionEntity() {
         return surveyVersionEntity;

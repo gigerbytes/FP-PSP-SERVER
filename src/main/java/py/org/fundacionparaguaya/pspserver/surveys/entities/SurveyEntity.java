@@ -114,7 +114,7 @@ public class SurveyEntity implements Serializable {
     public SurveyDefinition getSurveyDefinition() {
 
         SurveyVersionEntity surveyVersionEntity =  this.getSurveyVersionEntityList().stream()
-                .filter(version -> version.getCurrent()==true)
+                .filter(version -> version.getCurrent())
                 .findAny()
                 .orElse(null);
         if (surveyVersionEntity == null){
