@@ -260,7 +260,8 @@ public class SnapshotServiceImpl implements SnapshotService {
         LOG.info("User '{}' created a new Snapshot, snapshot_id={}", details.getUsername(),
                 created.getSnapshotEconomicId());
         LOG.info("Snapshot = {}", created);
-        LOG.info("User '{}' finished Survey, survey_id={}", details.getUsername(), created.getSurveyId());
+        LOG.info("User '{}' finished Survey, survey_id={}, survey_version_id={}", details.getUsername(),
+                created.getSurveyId(), created.getSurveyVersionId());
 
         return created;
     }
@@ -380,7 +381,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         toRet.setSnapshotIndicatorId(originalSnapshot.getSnapshotIndicator().getId());
         toRet.setSnapshotEconomicId(originalSnapshot.getId());
         toRet.setSurveyId(originalSnapshot.getSurveyDefinition().getId());
-        toRet.setSurveyVersionId(originalSnapshot.surveyVersionEntity.getId());
+        toRet.setSurveyVersionId(originalSnapshot.getSurveyVersionEntity().getId());
 
 
         // set family for information purpose

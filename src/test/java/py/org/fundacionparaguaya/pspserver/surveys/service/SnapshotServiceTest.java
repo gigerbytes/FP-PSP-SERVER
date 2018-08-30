@@ -80,7 +80,7 @@ public class SnapshotServiceTest {
     private OrganizationRepository organizationRepo;
 
     @Mock
-    SurveyRepository surveyRepository;
+    private SurveyRepository surveyRepository;
 
     private static final PersonEntity MOCK_PERSON = aPerson();
 
