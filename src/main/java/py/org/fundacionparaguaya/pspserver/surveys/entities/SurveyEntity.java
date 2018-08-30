@@ -133,7 +133,7 @@ public class SurveyEntity implements Serializable {
     @JsonIgnore
     public SurveyVersionEntity getCurrentVersion(){
         SurveyVersionEntity surveyVersionEntity =  this.getSurveyVersionEntityList().stream()
-                .filter(version -> version.getCurrent()==true)
+                .filter(version -> version.getCurrent())
                 .findAny()
                 .orElse(null);
         if (surveyVersionEntity == null){
