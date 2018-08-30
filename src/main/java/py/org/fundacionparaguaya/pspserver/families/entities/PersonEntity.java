@@ -115,8 +115,8 @@ public class PersonEntity extends BaseEntity implements StoreableSnapshot {
                     value = "py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData")})
     private SurveyData additionalProperties;
 
+    @Transient
     private String generatedCode;
-
 
     public FamilyEntity getFamily() {
         return family;
