@@ -21,8 +21,9 @@ public class PasswordResetTokenController {
 
     @PostMapping("/resetPassword")
     public ResponseEntity<?> resetPassword(
+            @RequestParam("username") String username,
             @RequestParam("email") String userEmail) {
-        passwordResetTokenService.resetPassword(userEmail);
+        passwordResetTokenService.resetPassword(username, userEmail);
         return ResponseEntity.noContent().build();
     }
 
