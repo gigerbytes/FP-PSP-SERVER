@@ -50,7 +50,8 @@
       "influenceInPublicSector",
       "awarenessOfNeeds",
       "selfEsteem",
-      "autonomyDecisions"
+      "autonomyDecisions",
+      "questionsPerFamilyMember"
     ],
     "properties": {
       "firstName": {
@@ -869,11 +870,185 @@
           "es": "Que tanto consume terere"
         },
         "default": "red"
+      },
+      "questionsPerFamilyMember": {
+        "type": "object",
+        "title": {
+          "es": "Preguntas por miembro de familias"
+        },
+        "required": [
+          "numberOfFamilyMembers"
+        ],
+        "properties": {
+          "numberOfFamilyMembers": {
+            "type": "number",
+            "title": {
+              "es": "Cantidad de miembros por familia"
+            }
+          },
+          "questions": {
+            "type": "array",
+            "title": {
+              "es": "Preguntas por cada miembro"
+            },
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "personBeingAsked": {
+                  "type": "boolean",
+                  "title": {
+                    "es": "Es usted la persona entrevistada?"
+                  }
+                },
+                "relationship": {
+                  "type": "string",
+                  "title": {
+                    "es": "Cuál es su relación con la cabeza de la familia?"
+                  },
+                  "enum": [
+                    "married",
+                    "father",
+                    "other"
+                  ]
+                },
+                "name": {
+                  "type": "string",
+                  "title": {
+                    "es": "Su nombre"
+                  }
+                },
+                "age": {
+                  "type": "number",
+                  "title": {
+                    "es": "Edad"
+                  }
+                },
+                "gender": {
+                  "type": "string",
+                  "title": {
+                    "es": "Género"
+                  },
+                  "enum": [
+                    "male",
+                    "female",
+                    "other"
+                  ]
+                },
+                "levelOfEducation": {
+                  "type": "string",
+                  "title": {
+                    "es": "Nivel de educación"
+                  },
+                  "enum": [
+                    "none",
+                    "pre-primaria",
+                    "primaria",
+                    "secundaria",
+                    "post - secundaria(no universitaria)",
+                    "universitaria",
+                    "post - grado",
+                    "no sé"
+                  ]
+                },
+                "gradeAchieved": {
+                  "type": "string",
+                  "title": {
+                    "es": "Grado alcanzado"
+                  },
+                  "enum": [
+                    "Primaria 1ro",
+                    "Primaria 2do",
+                    "Primaria 9no",
+                    "Secundaria 1ro",
+                    "Secundaria 2do",
+                    "Secundaria 3ro",
+                    "Universitaria 1er nivel",
+                    "Universitaria 2do nivel"
+                  ]
+                },
+                "employmentStatus": {
+                  "type": "string",
+                  "title": {
+                    "es": "Tiene un trabajo?"
+                  },
+                  "enum": [
+                    "si",
+                    "no",
+                    "no se",
+                    "no aplica"
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
   "survey_ui_schema": {
-    "properties": {},
+    "properties": {
+    },
+    "ui:custom:fields" : {
+      "questionsPerFamilyMember": {
+        "ui:field": "multipleQuestions",
+        "conditions": {
+          "questionsPerFamilyMember": {
+            "questions": {
+              "minItems": "numberOfFamilyMembers"
+            }
+          }
+        }
+      }
+    },
+    "ui:order": [
+      "firstName",
+      "lastName",
+      "birthdate",
+      "countryOfBirth",
+      "questionsPerFamilyMember",
+      "currency",
+      "areaOfResidence",
+      "employmentStatusPrimary",
+      "activityMain",
+      "employmentStatusSecondary",
+      "activitySecondary",
+      "householdMonthlyIncome",
+      "salaryIncome",
+      "benefitIncome",
+      "pensionIncome",
+      "savingsIncome",
+      "otherIncome",
+      "householdMonthlyOutgoing",
+      "netSuplus",
+      "educationClientLevel",
+      "educationPersonMostStudied",
+      "educationLevelAttained",
+      "housingSituation",
+      "income",
+      "documentation",
+      "drinkingWaterAccess",
+      "nearbyHealthPost",
+      "alimentation",
+      "garbageDisposal",
+      "safeHouse",
+      "safeBathroom",
+      "electricityAccess",
+      "refrigerator",
+      "separateBed",
+      "separateBedrooms",
+      "properKitchen",
+      "phone",
+      "security",
+      "readAndWrite",
+      "middleEducation",
+      "socialCapital",
+      "informationAccess",
+      "influenceInPublicSector",
+      "awarenessOfNeeds",
+      "selfEsteem",
+      "autonomyDecisions"
+    ],
     "ui:group:economics": [
       "currency",
       "areaOfResidence",
@@ -893,7 +1068,14 @@
       "educationPersonMostStudied",
       "educationLevelAttained",
       "housingSituation",
-      "otherUsefulInfo"
+      "otherUsefulInfo",
+        "questionsPerFamilyMember"
+    ],
+    "ui:group:personal": [
+      "firstName",
+      "lastName",
+      "birthdate",
+      "countryOfBirth"
     ],
     "ui:group:indicators": [
       "income",
