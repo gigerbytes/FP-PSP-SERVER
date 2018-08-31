@@ -165,22 +165,24 @@ public class SurveySchema implements Serializable {
         return Objects.equals(this.title, surveySchema.title) &&
                 Objects.equals(this.description, surveySchema.description) &&
                 Objects.equals(this.required, surveySchema.required) &&
-                Objects.equals(this.properties, surveySchema.properties) &&
-                equalSetOfPropertieValues(this.properties, surveySchema.properties);
+                Objects.equals(this.properties, surveySchema.properties)
+                && equalSetOfPropertieValues(this.properties, surveySchema.properties);
     }
 
     private boolean equalSetOfPropertieValues(Map<String, Property> a, Map<String, Property> b){
-        if (a == b)
+        if (a == b) {
             return true;
-        else if (a == null || b == null)
-            return false;
-
-        for(String key : a.keySet()){
+        }else {
+            if (a == null || b == null) {
+                return false;
+            }
+        }
+        for (String key : a.keySet()){
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 JsonNode jsonNodeA = objectMapper.valueToTree(a.get(key));
                 JsonNode jsonNodeB = objectMapper.valueToTree(b.get(key));
-                if (!Objects.equals(jsonNodeA,jsonNodeB)){
+                if (!Objects.equals(jsonNodeA, jsonNodeB)){
                     return false;
                 }
             } catch (RuntimeException e) {
