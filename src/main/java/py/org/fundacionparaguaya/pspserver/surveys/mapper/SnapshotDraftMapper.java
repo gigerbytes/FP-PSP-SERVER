@@ -12,6 +12,7 @@ import py.org.fundacionparaguaya.pspserver.security.repositories.TermCondPolRepo
 import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotDraft;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotDraftEntity;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 
 /**
@@ -79,9 +80,19 @@ public class SnapshotDraftMapper implements
         }
 
         if (dto.getSurveyId()!=null) {
-            entity.setSurveyDefinition(surveyRepository
-                .findOne(dto.getSurveyId()));
-            entity.setSurveyVersionEntity(entity.getSurveyDefinition().getCurrentVersion());
+            SurveyEntity surveyEntity =  surveyRepository
+                    .findOne(dto.getSurveyId());
+            entity.setSurveyDefinition(surveyEntity);
+
+            //TODO draft should always have surveyVersionId present
+            if (dto.getSurveyVersionId() == null){
+                entity.setSurveyVersionEntity(entity.getSurveyDefinition().getCurrentVersion());
+            }else{
+                entity.setSurveyVersionEntity(surveyEntity.getSurveyVersionEntityList().stream()
+                                    .filter(version -> version.getId().equals(dto.getSurveyVersionId()))
+                                    .findAny().get());
+            }
+
         }
 
         return entity;

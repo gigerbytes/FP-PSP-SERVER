@@ -41,6 +41,7 @@ public class SurveyMapper implements BaseMapper<SurveyEntity, SurveyDefinition> 
     public SurveyDefinition entityToDto(SurveyEntity entity) {
         entity.setSurveyDefinition(null);
         SurveyDefinition dto = modelMapper.map(entity, SurveyDefinition.class);
+        dto.setSurvey_version_id(entity.getCurrentVersion().getId());
         /*SurveyDefinition dto = new SurveyDefinition();
         dto.setDescription(entity.getDescription());
         dto.setTitle(entity.getTitle());

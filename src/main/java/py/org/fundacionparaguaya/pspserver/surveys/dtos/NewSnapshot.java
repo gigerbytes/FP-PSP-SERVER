@@ -33,6 +33,9 @@ public class NewSnapshot   {
     @JsonProperty("survey_id")
     private Long surveyId = null;
 
+    @JsonProperty("survey_version_id")
+    private Long surveyVersionId = null;
+
     @JsonProperty("organization_id")
     private Long organizationId = null;
 
@@ -138,6 +141,14 @@ public class NewSnapshot   {
         this.indicatorSurveyData = indicatorSurveyData;
     }
 
+    public Long getSurveyVersionId() {
+        return surveyVersionId;
+    }
+
+    public void setSurveyVersionId(Long surveyVersionId) {
+        this.surveyVersionId = surveyVersionId;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -169,6 +180,9 @@ public class NewSnapshot   {
         sb.append("    surveyId: ")
         .append(toIndentedString(surveyId))
         .append("\n");
+        sb.append("    surveyVersionId: ")
+                .append(toIndentedString(surveyVersionId))
+                .append("\n");
         sb.append("    organizationId: ")
         .append(toIndentedString(organizationId))
         .append("\n");

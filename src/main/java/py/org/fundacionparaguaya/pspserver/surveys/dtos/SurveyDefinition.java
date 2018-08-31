@@ -32,6 +32,8 @@ public class SurveyDefinition implements StoreableDefinition, Serializable {
 
     private Long id;
 
+    private Long survey_version_id;
+
     private String title;
 
     private String description;
@@ -83,6 +85,10 @@ public class SurveyDefinition implements StoreableDefinition, Serializable {
         return this;
     }
 
+    public SurveyDefinition surveyVersionId(Long survey_version_id){
+        this.survey_version_id = survey_version_id;
+        return this;
+    }
     /**
      * Get surveyUISchema
      * @return surveyUISchema
@@ -219,6 +225,14 @@ public class SurveyDefinition implements StoreableDefinition, Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getSurvey_version_id() {
+        return survey_version_id;
+    }
+
+    public void setSurvey_version_id(Long survey_version_id) {
+        this.survey_version_id = survey_version_id;
     }
 
     public SurveyDefinition surveyUISchema(SurveyUISchema surveyUISchema) {

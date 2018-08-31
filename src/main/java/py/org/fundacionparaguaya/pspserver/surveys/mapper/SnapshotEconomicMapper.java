@@ -14,12 +14,7 @@ import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.PropertyAttributeEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotIndicatorEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.StopLightGroup;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.StoreableSnapshot;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.*;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 
 import java.util.List;
@@ -118,9 +113,20 @@ public class SnapshotEconomicMapper implements
             privPol = termCondPolRepository.findOne(snapshot.getPrivPolId());
         }
 
+        SurveyVersionEntity surveyVersionEntity;
+        //TODO this property should be always sent to the server
+        if (snapshot.getSurveyVersionId() == null){
+            //throw new CustomParameterizedException("Survey version Id must be present");
+            surveyVersionEntity = surveyEntity.getCurrentVersion();
+        }else{
+            surveyVersionEntity = surveyEntity.getSurveyVersionEntityList().stream()
+                    .filter(version -> version.getId().equals(snapshot.getSurveyVersionId()))
+                    .findAny().get();
+        }
+
         return new SnapshotEconomicEntity()
             .surveyDefinition(surveyEntity)
-            .surveyVersion(surveyEntity.getCurrentVersion())
+            .surveyVersion(surveyVersionEntity)
             .surveyIndicator(indicator)
             .staticProperties(snapshot.getMappedEconomicSurveyData(
                 propertyAttributeSupport.staticEconomic(),

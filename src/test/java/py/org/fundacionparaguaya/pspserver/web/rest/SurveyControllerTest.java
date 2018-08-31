@@ -131,6 +131,8 @@ public class SurveyControllerTest {
     private FieldDescriptor[] survey = new FieldDescriptor[] {
             fieldWithPath("id").type(JsonFieldType.NUMBER)
                     .description("The survey's id"),
+            fieldWithPath("survey_version_id").type(JsonFieldType.NUMBER)
+                    .description("The survey version's id"),
             fieldWithPath("title").type(JsonFieldType.STRING)
                     .description("The survey's main title"),
             fieldWithPath("description").type(JsonFieldType.STRING)
@@ -158,6 +160,8 @@ public class SurveyControllerTest {
     private FieldDescriptor[] surveys = new FieldDescriptor[] {
             fieldWithPath("[].id").type(JsonFieldType.NUMBER)
                     .description("The survey's id"),
+            fieldWithPath("[].survey_version_id").type(JsonFieldType.NUMBER)
+                    .description("The survey version's id"),
             fieldWithPath("[].title").type(JsonFieldType.STRING)
                     .description("The survey's main title"),
             fieldWithPath("[].description").type(JsonFieldType.STRING)

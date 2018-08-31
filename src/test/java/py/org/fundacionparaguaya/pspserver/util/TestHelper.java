@@ -56,6 +56,7 @@ public class TestHelper {
         SurveyDefinition def = (SurveyDefinition) mapToObjectFromFile(SURVEY_DEFAULTS, SurveyDefinition.class);
 
         return new SurveyDefinition().id(SURVEY_ID).title(def.getTitle())
+                .surveyVersionId(SURVEY_VERSION_ID)
                 .description(def.getDescription())
                 .surveySchema(def.getSurveySchema())
                 .surveyUISchema(def.getSurveyUISchema())
