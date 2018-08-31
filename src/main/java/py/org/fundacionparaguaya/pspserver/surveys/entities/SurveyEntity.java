@@ -1,6 +1,8 @@
 package py.org.fundacionparaguaya.pspserver.surveys.entities;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.SurveyOrganizationSpecification.applicationsByLoggedUser;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.SurveyOrganizationSpecification.organizationsByLoggedUser;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -27,10 +29,12 @@ import org.hibernate.annotations.Type;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import py.org.fundacionparaguaya.pspserver.common.entities.LocalDateTimeConverter;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.types.SecondJSONBUserType;
 
@@ -157,22 +161,26 @@ public class SurveyEntity implements Serializable {
     }
 
     public List<ApplicationDTO> getApplications() {
+        UserDetailsDTO user = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return getSurveysOrganizations()
                 .stream()
                 .map(SurveyOrganizationEntity::getApplication)
                 .filter(Objects::nonNull)
                 .distinct()
+                .filter(applicationsByLoggedUser(user))
                 .map(application -> new ModelMapper().map(application, ApplicationDTO.class))
                 .sorted(Comparator.comparing(ApplicationDTO::getId))
                 .collect(Collectors.toList());
     }
 
     public List<OrganizationDTO> getOrganizations() {
+        UserDetailsDTO user = (UserDetailsDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return getSurveysOrganizations()
                 .stream()
                 .map(SurveyOrganizationEntity::getOrganization)
                 .filter(Objects::nonNull)
                 .distinct()
+                .filter(organizationsByLoggedUser(user))
                 .map(organization -> new ModelMapper().map(organization, OrganizationDTO.class))
                 .sorted(Comparator.comparing(OrganizationDTO::getId))
                 .collect(Collectors.toList());

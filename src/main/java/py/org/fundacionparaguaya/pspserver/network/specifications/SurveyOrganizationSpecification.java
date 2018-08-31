@@ -5,6 +5,8 @@ import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity_;
+import py.org.fundacionparaguaya.pspserver.security.constants.Role;
+import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -86,4 +88,22 @@ public class SurveyOrganizationSpecification {
         };
     }
 
+    public static java.util.function.Predicate<ApplicationEntity> applicationsByLoggedUser(UserDetailsDTO user) {
+        return application ->
+                user.hasRole(Role.ROLE_ROOT)
+                        || (user.hasRole(Role.ROLE_HUB_ADMIN)
+                                || user.hasRole(Role.ROLE_APP_ADMIN)
+                                || user.hasRole(Role.ROLE_SURVEY_USER))
+                            && application.getId().longValue() == user.getApplication().getId().longValue();
+    }
+
+    public static java.util.function.Predicate<OrganizationEntity> organizationsByLoggedUser(UserDetailsDTO user) {
+        return organization ->
+                user.hasRole(Role.ROLE_ROOT)
+                        || user.hasRole(Role.ROLE_HUB_ADMIN)
+                                && organization.getApplication().getId().longValue()
+                                                                            == user.getApplication().getId().longValue()
+                        || (user.hasRole(Role.ROLE_APP_ADMIN) || user.hasRole(Role.ROLE_SURVEY_USER))
+                                && organization.getId().longValue() == user.getOrganization().getId().longValue();
+    }
 }
