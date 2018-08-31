@@ -19,7 +19,6 @@ import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSurveyDefinition;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SurveyService;
@@ -71,8 +70,6 @@ public class ApplicationIT {
         // 2. Create snapshot
         NewSnapshot newSnapshot = TestHelper.getNewSnapshot(addSurveyDefinition.getId());
         Snapshot snapshot = snapshotService.addSurveySnapshot(userWithOrganization(), newSnapshot);
-
-        testMultipleQuestionsInSnapshot(snapshot);
         assertSnapshotCreation(snapshot);
 
         // 3. Verify family creation
@@ -81,12 +78,6 @@ public class ApplicationIT {
 
     }
 
-    private void testMultipleQuestionsInSnapshot(Snapshot snapshot) {
-        System.out.println("Snapshot: " + snapshot);
-        SnapshotEconomicEntity one = economicRepository.findOne(snapshot.getSnapshotEconomicId());
-        System.out.println("Additional properties: " + one.getAdditionalProperties());
-
-    }
 
     private UserDetailsDTO userWithOrganization() {
         try {
