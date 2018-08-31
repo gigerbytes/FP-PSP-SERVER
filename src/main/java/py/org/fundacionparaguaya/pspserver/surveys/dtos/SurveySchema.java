@@ -20,7 +20,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
+import py.org.fundacionparaguaya.pspserver.surveys.services.impl.SnapshotServiceImpl;
 
 /**
  * The MODEL SCHEMA definition of the survey
@@ -28,6 +31,8 @@ import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterized
 @ApiModel(description = "The MODEL SCHEMA definition of the survey")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SurveySchema implements Serializable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SnapshotServiceImpl.class);
 
     @JsonProperty("title")
     private String title = null;
@@ -179,7 +184,7 @@ public class SurveySchema implements Serializable {
                     return false;
                 }
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                LOG.error(e.getMessage(), e);
                 throw new CustomParameterizedException("Invalid Survey schema");
             }
         }
