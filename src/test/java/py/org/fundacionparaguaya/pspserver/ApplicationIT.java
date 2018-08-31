@@ -19,6 +19,7 @@ import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSurveyDefinition;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
+import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SurveyService;
 import py.org.fundacionparaguaya.pspserver.util.TestHelper;
@@ -49,6 +50,8 @@ public class ApplicationIT {
     @Autowired
     private ApplicationService applicationService;
 
+    @Autowired
+    private SnapshotEconomicRepository economicRepository;
 
     @Test
     public void itShouldStart() {
@@ -74,6 +77,8 @@ public class ApplicationIT {
         assertFamilyCreation(familyById);
 
     }
+
+
     private UserDetailsDTO userWithOrganization() {
         try {
             ApplicationDTO app = newTestApplication();

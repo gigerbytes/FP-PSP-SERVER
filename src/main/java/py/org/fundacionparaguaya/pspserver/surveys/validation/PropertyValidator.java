@@ -22,13 +22,15 @@ public interface PropertyValidator extends PropertyValidatorFunction<Property, S
                 //If the property is not valid because is an array
                 if(TypeEnum.ARRAY.equals(property.getType())) {
                     //Verify if contains items and if it a json, we compare if a value  is included in the json
-                    if(property.getItems()!=null && property.getItems().validateContent(propertyValue)) {
+                    if(property.getItems()!= null && property.getItems().validateContent(propertyValue)) {
                         response = valid();
-                    }else {
-                        response = invalid(propertyName, "Property '" + propertyName + "' is of invalid type. Required: '" + property.getType() + "'");
+                    } else {
+                        response = invalid(propertyName, "Property '" + propertyName
+                                + "' is of invalid type. Required: '" + property.getType() + "'");
                     }
                 } else {
-                    response = invalid(propertyName, "Property '" + propertyName + "' is of invalid type. Required: '" + property.getType() + "'");
+                    response = invalid(propertyName, "Property '" + propertyName
+                            + "' is of invalid type. Required: '" + property.getType() + "'");
                 }
             }
             return response;
