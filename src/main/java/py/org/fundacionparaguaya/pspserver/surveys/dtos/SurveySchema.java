@@ -12,15 +12,15 @@ package py.org.fundacionparaguaya.pspserver.surveys.dtos;
  * Do not edit the class manually.
  */
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.ArrayList;
-import java.util.List;
+import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 
 /**
  * The MODEL SCHEMA definition of the survey
@@ -160,7 +160,32 @@ public class SurveySchema implements Serializable {
         return Objects.equals(this.title, surveySchema.title) &&
                 Objects.equals(this.description, surveySchema.description) &&
                 Objects.equals(this.required, surveySchema.required) &&
-                Objects.equals(this.properties, surveySchema.properties);
+                Objects.equals(this.properties, surveySchema.properties) &&
+                equalSetOfPropertieValues(this.properties, surveySchema.properties);
+    }
+
+    private boolean equalSetOfPropertieValues(Map<String, Property> a, Map<String, Property> b){
+        if (a == b)
+            return true;
+        else if (a == null || b == null)
+            return false;
+
+        for(String key : a.keySet()){
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode jsonNodeA = objectMapper.valueToTree(a.get(key));
+                JsonNode jsonNodeB = objectMapper.valueToTree(b.get(key));
+                if (!Objects.equals(jsonNodeA,jsonNodeB)){
+                    return false;
+                }
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                throw new CustomParameterizedException("Invalid Survey schema");
+            }
+        }
+
+        return true;
+
     }
 
     @Override
