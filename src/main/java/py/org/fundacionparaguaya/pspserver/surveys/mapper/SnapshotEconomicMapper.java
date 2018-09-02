@@ -117,8 +117,10 @@ public class SnapshotEconomicMapper implements
         //TODO this property should be always sent to the server
         if (snapshot.getSurveyVersionId() == null){
             //throw new CustomParameterizedException("Survey version Id must be present");
+            /*TODO by now, if surveyVersionId is not present, we asume the snapshot was taken
+            * with the current survey version*/
             surveyVersionEntity = surveyEntity.getCurrentVersion();
-        }else{
+        }else {
             surveyVersionEntity = surveyEntity.getSurveyVersionEntityList().stream()
                     .filter(version -> version.getId().equals(snapshot.getSurveyVersionId()))
                     .findAny().get();

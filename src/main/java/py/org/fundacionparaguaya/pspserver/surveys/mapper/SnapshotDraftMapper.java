@@ -86,8 +86,10 @@ public class SnapshotDraftMapper implements
 
             //TODO draft should always have surveyVersionId present
             if (dto.getSurveyVersionId() == null){
+                /*TODO by now, we assume that if suveyVersionId is not present,
+                * then, the snapshot was taken with the current version*/
                 entity.setSurveyVersionEntity(entity.getSurveyDefinition().getCurrentVersion());
-            }else{
+            }else {
                 entity.setSurveyVersionEntity(surveyEntity.getSurveyVersionEntityList().stream()
                                     .filter(version -> version.getId().equals(dto.getSurveyVersionId()))
                                     .findAny().get());
