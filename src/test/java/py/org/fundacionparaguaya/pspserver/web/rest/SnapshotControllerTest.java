@@ -89,6 +89,9 @@ public class SnapshotControllerTest {
                 fieldWithPath("survey_id")
                         .type(JsonFieldType.NUMBER)
                         .description("The survey's id that this snapshot belongs to"),
+                fieldWithPath("survey_version_id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("The survey version's id that this snapshot belongs to"),
                 fieldWithPath("snapshot_economic_id").type(JsonFieldType.NUMBER)
                         .description("The id that this snapshot belongs to"),
                 fieldWithPath("snapshot_indicator_id").type(JsonFieldType.NUMBER)
@@ -127,6 +130,9 @@ public class SnapshotControllerTest {
                 fieldWithPath("[].survey_id")
                         .type(JsonFieldType.NUMBER)
                         .description("The survey's id that this snapshot belongs to"),
+                fieldWithPath("[].survey_version_id")
+                        .type(JsonFieldType.NUMBER)
+                        .description("The survey version's id that this snapshot belongs to"),
                 fieldWithPath("[].snapshot_economic_id")
                         .type(JsonFieldType.NUMBER)
                         .description("The id that this snapshot belongs to"),

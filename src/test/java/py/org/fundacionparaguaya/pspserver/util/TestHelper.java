@@ -22,6 +22,7 @@ import java.io.InputStream;
 public class TestHelper {
 
     public static final Long SURVEY_ID = 1L;
+    public static final Long SURVEY_VERSION_ID = 6L;
     public static final Long USER_ID = 3L;
     public static final Long TERM_COND_ID = 4L;
     public static final Long PRIV_POL_ID = 5L;
@@ -55,6 +56,7 @@ public class TestHelper {
         SurveyDefinition def = (SurveyDefinition) mapToObjectFromFile(SURVEY_DEFAULTS, SurveyDefinition.class);
 
         return new SurveyDefinition().id(SURVEY_ID).title(def.getTitle())
+                .surveyVersionId(SURVEY_VERSION_ID)
                 .description(def.getDescription())
                 .surveySchema(def.getSurveySchema())
                 .surveyUISchema(def.getSurveyUISchema())
@@ -71,6 +73,7 @@ public class TestHelper {
         Snapshot snapshot = (Snapshot) mapToObjectFromFile(SNAPSHOT_JSON_FILE, Snapshot.class);
         return new Snapshot()
                 .surveyId(surveyId)
+                .surveyVersionId(SURVEY_VERSION_ID)
                 .snapshotEconomicId(SNAPSHOT_ID)
                 .userId(USER_ID)
                 .user(snapshot.getUser())

@@ -12,6 +12,7 @@ import py.org.fundacionparaguaya.pspserver.security.repositories.TermCondPolRepo
 import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotDraft;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotDraftEntity;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 
 /**
@@ -54,7 +55,8 @@ public class SnapshotDraftMapper implements
     public SnapshotDraft entityToDto(SnapshotDraftEntity entity) {
         SnapshotDraft dto = modelMapper.map(entity, SnapshotDraft.class);
         dto = dto.createdAt(entity.getCreatedAtAsISOString()).
-                surveyId(entity.getSurveyDefinition().getId());
+                surveyId(entity.getSurveyDefinition().getId())
+                .surveyVersion(entity.getSurveyVersionEntity().getId());
         return dto;
     }
 
@@ -78,8 +80,21 @@ public class SnapshotDraftMapper implements
         }
 
         if (dto.getSurveyId()!=null) {
-            entity.setSurveyDefinition(surveyRepository
-                .findOne(dto.getSurveyId()));
+            SurveyEntity surveyEntity =  surveyRepository
+                    .findOne(dto.getSurveyId());
+            entity.setSurveyDefinition(surveyEntity);
+
+            //TODO draft should always have surveyVersionId present
+            if (dto.getSurveyVersionId() == null){
+                /*TODO by now, we assume that if suveyVersionId is not present,
+                * then, the snapshot was taken with the current version*/
+                entity.setSurveyVersionEntity(entity.getSurveyDefinition().getCurrentVersion());
+            }else {
+                entity.setSurveyVersionEntity(surveyEntity.getSurveyVersionEntityList().stream()
+                                    .filter(version -> version.getId().equals(dto.getSurveyVersionId()))
+                                    .findAny().get());
+            }
+
         }
 
         return entity;

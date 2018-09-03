@@ -25,6 +25,8 @@ public class SurveyMapper implements BaseMapper<SurveyEntity, SurveyDefinition> 
             protected void configure() {
                 map().setApplications(source.getApplications());
                 map().setOrganizations(source.getOrganizations());
+                map().setSurveyVersionId(source.getCurrentVersion().getId());
+                //map().setLastModifiedAt(source.getCurrentVersion().getCreatedAt().toString());
             }
         });
     }
@@ -39,7 +41,9 @@ public class SurveyMapper implements BaseMapper<SurveyEntity, SurveyDefinition> 
 
     @Override
     public SurveyDefinition entityToDto(SurveyEntity entity) {
+        entity.setSurveyDefinition(null);
         SurveyDefinition dto = modelMapper.map(entity, SurveyDefinition.class);
+        dto.setLastModifiedAt(entity.getCurrentVersion().getCreatedAt().toString());
         return dto;
     }
 

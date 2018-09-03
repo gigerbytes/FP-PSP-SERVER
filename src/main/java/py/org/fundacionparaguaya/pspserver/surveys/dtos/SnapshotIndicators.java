@@ -49,6 +49,22 @@ public class SnapshotIndicators implements Serializable {
     @JsonProperty("survey_id")
     private Long surveyId;
 
+    @JsonProperty("survey_version_id")
+    private Long surveyVersionId;
+
+    public Long getSurveyVersionId() {
+        return surveyVersionId;
+    }
+
+    public void setSurveyVersionId(Long surveyVersionId) {
+        this.surveyVersionId = surveyVersionId;
+    }
+
+    public SnapshotIndicators surveyVersion(Long surveyVersionId){
+        this.surveyVersionId = surveyVersionId;
+        return this;
+    }
+
     public SnapshotIndicators indicatorSurveyData(
             List<SurveyData> indicatorsSurveyData) {
         this.indicatorsSurveyData = indicatorsSurveyData;
