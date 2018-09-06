@@ -2,6 +2,7 @@ package py.org.fundacionparaguaya.pspserver.util;
 
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
+import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTOBuilder;
@@ -21,6 +22,7 @@ public class TestMockFactory {
     public static final Long ECONOMIC_ID = 222L;
     public static final Long SURVEY_ID = 333L;
     public static final Long USER_ID = 444L;
+    public static final Long SURVEY_VERSION_ID = 555L;
 
     private static PersonEntity mockPerson = aPerson();
     private static UserEntity mockUserEntity = new UserEntity();
@@ -52,11 +54,15 @@ public class TestMockFactory {
 
     public static Snapshot aSnapshot() {
         return new Snapshot().snapshotEconomicId(ECONOMIC_ID).surveyId(SURVEY_ID).userId(USER_ID)
+                .surveyVersionId(SURVEY_VERSION_ID)
                 .personalSurveyData(mockPerson.asSurveyData());
     }
 
     public static UserDetailsDTO aUser() {
-        return new UserDetailsDTOBuilder().username("jdoe").build();
+        return new UserDetailsDTOBuilder()
+                .username("jdoe")
+                .organization(OrganizationDTO.builder().build())
+                .build();
     }
 
     public static NewSnapshot aNewSnapshot() {

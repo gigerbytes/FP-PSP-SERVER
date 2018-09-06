@@ -48,8 +48,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs(outputDir = "target/snippets")
 public class SurveyControllerTest {
 
-    private static final Long SURVEY_ID = 1L;
-    private static final String SURVEY_DEFAULTS = "/survey_defaults.json";
     public static final String LAST_MODIFIED = "2018-03-16T15:30";
 
     @Autowired
@@ -94,12 +92,12 @@ public class SurveyControllerTest {
     @Test
     public void shouldGetSurveyById() throws Exception {
 
-        when(surveyService.getSurveyDefinition(eq(SURVEY_ID)))
-                .thenReturn(getDefinition());
+        when(surveyService.getSurveyDefinition(eq(TestHelper.SURVEY_ID)))
+                .thenReturn(TestHelper.getDefinition());
 
         this.mockMvc
                 .perform(RestDocumentationRequestBuilders
-                        .get("/api/v1/surveys/{survey_id}", SURVEY_ID))
+                        .get("/api/v1/surveys/{survey_id}", TestHelper.SURVEY_ID))
                 .andDo(print()).andExpect(status().isOk())
                 .andDo(document("surveys-by-id",
                         preprocessResponse(prettyPrint()),
@@ -110,7 +108,7 @@ public class SurveyControllerTest {
 
     @Test
     public void shouldPostToCreateSurvey() throws Exception {
-        SurveyDefinition definition = getDefinition();
+        SurveyDefinition definition = TestHelper.getDefinition();
 
         when(surveyService.addSurveyDefinition(anyObject()))
                 .thenReturn(definition);
@@ -127,24 +125,14 @@ public class SurveyControllerTest {
     }
 
     private List<SurveyDefinition> surveyList() {
-        return Arrays.asList(getDefinition());
-    }
-
-    public SurveyDefinition getDefinition() {
-        SurveyDefinition def = (SurveyDefinition) TestHelper
-                .mapToObjectFromFile(SURVEY_DEFAULTS, SurveyDefinition.class);
-
-        return new SurveyDefinition().id(SURVEY_ID).title(def.getTitle())
-                .description(def.getDescription())
-                .surveySchema(def.getSurveySchema())
-                .surveyUISchema(def.getSurveyUISchema())
-                .organizations(def.getOrganizations())
-                .applications(def.getApplications());
+        return Arrays.asList(TestHelper.getDefinition());
     }
 
     private FieldDescriptor[] survey = new FieldDescriptor[] {
             fieldWithPath("id").type(JsonFieldType.NUMBER)
                     .description("The survey's id"),
+            fieldWithPath("survey_version_id").type(JsonFieldType.NUMBER)
+                    .description("The survey version's id"),
             fieldWithPath("title").type(JsonFieldType.STRING)
                     .description("The survey's main title"),
             fieldWithPath("description").type(JsonFieldType.STRING)
@@ -172,6 +160,8 @@ public class SurveyControllerTest {
     private FieldDescriptor[] surveys = new FieldDescriptor[] {
             fieldWithPath("[].id").type(JsonFieldType.NUMBER)
                     .description("The survey's id"),
+            fieldWithPath("[].survey_version_id").type(JsonFieldType.NUMBER)
+                    .description("The survey version's id"),
             fieldWithPath("[].title").type(JsonFieldType.STRING)
                     .description("The survey's main title"),
             fieldWithPath("[].description").type(JsonFieldType.STRING)

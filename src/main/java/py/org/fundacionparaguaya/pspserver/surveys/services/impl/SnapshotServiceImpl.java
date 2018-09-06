@@ -1,13 +1,14 @@
 package py.org.fundacionparaguaya.pspserver.surveys.services.impl;
 
 import com.amazonaws.util.json.Jackson;
-import com.google.gson.*;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
 import py.org.fundacionparaguaya.pspserver.config.I18n;
@@ -22,13 +23,22 @@ import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepo
 import py.org.fundacionparaguaya.pspserver.security.constants.Role;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDTO;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
-import py.org.fundacionparaguaya.pspserver.surveys.dtos.*;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.PropertyTitle;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotIndicatorPriority;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotIndicators;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SnapshotTaken;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
+import py.org.fundacionparaguaya.pspserver.surveys.dtos.TopOfIndicators;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotIndicatorEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.enums.SurveyStoplightEnum;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotEconomicMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotIndicatorMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
+import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotIndicatorPriorityService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SurveyService;
@@ -38,7 +48,12 @@ import py.org.fundacionparaguaya.pspserver.surveys.validation.ValidationResults;
 
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -77,16 +92,22 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     private final OrganizationRepository organizationRepository;
 
+    private final SurveyRepository surveyRepository;
+
     private final I18n i18n;
 
     private static final String INDICATOR_NAME = "name";
 
     private static final String INDICATOR_VALUE = "value";
 
+    private static final String INDICATOR_KEY = "key";
+
+
     public SnapshotServiceImpl(SnapshotEconomicRepository economicRepository, SnapshotEconomicMapper economicMapper,
             SurveyService surveyService, SnapshotIndicatorMapper indicatorMapper,
             SnapshotIndicatorPriorityService priorityService, PersonMapper personMapper, FamilyService familyService,
-            OrganizationMapper organizationMapper, I18n i18n, OrganizationRepository organizationRepository) {
+            OrganizationMapper organizationMapper, I18n i18n, OrganizationRepository organizationRepository,
+                               SurveyRepository surveyRepository) {
         this.economicRepository = economicRepository;
         this.economicMapper = economicMapper;
         this.surveyService = surveyService;
@@ -97,6 +118,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         this.organizationMapper = organizationMapper;
         this.i18n = i18n;
         this.organizationRepository = organizationRepository;
+        this.surveyRepository = surveyRepository;
     }
 
     private boolean dependenciesAreValid(NewSnapshot snapshot) {
@@ -196,7 +218,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     @Override
     @Transactional
     public Snapshot addSurveySnapshot(UserDetailsDTO details, NewSnapshot snapshot) {
-        checkNotNull(snapshot);
+        checkNotNull(snapshot, "Snapshot parameter is null");
+        checkNotNull(details, "UserDetails parameter is null");
 
         ValidationResults results = surveyService.checkSchemaCompliance(snapshot);
 
@@ -237,7 +260,8 @@ public class SnapshotServiceImpl implements SnapshotService {
         LOG.info("User '{}' created a new Snapshot, snapshot_id={}", details.getUsername(),
                 created.getSnapshotEconomicId());
         LOG.info("Snapshot = {}", created);
-        LOG.info("User '{}' finished Survey, survey_id={}", details.getUsername(), created.getSurveyId());
+        LOG.info("User '{}' finished Survey, survey_id={}, survey_version_id={}", details.getUsername(),
+                created.getSurveyId(), created.getSurveyVersionId());
 
         return created;
     }
@@ -248,7 +272,6 @@ public class SnapshotServiceImpl implements SnapshotService {
         // FIXME should not modify the parameter
         entity.setFamily(family);
         entity.setPersonalInformation(snapshot.getPersonalSurveyData());
-
         return this.economicRepository.save(entity);
     }
 
@@ -309,6 +332,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         return surveyData;
     }
 
+    // TODO Needs refactor
     public SurveyData mapToNumericIndicators(SurveyData surveyData) {
 
         SurveyData outSurveyData = new SurveyData();
@@ -357,6 +381,8 @@ public class SnapshotServiceImpl implements SnapshotService {
         toRet.setSnapshotIndicatorId(originalSnapshot.getSnapshotIndicator().getId());
         toRet.setSnapshotEconomicId(originalSnapshot.getId());
         toRet.setSurveyId(originalSnapshot.getSurveyDefinition().getId());
+        toRet.setSurveyVersionId(originalSnapshot.getSurveyVersionEntity().getId());
+
 
         // set family for information purpose
         Long familyId = originalSnapshot.getFamily().getFamilyId();
@@ -390,6 +416,7 @@ public class SnapshotServiceImpl implements SnapshotService {
                             .orElse(getNameFromCamelCase(indicator)));
                     sd.put(INDICATOR_VALUE, indicators.get(indicator));
                     countIndicators(toRet, sd.get(INDICATOR_VALUE));
+                    sd.put(INDICATOR_KEY, indicator);
                     indicatorsToRet.add(sd);
                 }
             });
@@ -452,6 +479,7 @@ public class SnapshotServiceImpl implements SnapshotService {
             snapshotIndicators.setFamilyId(os.getFamily().getFamilyId());
             snapshotIndicators.setSnapshotEconomicId(os.getId());
             snapshotIndicators.setSurveyId(os.getSurveyDefinition().getId());
+            snapshotIndicators.setSurveyVersionId(os.getSurveyVersionEntity().getId());
             FamilyDTO familyDto = familyService.getFamilyById(familyId);
             Optional.ofNullable(familyDto.getOrganization()).ifPresent(organization -> {
                 familyDto.setOrganization(

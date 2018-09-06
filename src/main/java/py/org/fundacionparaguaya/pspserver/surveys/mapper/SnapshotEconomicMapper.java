@@ -14,12 +14,8 @@ import py.org.fundacionparaguaya.pspserver.security.repositories.UserRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.NewSnapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.Snapshot;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyData;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.PropertyAttributeEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotEconomicEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotIndicatorEntity;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.StopLightGroup;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.StoreableSnapshot;
-import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.*;
+import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,18 +35,20 @@ public class SnapshotEconomicMapper implements
     private TermCondPolRepository termCondPolRepository;
     private final UserMapper userMapper;
     private final FamilyMapper familyMapper;
+    private final SurveyRepository surveyRepository;
 
     public SnapshotEconomicMapper(
         PropertyAttributeSupport propertyAttributeSupport,
         UserRepository userRepository,
         TermCondPolRepository termCondPolRepository,
         UserMapper userMapper,
-        FamilyMapper familyMapper) {
+        FamilyMapper familyMapper, SurveyRepository surveyRepository) {
         this.propertyAttributeSupport = propertyAttributeSupport;
         this.userRepository = userRepository;
         this.termCondPolRepository = termCondPolRepository;
         this.userMapper = userMapper;
         this.familyMapper = familyMapper;
+        this.surveyRepository = surveyRepository;
     }
 
     @Override
@@ -65,6 +63,7 @@ public class SnapshotEconomicMapper implements
                 .snapshotEconomicId(entity.getId())
                 .snapshotIndicatorId(entity.getSnapshotIndicator().getId())
                 .surveyId(entity.getSurveyDefinition().getId())
+                .surveyVersionId(entity.getSurveyVersionEntity().getId())
                 .createdAt(entity.getCreatedAtAsISOString())
                 .economicSurveyData(getAllProperties(entity,
                         propertyAttributeSupport.getPropertyAttributesByGroup(StopLightGroup.ECONOMIC)))
@@ -101,6 +100,7 @@ public class SnapshotEconomicMapper implements
         UserEntity user = null;
         TermCondPolEntity termCond = null;
         TermCondPolEntity privPol = null;
+        SurveyEntity surveyEntity = this.surveyRepository.findById(snapshot.getSurveyId());
         if (snapshot.getUserName()!=null) {
             user = userRepository.findOneByUsername(
                 snapshot.getUserName()).get();
@@ -113,8 +113,22 @@ public class SnapshotEconomicMapper implements
             privPol = termCondPolRepository.findOne(snapshot.getPrivPolId());
         }
 
+        SurveyVersionEntity surveyVersionEntity;
+        //TODO this property should be always sent to the server
+        if (snapshot.getSurveyVersionId() == null){
+            //throw new CustomParameterizedException("Survey version Id must be present");
+            /*TODO by now, if surveyVersionId is not present, we asume the snapshot was taken
+            * with the current survey version*/
+            surveyVersionEntity = surveyEntity.getCurrentVersion();
+        }else {
+            surveyVersionEntity = surveyEntity.getSurveyVersionEntityList().stream()
+                    .filter(version -> version.getId().equals(snapshot.getSurveyVersionId()))
+                    .findAny().get();
+        }
+
         return new SnapshotEconomicEntity()
-            .surveyDefinition(new SurveyEntity(snapshot.getSurveyId()))
+            .surveyDefinition(surveyEntity)
+            .surveyVersion(surveyVersionEntity)
             .surveyIndicator(indicator)
             .staticProperties(snapshot.getMappedEconomicSurveyData(
                 propertyAttributeSupport.staticEconomic(),

@@ -4,7 +4,7 @@ import py.org.fundacionparaguaya.pspserver.security.entities.UserEntity;
 
 public interface PasswordResetTokenService {
 
-    void resetPassword(String userEmail);
+    void resetPassword(String username, String userEmail);
 
     void createPasswordResetTokenForUser(UserEntity user, String token);
 
