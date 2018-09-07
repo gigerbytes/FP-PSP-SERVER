@@ -157,28 +157,27 @@
       "birthdate": {
          "ui:field": "date"
       },
+      "membersInHousehold": {
+      	"ui:field": "numberFormat"
+      },
       "memberOver15": {
       	"ui:field": "numberFormat"
       },
-      "memberOver15HaveAjob": {
+      "hoursWorkInWeek": {
       	"ui:field": "numberFormat"
       },
-    "benefitIncome": {
-        "ui:field": "numberFormat"
+      "earnInADay": {
+      	"ui:field": "numberFormat"
       },
-    "salaryIncome": {
-        "ui:field": "numberFormat"
+      "otherMembersIncome": {
+      	"ui:field": "numberFormat"
       },
-    "otherMembersSalary": {
-      "ui:field": "numberFormat"
-    },
-    "familyUbication": {
-      "ui:field": "gmap"
-    },
-    "otherMembersBusinessIncome": {
-      "ui:field": "numberFormat"
-    }
-
+      "memberDiedUnderAge5": {
+      	"ui:field": "numberFormat"
+      },
+      "familyUbication": {
+          "ui:field": "gmap"
+      }
    },
 
   "ui:order": [
@@ -187,32 +186,28 @@
   	"birthdate",
   	"countryOfBirth",
   	"gender",
+    "headOfHousehold",
+  	"membersInHousehold",
+  	"memberOver15",
+  	"employmentStatusPrimary",
     "currency",
-  	"activityMain",
-  	"activitySecondary",
-  	"benefitIncome",
-    "salaryIncome",
+    "hoursWorkInWeek",
+    "wouldLikeToWorkMore",
+    "activityMain",
+    "activitySecondary",
+    "employedInLast3Month",
+    "earnInADay",
+    "otherMembersHaveIncome",
     "otherMembersIncome",
-    "otherMembersSalary",
-    "otherMembersBusinessIncome",
-    "receiveStateIncome",
     "housingSituation",
-    "memberDisability",
-    "memberDiedBefore5",
+    "memberDiedLast5Years",
+    "memberDiedUnderAge5",
     "familyWaterAccess",
+    "howObtainWater",
     "familyCar",
     "educationalAttend",
     "educationClientLevel",
-    "memberOver15",
-    "memberOver15HaveAjob",
-    "houseHoldWork",
-    "houseHoldEarn",
-    "houseHoldWorkMore",
-    "partnerWorks",
-    "partnerEarns",
-    "partnerWorksMore",
     "familyUbication",
-
 
     "income",
     "familySavings",
@@ -275,30 +270,27 @@
   ],
 
   "ui:group:economics": [
+    "headOfHousehold",
+    "membersInHousehold",
+    "memberOver15",
+    "employmentStatusPrimary",
     "currency",
+    "hoursWorkInWeek",
+    "wouldLikeToWorkMore",
     "activityMain",
     "activitySecondary",
-    "benefitIncome",
-    "salaryIncome",
+    "employedInLast3Month",
+    "earnInADay",
+    "otherMembersHaveIncome",
     "otherMembersIncome",
-    "otherMembersSalary",
-    "otherMembersBusinessIncome",
-    "receiveStateIncome",
     "housingSituation",
-    "memberDisability",
-    "memberDiedBefore5",
+    "memberDiedLast5Years",
+    "memberDiedUnderAge5",
     "familyWaterAccess",
+    "howObtainWater",
     "familyCar",
     "educationalAttend",
     "educationClientLevel",
-    "memberOver15",
-    "memberOver15HaveAjob",
-    "houseHoldWork",
-    "houseHoldEarn",
-    "houseHoldWorkMore",
-    "partnerWorks",
-    "partnerEarns",
-    "partnerWorksMore",
     "familyUbication"
   ],
 

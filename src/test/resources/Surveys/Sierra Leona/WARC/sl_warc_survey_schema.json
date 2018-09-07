@@ -9,14 +9,13 @@
 		"countryOfBirth",
 		"gender",
 		"currency"
-
 	],
 	"properties": {
 
 		"firstName": {
 			"type": "string",
 			"title": {
-				"es": "Please, insert your name"
+				"es": "What is your name?"
 			},
             "shortName": {
                 "es": "First Name"
@@ -26,7 +25,7 @@
 		"lastName": {
 			"type": "string",
 			"title": {
-				"es": "Please insert your surname"
+				"es": "What is your surname?"
 			},
             "shortName": {
                 "es": "Last Name"
@@ -53,6 +52,11 @@
                 "es": "Country of Birth"
             },
 			"enum": [
+                "SL",
+                "GN",
+                "LR",
+                "CI",
+                "GH",
 				"AF",
 				"AL",
 				"DZ",
@@ -129,7 +133,6 @@
 				"GM",
 				"GE",
 				"DE",
-				"GH",
 				"GI",
 				"CA",
 				"GR",
@@ -139,7 +142,6 @@
 				"GT",
 				"GG",
 				"GY",
-				"GN",
 				"GW",
 				"HT",
 				"HM",
@@ -156,7 +158,6 @@
 				"IM",
 				"IL",
 				"IT",
-				"CI",
 				"JM",
 				"JP",
 				"JO",
@@ -169,7 +170,6 @@
 				"LV",
 				"LB",
 				"LS",
-				"LR",
 				"LY",
 				"LI",
 				"LT",
@@ -242,7 +242,6 @@
 				"SN",
 				"RS",
 				"SC",
-				"SL",
 				"SG",
 				"SK",
 				"SI",
@@ -295,6 +294,11 @@
 				"YE"
 			],
 			"enumNames": [
+                "Sierra Leone",
+                "Guinea",
+                "Liberia",
+                "Cote d'Ivoire",
+                "Ghana",
 				"Afghanistan",
 				"Albania",
 				"Algiers",
@@ -371,7 +375,6 @@
 				"Gambia",
 				"Georgia",
 				"Germany",
-				"Ghana",
 				"Gibraltar",
 				"Glen",
 				"Greece",
@@ -381,7 +384,6 @@
 				"Guatemala",
 				"Guernsey",
 				"Guiana",
-				"Guinea",
 				"Guinea-Bissau",
 				"Haiti",
 				"Heard and McDonald Islands",
@@ -398,7 +400,6 @@
 				"Isle of Man",
 				"Israel",
 				"Italy",
-				"Ivory Coast",
 				"Jamaica",
 				"Japan",
 				"Jordan",
@@ -411,7 +412,6 @@
 				"Latvia",
 				"Lebanon",
 				"Lesotho",
-				"Liberia",
 				"Libya",
 				"Liechtenstein",
 				"Lithuania",
@@ -484,7 +484,6 @@
 				"Senegal",
 				"Serbia and Montenegro",
 				"Seychelles",
-				"Sierra Leone",
 				"Singapore",
 				"Slovakia",
 				"Slovenia",
@@ -559,7 +558,70 @@
 			],
 			"default": "F"
 		},
-		"currency": {
+
+        "headOfHousehold": {
+            "type": "string",
+            "title": {
+                "es": "Are you the head of your household?"
+            },
+            "shortName": {
+                "es": "Head of Household"
+            },
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
+
+        "membersInHousehold": {
+            "type": "number",
+            "title": {
+                "es": "How many members are there in your household? (including yourself)"
+            },
+            "shortName": {
+                "es": "Members in Household"
+            },
+            "default": 0
+        },
+
+        "memberOver15": {
+            "type": "number",
+            "title": {
+                "es": "How many household members are over the age of 15?"
+            },
+            "shortName": {
+                "es": "Members Over 15"
+            },
+            "default": 0
+        },
+
+        "employmentStatusPrimary": {
+            "type": "string",
+            "title": {
+                "es": "Are you a WARC employee, in HEEP, or none?"
+            },
+            "shortName": {
+                "es": "Employment Status"
+            },
+            "enum": [
+                "EMPLOYEE",
+                "HEEP",
+                "NONE"
+            ],
+            "enumNames": [
+                "Employee",
+                "HEEP",
+                "None"
+            ],
+            "default": "EMPLOYEE"
+        },
+
+        "currency": {
 			"type": "string",
 			"title": {
 				"es": "Please select the currency in which you earn your main income"
@@ -568,6 +630,11 @@
                 "es": "Currency"
             },
 			"enum": [
+                "SLL",
+                "GNF",
+                "LRD",
+                "XOF",
+                "GHS",
 				"AFN",
 				"XUA",
 				"DZD",
@@ -593,7 +660,6 @@
 				"CVE",
 				"CAD",
 				"KYD",
-				"XOF",
 				"XAF",
 				"XPF",
 				"CLP",
@@ -620,11 +686,9 @@
 				"FKP",
 				"FJD",
 				"HUF",
-				"GHS",
 				"GIP",
 				"HTG",
 				"PYG",
-				"GNF",
 				"GYD",
 				"HKD",
 				"UAH",
@@ -645,8 +709,6 @@
 				"LBP",
 				"ALL",
 				"HNL",
-				"SLL",
-				"LRD",
 				"LYD",
 				"SZL",
 				"LSL",
@@ -736,9 +798,13 @@
 				"ZMW",
 				"ZWL",
 				"PLN"
-
 			],
 			"enumNames": [
+                "Leone",
+                "Guinean Franc",
+                "Liberian Dollar",
+                "CFA Franc BCEAO",
+                "Ghanaian Cedi",
 				"Afghani",
 				"ADB Unit of Account",
 				"Algerian Dinar",
@@ -764,7 +830,6 @@
 				"Cabo Verde Escudo",
 				"Canadian Dollar",
 				"Cayman Islands Dollar",
-				"CFA Franc BCEAO",
 				"CFA Franc BEAC",
 				"CFP Franc",
 				"Chilean Peso",
@@ -791,11 +856,9 @@
 				"Falkland Islands Pound",
 				"Fiji Dollar",
 				"Forint",
-				"Ghana Cedi",
 				"Gibraltar Pound",
 				"Gourde",
 				"Guarani",
-				"Guinean Franc",
 				"Guyana Dollar",
 				"Hong Kong Dollar",
 				"Hryvnia",
@@ -816,8 +879,6 @@
 				"Lebanese Pound",
 				"Lek",
 				"Lempira",
-				"Leone",
-				"Liberian Dollar",
 				"Libyan Dinar",
 				"Lilangeni",
 				"Loti",
@@ -907,13 +968,41 @@
 				"Zambian Kwacha",
 				"Zimbabwe Dollar",
 				"Zloty"
-
-
 			],
 			"default": "SLL"
 		},
 
-		"activityMain": {
+        "hoursWorkInWeek": {
+            "type": "number",
+            "title": {
+                "es": "How many hours do you work in a week?"
+            },
+            "shortName": {
+                "es": "Hours worked in Week"
+            },
+            "default": 0
+        },
+
+        "wouldLikeToWorkMore": {
+            "type": "string",
+            "title": {
+                "es": "Would you like to work more hours?"
+            },
+            "shortName": {
+                "es": "Would Like to Work More"
+            },
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
+
+        "activityMain": {
 			"type": "string",
 			"title": {
 				"es": "Please select your main economic activity"
@@ -922,41 +1011,40 @@
                 "es": "Main Economic Activity"
             },
 			"enum": [
+				"CL",
 				"CF",
-				"VF",
-				"TF",
-				"PT",
-				"LR",
-				"ES",
 				"DM",
-				"T",
+				"D",
+				"ES",
 				"F",
 				"H",
-				"D",
-				"CL",
+				"LR",
+				"PT",
 				"S",
+				"T",
+				"TF",
+				"VF",
 				"O",
 				"N"
 			],
 			"enumNames": [
+				"CASUAL LABOR",
 				"CROP FARMING",
-				"VEGETABLE FARMING",
-				"TREE FARMING",
-				"PETTY TRADING",
-				"LIVESTOCK REARING",
-				"EMPLOYED FOR A SALARY/WAGE",
 				"DOMESTIC MAID",
-				"TEACHER",
+				"DRIVER/MOTORBIKE RIDER",
+				"EMPLOYED FOR A SALARY/WAGE",
 				"FISHING",
 				"HUNTING",
-				"DRIVER/MOTORBIKE RIDER",
-				"CASUAL LABOR",
+				"LIVESTOCK REARING",
+				"PETTY TRADING",
 				"SERVICES",
+				"TEACHER",
+				"TREE FARMING",
+				"VEGETABLE FARMING",
 				"OTHER",
 				"NONE"
 			],
-			"default": "CF"
-
+			"default": "CL"
 		},
 
 		"activitySecondary": {
@@ -968,390 +1056,268 @@
                 "es": "Secondary Economic Activity"
             },
 			"enum": [
+				"CL",
 				"CF",
-				"VF",
-				"TF",
-				"PT",
-				"LR",
-				"ES",
 				"DM",
-				"T",
+				"D",
+				"ES",
 				"F",
 				"H",
-				"D",
-				"CL",
+				"LR",
+				"PT",
 				"S",
+				"T",
+				"TF",
+				"VF",
 				"O",
 				"N"
 			],
 			"enumNames": [
+				"CASUAL LABOR",
 				"CROP FARMING",
-				"VEGETABLE FARMING",
-				"TREE FARMING",
-				"PETTY TRADING",
-				"LIVESTOCK REARING",
-				"EMPLOYED FOR A SALARY/WAGE",
 				"DOMESTIC MAID",
-				"TEACHER",
+				"DRIVER/MOTORBIKE RIDER",
+				"EMPLOYED FOR A SALARY/WAGE",
 				"FISHING",
 				"HUNTING",
-				"DRIVER/MOTORBIKE RIDER",
-				"CASUAL LABOR",
+				"LIVESTOCK REARING",
+				"PETTY TRADING",
 				"SERVICES",
-				"OTHER",
+				"TEACHER",
+				"TREE FARMING",
+				"VEGETABLE FARMING",
+				"OTHER",                     
 				"NONE"
 			],
-			"default": "CF"
+			"default": "CL"
 
 		},
 
-		"benefitIncome": {
-			"type": "number",
-			"title": {
-				"es": "Do I have a business that generates me income? How much (daily)?"
-			},
-            "shortName": {
-                "es": "Benefit Income"
+        "employedInLast3Month": {
+            "type": "string",
+            "title": {
+                "es": "Have you been employed continuously for the last 3 months?"
             },
-			"default": 0
-		},
-
-		"salaryIncome": {
-			"type": "number",
-			"title": {
-				"es": "Do I have a monthly salary? How much?"
-			},
             "shortName": {
-                "es": "Salary Income"
+                "es": "Employed in last 3 Months"
             },
-			"default": 0
-		},
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
 
-		"otherMembersIncome": {
-			"type": "string",
-			"title": {
-				"es": "What are other members income? (daily)"
-			},
+        "earnInADay": {
+            "type": "number",
+            "title": {
+                "es": "How much do you earn in a day?"
+            },
+            "shortName": {
+                "es": "Earn in a Day"
+            },
+            "default": 0
+        },
+
+        "otherMembersHaveIncome": {
+            "type": "string",
+            "title": {
+                "es": "Do other household members earn an income?"
+            },
+            "shortName": {
+                "es": "Other Members have Income"
+            },
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
+
+        "otherMembersIncome": {
+            "type": "number",
+            "title": {
+                "es": "How much in total do they earn in a day?"
+            },
             "shortName": {
                 "es": "Other Members Income"
             },
-			"default": ""
-		},
+            "default": 0
+        },
 
-		"otherMembersSalary": {
-			"type": "number",
-			"title": {
-				"es": "Do they have a salary? How much?"
-			},
-            "shortName": {
-                "es": "Other Members Salary"
+        "housingSituation": {
+            "type": "string",
+            "title": {
+                "es": "What is my housing situation?"
             },
-			"default": 0
-		},
-
-		"otherMembersBusinessIncome": {
-			"type": "number",
-			"title": {
-				"es": "Do they have business with daily income?"
-			},
             "shortName": {
-                "es": "Other Members Business Income"
+                "es": "Housing Situation"
             },
-			"default": 0
-		},
+            "enum": [
+                "OT",
+                "ONT",
+                "FP",
+                "R",
+                "S",
+                "B"
+            ],
+            "enumNames": [
+                "OWN WITH TITLE",
+                "OWN NO TITLE",
+                "IN FAMILY PROPERTY",
+                "RENTED",
+                "SQUATTERS",
+                "BORROWED"
+            ],
+            "default": "OT"
+        },
 
-		"receiveStateIncome": {
-			"type": "string",
-			"title": {
-				"es": "Does my family receives cash benefits from the government?"
-			},
+        "memberDiedLast5Years": {
+            "type": "string",
+            "title": {
+                "es": "Have any household members died in the last 5 years?"
+            },
             "shortName": {
-                "es": "Cash Benefits From the Government"
+                "es": "Member Died in Last 5 Years"
             },
-			"default": ""
-		},
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
 
-		"housingSituation": {
-			"type": "string",
-			"title": {
-				"es": "What is the situation of my house?"
-			},
+        "memberDiedUnderAge5": {
+            "type": "number",
+            "title": {
+                "es": "How many were under the age of 5?"
+            },
             "shortName": {
-                "es": "Situation of House"
+                "es": "Died under age of 5"
             },
-			"enum": [
-				"OT",
-				"ONT",
-				"FP",
-				"R",
-				"S",
-				"B"
-			],
-			"enumNames": [
-				"OWN WITH TITLE",
-				"OWN NO TITLE",
-				"IN FAMILY PROPERTY",
-				"RENTED",
-				"SQUATTERS",
-				"BORROWED"
-			],
-			"default": "OT"
+            "default": 0
+        },
 
-		},
-
-		"memberDisability": {
-			"type": "string",
-			"title": {
-				"es": "In your house is there a member with a disability?"
-			},
+        "familyWaterAccess": {
+            "type": "string",
+            "title": {
+                "es": "Does your house have water service?"
+            },
             "shortName": {
-                "es": "Household Member with Disabilities"
+                "es": "Water Access"
             },
-			"default": ""
-		},
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
 
-		"memberDiedBefore5": {
-			"type": "string",
-			"title": {
-				"es": "During the past five years, did any member of my family die before the age of 5?"
-			},
+        "howObtainWater": {
+            "type": "string",
+            "title": {
+                "es": "If no, how does your family obtain water?"
+            },
             "shortName": {
-                "es": "Member Died Before 5"
-            },
-			"enum": [
-				"YES",
-				"NO"
-			],
-			"enumNames": [
-				"Yes",
-				"No"
-			],
-			"default": "NO"
-		},
+                "es": "How Obtain Water"
+            }
+        },
 
-		"familyWaterAccess": {
-			"type": "string",
-			"title": {
-				"es": "Is there water service at your family's place of residence? If not, how does your family obtain water?"
-			},
-            "shortName": {
-                "es": "Family Water Access"
+        "familyCar": {
+            "type": "string",
+            "title": {
+                "es": "Does your family have a car or truck?"
             },
-			"default": ""
-		},
-
-		"familyCar": {
-			"type": "string",
-			"title": {
-				"es": "Does your family have a car or truck?"
-			},
             "shortName": {
                 "es": "Family Car"
             },
-			"enum": [
-				"YES",
-				"NO"
-			],
-			"enumNames": [
-				"Yes",
-				"No"
-			],
-			"default": "NO"
-		},
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
 
-		"educationalAttend": {
-			"type": "string",
-			"title": {
-				"es": "Are you currently attending school or an educational program?"
-			},
+        "educationalAttend": {
+            "type": "string",
+            "title": {
+                "es": "Are you currently attending school or an educational program?"
+            },
             "shortName": {
                 "es": "Educational Attend"
             },
-			"default": ""
-		},
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ],
+            "default": "NO"
+        },
 
-		"educationClientLevel": {
-			"type": "string",
-			"title": {
-				"es": "Current or maximum degree achieved"
-			},
+        "educationClientLevel": {
+            "type": "string",
+            "title": {
+                "es": "Current or maximum degree achieved"
+            },
             "shortName": {
                 "es": "Current Education Level"
             },
-			"enum": [
-				"SCHOOL-INCOMPLETE",
-				"SCHOOL-COMPLETE",
-				"INCOMPLETE-SECONDARY",
-				"COMPLETED-SECONDARY",
-				"UNIVERSITY-INCOMPLETE",
-				"UNIVERSITY-COMPLETE",
-				"OTHER",
-				"PREFER-NOT-SAY"
-			],
-			"enumNames": [
-				"School incomplete",
-				"School complete",
-				"Secondary complete",
-				"Secondary incomplete",
-				"University incomplete",
-				"University complete",
-				"Other",
-				"Prefer not to say"
-			]
-		},
+            "enum": [
+                "PRIMARY-COMPLETE",
+                "PRIMARY-INCOMPLETE",
+                "SECONDARY-COMPLETE",
+                "SECONDARY-INCOMPLETE",
+                "UNIVERSITY-COMPLETE",
+                "UNIVERSITY-INCOMPLETE",
+                "OTHER",
+                "PREFER-NOT-SAY"
+            ],
+            "enumNames": [
+                "Primary complete",
+                "Primary incomplete",
+                "Secondary complete",
+                "Secondary incomplete",
+                "University complete",
+                "University incomplete",
+                "Other",
+                "Prefer not to say"
+            ]
+        },
 
-		"memberOver15": {
-			"type": "number",
-			"title": {
-				"es": "How many people over 15 are there in your family?"
-			},
-            "shortName": {
-                "es": "People Over 15"
+        "familyUbication": {
+            "type": "string",
+            "title": {
+                "es": "Please select the geographic location of your household"
             },
-			"default": 0
-		},
-
-		"memberOver15HaveAjob": {
-			"type": "number",
-			"title": {
-				"es": "How many of those people over 15 have a job?"
-			},
-            "shortName": {
-                "es": "People Over 15 with Job"
-            },
-			"default": 0
-		},
-
-		"houseHoldWork": {
-			"type": "string",
-			"title": {
-				"es": "Do you work at least 30 hours a week?"
-			},
-            "shortName": {
-                "es": "Work 30 Hours a Week"
-            },
-			"enum": [
-				"YES",
-				"NO"
-			],
-			"enumNames": [
-				"Yes",
-				"No"
-			],
-			"default": "NO"
-		},
-
-		"houseHoldEarn": {
-			"type": "string",
-			"title": {
-				"es": "Do you earn at least the minimum wage?"
-			},
-            "shortName": {
-                "es": "Earn at least Minimum Wage"
-            },
-			"enum": [
-				"YES",
-				"NO"
-			],
-			"enumNames": [
-				"Yes",
-				"No"
-			],
-			"default": "NO"
-		},
-
-		"houseHoldWorkMore": {
-			"type": "string",
-			"title": {
-				"es": "If you do not work or work less than 30 hours a week, would you like to work or work more?"
-			},
-            "shortName": {
-                "es": "Would Like to Work More"
-            },
-			"enum": [
-				"YES",
-				"NO"
-			],
-			"enumNames": [
-				"Yes",
-				"No"
-			],
-			"default": "NO"
-		},
-
-		"partnerWorks": {
-			"type": "string",
-			"title": {
-				"es": "Does your partner work at least 30 hours a week?"
-			},
-            "shortName": {
-                "es": "Partner Work at least 30 hour a Week"
-            },
-			"enum": [
-				"YES",
-				"NO",
-				"NA"
-			],
-			"enumNames": [
-				"Yes",
-				"No",
-				"Not applicable"
-			],
-			"default": "NO"
-		},
-
-		"partnerEarns": {
-			"type": "string",
-			"title": {
-				"es": "Does your partner earn at least the minimum wage? "
-			},
-            "shortName": {
-                "es": "Partner Earns at least Minimum Wage"
-            },
-			"enum": [
-				"YES",
-				"NO",
-				"NA"
-			],
-			"enumNames": [
-				"Yes",
-				"No",
-				"Not applicable"
-			],
-			"default": "NO"
-		},
-
-		"partnerWorksMore": {
-			"type": "string",
-			"title": {
-				"es": "If your partner does not work or works less than 30 hours a week, would he/she like to work or to work more?"
-			},
-            "shortName": {
-                "es": "Partner Would Like to Work More"
-            },
-			"enum": [
-				"YES",
-				"NO",
-				"NA"
-			],
-			"enumNames": [
-				"Yes",
-				"No",
-				"Not applicable"
-			],
-			"default": "NO"
-		},
-
-		"familyUbication": {
-			"type": "string",
-			"title": {
-				"es": "Please select the geographic location of your household"
-			},
             "shortName": {
                 "es": "Family Location"
             },
-			"default": "8.470919, -13.238901"
-		},
+            "default": "8.470919, -13.238901"
+        },
+
 
 		"income": {
 			"type": "array",
