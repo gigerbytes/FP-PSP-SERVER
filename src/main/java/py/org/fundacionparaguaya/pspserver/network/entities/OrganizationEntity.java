@@ -65,6 +65,10 @@ public class OrganizationEntity {
     @JoinColumn(name = "application_id")
     private ApplicationEntity application;
 
+    @ManyToOne(targetEntity = GroupOrganizationEntity.class)
+    @JoinColumn(name = "group")
+    private GroupOrganizationEntity group;
+
     private String logoUrl;
 
     public Long getId() {
@@ -139,6 +143,13 @@ public class OrganizationEntity {
         this.logoUrl = logoUrl;
     }
 
+    public GroupOrganizationEntity getGroup() {
+        return group;
+    }
+
+    public void setGroup(GroupOrganizationEntity group) {
+        this.group = group;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -168,6 +179,7 @@ public class OrganizationEntity {
                 .add("country", country)
                 .add("information", information)
                 .add("application", application)
+                .add("group",group)
                 .toString();
     }
 
