@@ -16,18 +16,18 @@ public class GroupOrganizationEntity {
 
     @Id
     @GenericGenerator(
-        name = "groupsOrganizationsSequenceGenerator",
-        strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {
-            @Parameter(name = SequenceStyleGenerator.SCHEMA,
-                        value = "ps_network"),
-            @Parameter(name = SequenceStyleGenerator.SEQUENCE_PARAM,
-                        value = "organizations_id_seq"),
-            @Parameter(name = SequenceStyleGenerator.INITIAL_PARAM,
-                        value = "1"),
-            @Parameter(name = SequenceStyleGenerator.INCREMENT_PARAM,
-                        value = "1")
-        }
+            name = "groupsOrganizationsSequenceGenerator",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                    @Parameter(name = SequenceStyleGenerator.SCHEMA,
+                            value = "ps_network"),
+                    @Parameter(name = SequenceStyleGenerator.SEQUENCE_PARAM,
+                            value = "organizations_id_seq"),
+                    @Parameter(name = SequenceStyleGenerator.INITIAL_PARAM,
+                            value = "1"),
+                    @Parameter(name = SequenceStyleGenerator.INCREMENT_PARAM,
+                            value = "1")
+            }
     )
     @GeneratedValue(generator = "groupsOrganizationsSequenceGenerator")
     @Column(name = "id")
@@ -37,7 +37,6 @@ public class GroupOrganizationEntity {
     private String name;
 
 
-
     @NotNull
     private String description;
 
@@ -45,7 +44,7 @@ public class GroupOrganizationEntity {
     @JoinColumn(name = "organization")
     private OrganizationEntity master;
 
-    @OneToMany(mappedBy="group" )
+    @OneToMany(mappedBy = "group")
     private List<OrganizationEntity> organizations;
 
 
@@ -64,7 +63,6 @@ public class GroupOrganizationEntity {
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     public String getDescription() {
@@ -114,7 +112,7 @@ public class GroupOrganizationEntity {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
-                
+
                 .add("description", description)
                 .add("master", master)
                 .toString();
