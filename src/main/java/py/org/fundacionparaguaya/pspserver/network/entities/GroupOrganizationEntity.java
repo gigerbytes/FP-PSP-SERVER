@@ -36,13 +36,12 @@ public class GroupOrganizationEntity {
     @NotNull
     private String name;
 
-
     @NotNull
     private String description;
 
     @ManyToOne(targetEntity = OrganizationEntity.class)
-    @JoinColumn(name = "organization")
-    private OrganizationEntity master;
+    @JoinColumn(name = "organization_id")
+    private OrganizationEntity organization;
 
     @OneToMany(mappedBy = "group")
     private List<OrganizationEntity> organizations;
@@ -64,7 +63,6 @@ public class GroupOrganizationEntity {
         this.name = name;
     }
 
-
     public String getDescription() {
         return description;
     }
@@ -74,12 +72,12 @@ public class GroupOrganizationEntity {
     }
 
 
-    public OrganizationEntity getMaster() {
-        return master;
+    public OrganizationEntity getOrganization() {
+        return organization;
     }
 
-    public void setMaster(OrganizationEntity master) {
-        this.master = master;
+    public void setOrganization(OrganizationEntity organization) {
+        this.organization = organization;
     }
 
     public List<OrganizationEntity> getOrganizations() {
@@ -112,9 +110,8 @@ public class GroupOrganizationEntity {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
-
                 .add("description", description)
-                .add("master", master)
+                .add("organization", organization)
                 .toString();
     }
 

@@ -66,7 +66,7 @@ public class OrganizationEntity {
     private ApplicationEntity application;
 
     @ManyToOne(targetEntity = GroupOrganizationEntity.class)
-    @JoinColumn(name = "group")
+    @JoinColumn(name = "group_organization_id")
     private GroupOrganizationEntity group;
 
     private String logoUrl;

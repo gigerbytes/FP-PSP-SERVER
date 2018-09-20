@@ -21,4 +21,19 @@ public interface GroupOrganizationService {
      * @return
      */
     GroupOrganizationDTO addGroupOrganization(GroupOrganizationDTO groupOrganizationDTO);
+
+    /**
+     * Updates the information of the groups
+     * @param groupOrganizationId
+     * @param groupOrganizationDTO
+     * @return
+     */
+    GroupOrganizationDTO updateGroupOrganization(Long groupOrganizationId, GroupOrganizationDTO groupOrganizationDTO);
+
+    /**
+     * Returns the information of a group an his organizations
+     * @param groupOrganizationId
+     * @return
+     */
+    GroupOrganizationDTO getGroupOrganizationById(Long groupOrganizationId);
 }

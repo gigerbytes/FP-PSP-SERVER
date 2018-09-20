@@ -19,5 +19,7 @@ public interface GroupOrganizationRepository extends PagingAndSortingRepository<
 
     List<GroupOrganizationEntity> findAll();
 
+    List<GroupOrganizationEntity> findByOrganizationId(Long organizationId);
+
     Page<GroupOrganizationEntity> findAll(Pageable page);
 }

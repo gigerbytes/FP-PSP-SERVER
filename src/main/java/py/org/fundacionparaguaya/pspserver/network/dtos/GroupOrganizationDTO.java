@@ -18,7 +18,7 @@ public class GroupOrganizationDTO implements Serializable {
 
     private String description;
 
-    private OrganizationDTO master;
+    private OrganizationDTO organization;
 
     private List<OrganizationDTO> organizations;
 
@@ -26,11 +26,11 @@ public class GroupOrganizationDTO implements Serializable {
     public GroupOrganizationDTO() {
     }
 
-    public GroupOrganizationDTO(Long id, @NotNull String name, String description, OrganizationDTO master, List<OrganizationDTO> organizations) {
+    public GroupOrganizationDTO(Long id, @NotNull String name, String description, OrganizationDTO organization, List<OrganizationDTO> organizations) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.master = master;
+        this.organization = organization;
         this.organizations = organizations;
     }
 
@@ -64,12 +64,12 @@ public class GroupOrganizationDTO implements Serializable {
         this.description = description;
     }
 
-    public OrganizationDTO getMaster() {
-        return master;
+    public OrganizationDTO getOrganization() {
+        return organization;
     }
 
-    public void setMaster(OrganizationDTO master) {
-        this.master = master;
+    public void setOrganization(OrganizationDTO organization) {
+        this.organization = organization;
     }
 
     public List<OrganizationDTO> getOrganizations() {
@@ -84,7 +84,7 @@ public class GroupOrganizationDTO implements Serializable {
         private Long id;
         private String name;
         private String description;
-        private OrganizationDTO master;
+        private OrganizationDTO organization;
         private List<OrganizationDTO> organizations;
 
         public GroupOrganizationDTO.Builder id(Long groupOrganizationId) {
@@ -99,8 +99,8 @@ public class GroupOrganizationDTO implements Serializable {
             this.description = description; return this;
         }
 
-        public GroupOrganizationDTO.Builder master(OrganizationDTO master) {
-            this.master = master; return this;
+        public GroupOrganizationDTO.Builder organization(OrganizationDTO organization) {
+            this.organization = organization; return this;
         }
 
         public GroupOrganizationDTO.Builder organizations(List<OrganizationDTO> organizations) {
@@ -109,7 +109,7 @@ public class GroupOrganizationDTO implements Serializable {
 
         public GroupOrganizationDTO build() {
             return new GroupOrganizationDTO(
-                    id, name,  description, master, organizations);
+                    id, name,  description, organization, organizations);
         }
     }
 
@@ -122,7 +122,7 @@ public class GroupOrganizationDTO implements Serializable {
         return MoreObjects.toStringHelper(this)
                 .add("id", id).add("name", name)
                 .add("description", description)
-                .add("master", master)
+                .add("organization", organization)
                 .toString();
     }
 }

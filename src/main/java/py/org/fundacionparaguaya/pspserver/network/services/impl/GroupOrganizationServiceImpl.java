@@ -7,7 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
 import py.org.fundacionparaguaya.pspserver.common.pagination.PaginableList;
@@ -16,13 +19,8 @@ import py.org.fundacionparaguaya.pspserver.config.ApplicationProperties;
 import py.org.fundacionparaguaya.pspserver.families.dtos.FamilyFilterDTO;
 import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.services.FamilyService;
-import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
-import py.org.fundacionparaguaya.pspserver.network.dtos.DashboardDTO;
-import py.org.fundacionparaguaya.pspserver.network.dtos.GroupOrganizationDTO;
-import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
-import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity;
-import py.org.fundacionparaguaya.pspserver.network.entities.GroupOrganizationEntity;
-import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
+import py.org.fundacionparaguaya.pspserver.network.dtos.*;
+import py.org.fundacionparaguaya.pspserver.network.entities.*;
 import py.org.fundacionparaguaya.pspserver.network.mapper.GroupOrganizationMapper;
 import py.org.fundacionparaguaya.pspserver.network.mapper.OrganizationMapper;
 import py.org.fundacionparaguaya.pspserver.network.repositories.ApplicationRepository;
@@ -58,18 +56,24 @@ public class GroupOrganizationServiceImpl implements GroupOrganizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(GroupOrganizationServiceImpl.class);
 
-    private GroupOrganizationRepository groups;
+    private GroupOrganizationRepository groupOrganizationRepository;
     private GroupOrganizationMapper groupOrganizationMapper;
+    private OrganizationRepository organizationRepository;
+    private OrganizationMapper organizationMapper;
 
-    public GroupOrganizationServiceImpl(GroupOrganizationRepository groups, GroupOrganizationMapper groupOrganizationMapper) {
-        this.groups = groups;
+    public GroupOrganizationServiceImpl(GroupOrganizationRepository groupOrganizationRepository, GroupOrganizationMapper groupOrganizationMapper,
+                                        OrganizationRepository organizationRepository,  OrganizationMapper organizationMapper) {
+
+        this.groupOrganizationRepository = groupOrganizationRepository;
         this.groupOrganizationMapper = groupOrganizationMapper;
+        this.organizationRepository = organizationRepository;
+        this.organizationMapper = organizationMapper;
     }
 
     @Override
     public GroupOrganizationDTO addGroupOrganization(GroupOrganizationDTO groupOrganizationDTO) {
-        groups
-                .findOneByName(groupOrganizationDTO.getName())
+
+        groupOrganizationRepository.findOneByName(groupOrganizationDTO.getName())
                 .ifPresent(organization -> {
                     throw new CustomParameterizedException("Organization group already exists",
                             new ImmutableMultimap.Builder<String, String>()
@@ -81,9 +85,55 @@ public class GroupOrganizationServiceImpl implements GroupOrganizationService {
         GroupOrganizationEntity group = new GroupOrganizationEntity();
         BeanUtils.copyProperties(groupOrganizationDTO, group);
 
+        OrganizationEntity organization = organizationRepository.findById(group.getOrganization().getId());
+        group.setOrganization(organization);
 
-        return groupOrganizationMapper.entityToDto(groups.save(group));
+        GroupOrganizationEntity master = groupOrganizationRepository.save(group);
+
+        for (OrganizationDTO organizationDTO : groupOrganizationDTO.getOrganizations()) {
+
+            OrganizationEntity org = organizationRepository.findById(organizationDTO.getId());
+            org.setGroup(master);
+            organizationRepository.save(org);
+        }
+
+        return groupOrganizationMapper.entityToDto(master);
     }
 
+    @Override
+    public GroupOrganizationDTO updateGroupOrganization(Long groupOrganizationId, GroupOrganizationDTO groupOrganizationDTO) {
+        checkArgument(groupOrganizationId > 0, "Argument was %s but expected nonnegative", groupOrganizationId);
 
+        return Optional.ofNullable(
+                groupOrganizationRepository.findOne(groupOrganizationId))
+                .map(group -> {
+                    group.setName(groupOrganizationDTO.getName());
+                    group.setDescription(groupOrganizationDTO.getDescription());
+                    return groupOrganizationRepository.save(group);
+                })
+                .map(groupOrganizationMapper::entityToDto)
+                .orElseThrow(() -> new UnknownResourceException("Group does not exist"));
+    }
+
+    @Override
+    public GroupOrganizationDTO getGroupOrganizationById(Long groupOrganizationId) {
+        checkArgument(groupOrganizationId > 0, "Argument was %s but expected nonnegative", groupOrganizationId);
+
+        GroupOrganizationEntity group = groupOrganizationRepository.findById(groupOrganizationId);
+        GroupOrganizationDTO groupDto = groupOrganizationMapper.entityToDto(group);
+
+
+
+        List<OrganizationDTO> organizations = new ArrayList<>();
+
+        for(OrganizationEntity org : group.getOrganizations())
+        {
+            organizations.add(organizationMapper.entityToDto(org));
+        }
+
+        groupDto.setOrganizations(organizations);
+        groupDto.setOrganization(organizationMapper.entityToDto(organizationRepository.findById(group.getOrganization().getId())));
+
+        return groupDto;
+    }
 }
