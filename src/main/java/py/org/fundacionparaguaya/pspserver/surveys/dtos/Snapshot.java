@@ -46,6 +46,17 @@ public class Snapshot {
     @JsonProperty("snapshot_indicator_id")
     private Long snapshotIndicatorId= null;
 
+    @JsonProperty("survey_version_id")
+    private Long surveyVersionId;
+
+    public Long getSurveyVersionId() {
+        return surveyVersionId;
+    }
+
+    public void setSurveyVersionId(Long surveyVersionId) {
+        this.surveyVersionId = surveyVersionId;
+    }
+
     public Snapshot personalSurveyData(SurveyData surveyData) {
         this.personalSurveyData = surveyData;
         return this;
@@ -192,6 +203,9 @@ public class Snapshot {
         sb.append("    surveyId: ")
         .append(toIndentedString(surveyId))
         .append("\n");
+        sb.append("    surveyVersionId: ")
+                .append(this.surveyVersionId)
+                .append("\n");
         sb.append("    snapshotEconomicId: ")
         .append(toIndentedString(snapshotEconomicId))
         .append("\n");
@@ -302,6 +316,11 @@ public class Snapshot {
     
     public Snapshot privPolId(Long privPolId) {
         this.privPolId = privPolId;
+        return this;
+    }
+
+    public Snapshot surveyVersionId(Long surveyVersionId){
+        this.surveyVersionId = surveyVersionId;
         return this;
     }
 

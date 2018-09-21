@@ -38,6 +38,7 @@ import py.org.fundacionparaguaya.pspserver.surveys.enums.SurveyStoplightEnum;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotEconomicMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotIndicatorMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
+import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotIndicatorPriorityService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SurveyService;
@@ -91,6 +92,8 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     private final OrganizationRepository organizationRepository;
 
+    private final SurveyRepository surveyRepository;
+
     private final I18n i18n;
 
     private static final String INDICATOR_NAME = "name";
@@ -103,7 +106,8 @@ public class SnapshotServiceImpl implements SnapshotService {
     public SnapshotServiceImpl(SnapshotEconomicRepository economicRepository, SnapshotEconomicMapper economicMapper,
             SurveyService surveyService, SnapshotIndicatorMapper indicatorMapper,
             SnapshotIndicatorPriorityService priorityService, PersonMapper personMapper, FamilyService familyService,
-            OrganizationMapper organizationMapper, I18n i18n, OrganizationRepository organizationRepository) {
+            OrganizationMapper organizationMapper, I18n i18n, OrganizationRepository organizationRepository,
+                               SurveyRepository surveyRepository) {
         this.economicRepository = economicRepository;
         this.economicMapper = economicMapper;
         this.surveyService = surveyService;
@@ -114,6 +118,7 @@ public class SnapshotServiceImpl implements SnapshotService {
         this.organizationMapper = organizationMapper;
         this.i18n = i18n;
         this.organizationRepository = organizationRepository;
+        this.surveyRepository = surveyRepository;
     }
 
     private boolean dependenciesAreValid(NewSnapshot snapshot) {
@@ -255,7 +260,8 @@ public class SnapshotServiceImpl implements SnapshotService {
         LOG.info("User '{}' created a new Snapshot, snapshot_id={}", details.getUsername(),
                 created.getSnapshotEconomicId());
         LOG.info("Snapshot = {}", created);
-        LOG.info("User '{}' finished Survey, survey_id={}", details.getUsername(), created.getSurveyId());
+        LOG.info("User '{}' finished Survey, survey_id={}, survey_version_id={}", details.getUsername(),
+                created.getSurveyId(), created.getSurveyVersionId());
 
         return created;
     }
@@ -266,7 +272,6 @@ public class SnapshotServiceImpl implements SnapshotService {
         // FIXME should not modify the parameter
         entity.setFamily(family);
         entity.setPersonalInformation(snapshot.getPersonalSurveyData());
-
         return this.economicRepository.save(entity);
     }
 
@@ -376,6 +381,8 @@ public class SnapshotServiceImpl implements SnapshotService {
         toRet.setSnapshotIndicatorId(originalSnapshot.getSnapshotIndicator().getId());
         toRet.setSnapshotEconomicId(originalSnapshot.getId());
         toRet.setSurveyId(originalSnapshot.getSurveyDefinition().getId());
+        toRet.setSurveyVersionId(originalSnapshot.getSurveyVersionEntity().getId());
+
 
         // set family for information purpose
         Long familyId = originalSnapshot.getFamily().getFamilyId();
@@ -472,6 +479,7 @@ public class SnapshotServiceImpl implements SnapshotService {
             snapshotIndicators.setFamilyId(os.getFamily().getFamilyId());
             snapshotIndicators.setSnapshotEconomicId(os.getId());
             snapshotIndicators.setSurveyId(os.getSurveyDefinition().getId());
+            snapshotIndicators.setSurveyVersionId(os.getSurveyVersionEntity().getId());
             FamilyDTO familyDto = familyService.getFamilyById(familyId);
             Optional.ofNullable(familyDto.getOrganization()).ifPresent(organization -> {
                 familyDto.setOrganization(

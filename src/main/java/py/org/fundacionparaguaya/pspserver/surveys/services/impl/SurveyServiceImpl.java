@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.springframework.data.jpa.domain.Specifications.where;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.SurveyOrganizationSpecification.byApplication;
-import static py.org.fundacionparaguaya.pspserver.network.specifications.SurveyOrganizationSpecification.byOrganization;
 import static py.org.fundacionparaguaya.pspserver.network.specifications.SurveyOrganizationSpecification.lastModifiedGt;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.SurveyOrganizationSpecification.byOrganization;
 import static py.org.fundacionparaguaya.pspserver.surveys.validation.MultipleSchemaValidator.all;
 import static py.org.fundacionparaguaya.pspserver.surveys.validation.PropertyValidator.validType;
 import static py.org.fundacionparaguaya.pspserver.surveys.validation.SchemaValidator.markedAsRequired;
@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import py.org.fundacionparaguaya.pspserver.common.exceptions.CustomParameterizedException;
 import py.org.fundacionparaguaya.pspserver.common.exceptions.UnknownResourceException;
+import py.org.fundacionparaguaya.pspserver.config.I18n;
 import py.org.fundacionparaguaya.pspserver.network.dtos.ApplicationDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.SurveyOrganizationEntity;
@@ -42,6 +43,7 @@ import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveyDefinition;
 import py.org.fundacionparaguaya.pspserver.surveys.dtos.SurveySchema;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.StopLightType;
 import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyEntity;
+import py.org.fundacionparaguaya.pspserver.surveys.entities.SurveyVersionEntity;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.PropertyAttributeSupport;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SurveyMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
@@ -75,6 +77,8 @@ public class SurveyServiceImpl implements SurveyService {
 
     private final SurveyOrganizationService surveyOrganizationService;
 
+    private final I18n i18n;
+
     public SurveyServiceImpl(SurveyRepository repo,
             PropertyAttributeSupport propertyAttributeSupport,
             SurveyMapper mapper,
@@ -83,7 +87,8 @@ public class SurveyServiceImpl implements SurveyService {
             OrganizationMapper organizationMapper,
             ApplicationRepository applicationRepo,
             ApplicationMapper applicationMapper,
-            SurveyOrganizationService surveyOrganizationService) {
+            SurveyOrganizationService surveyOrganizationService,
+                             I18n i18n) {
         this.repo = repo;
         this.propertyAttributeSupport = propertyAttributeSupport;
         this.mapper = mapper;
@@ -93,6 +98,7 @@ public class SurveyServiceImpl implements SurveyService {
         this.applicationRepo = applicationRepo;
         this.applicationMapper = applicationMapper;
         this.surveyOrganizationService = surveyOrganizationService;
+        this.i18n=i18n;
     }
 
     @Override
@@ -109,7 +115,13 @@ public class SurveyServiceImpl implements SurveyService {
                 surveyDefinition.getTitle(), surveyDefinition.getDescription(),
                 new SurveyDefinition()
                         .surveySchema(surveyDefinition.getSurveySchema())
-                        .surveyUISchema(surveyDefinition.getSurveyUISchema())));
+                        .surveyUISchema(surveyDefinition.getSurveyUISchema())
+                        .description(surveyDefinition.getDescription())
+                        .title(surveyDefinition.getTitle())
+                        .organizations(surveyDefinition.getOrganizations())
+                        .applications(surveyDefinition.getApplications())
+        ));
+
 
         if (surveyDefinition.getOrganizations() != null
                 && surveyDefinition.getOrganizations().size() > 0) {
@@ -233,7 +245,9 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public void deleteSurvey(Long surveyId) {
-        try {
+
+        //Deleting surveys should not delete associated data (snapshots, families, etc)
+        /*try {
 
             Optional.ofNullable(repo.findOne(surveyId)).ifPresent(survey -> {
                 surveyOrganizationRepo.deleteBySurveyId(survey.getId());
@@ -243,7 +257,9 @@ public class SurveyServiceImpl implements SurveyService {
         } catch (Exception e) {
             throw new CustomParameterizedException(
                     "The survey can not be deleted!");
-        }
+        }*/
+
+        throw new CustomParameterizedException(i18n.translate("survey.delete.unsupported"));
     }
 
     @Override
@@ -258,8 +274,16 @@ public class SurveyServiceImpl implements SurveyService {
 
             survey.setDescription(surveyDefinition.getDescription());
             survey.setTitle(surveyDefinition.getTitle());
-            survey.setSurveyDefinition(surveyDefinition);
-            survey.setLastModifiedAt(LocalDateTime.now());
+
+            //comparisons to see if new version will be created
+            if (this.definitionUpdated(survey, surveyDefinition)){
+                survey.getCurrentVersion().setCurrent(false);
+
+                SurveyVersionEntity surveyVersionEntity = new SurveyVersionEntity();
+                surveyVersionEntity.setCurrent(true);
+                surveyVersionEntity.setSurveyDefinition(surveyDefinition);
+                survey.getSurveyVersionEntityList().add(surveyVersionEntity);
+            }
 
             surveyOrganizationService
                     .crudSurveyOrganization(details, surveyId, surveyDefinition, survey);
@@ -268,6 +292,19 @@ public class SurveyServiceImpl implements SurveyService {
 
         }).map(mapper::entityToDto).orElseThrow(
                 () -> new UnknownResourceException("Survey does not exist"));
+    }
+
+    private boolean definitionUpdated(SurveyEntity surveyEntity, SurveyDefinition surveyDefinition){
+        SurveyDefinition savedDefinition = surveyEntity.getCurrentVersion().getSurveyDefinition();
+
+        if (surveyDefinition.getSurveyUISchema().equals(savedDefinition.getSurveyUISchema())
+                && surveyDefinition.getSurveySchema().equals(savedDefinition.getSurveySchema())){
+            return false;
+        }
+
+        return true;
+
+
     }
 
     @Override
@@ -288,13 +325,28 @@ public class SurveyServiceImpl implements SurveyService {
                     .collect(Collectors.toList());
         } else {
             surveys = surveyOrganizationRepo.findAll(where(byApplication(applicationId))
-                            .and(byOrganization(organizationId))
-                            .and(lastModifiedGt(lastModifiedGt)))
-                            .stream()
-                            .map(SurveyOrganizationEntity::getSurvey)
-                            .distinct()
-                            .sorted(Comparator.comparing(SurveyEntity::getId))
+                    .and(byOrganization(organizationId)))
+                    .stream()
+                    .map(SurveyOrganizationEntity::getSurvey)
+                    .distinct()
+                    .sorted(Comparator.comparing(SurveyEntity::getId))
+                    .collect(Collectors.toList());
+
+            if (lastModifiedGt!=null) {
+                /*Default format is yyyy-MM-dd'T'HH:mm --> yyyy-MM-ddTHH:mm
+                * DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'HH:mm");
+                * */
+                try {
+                    final LocalDateTime dateTimeParam = LocalDateTime.parse(lastModifiedGt);
+                    surveys = surveys.stream()
+                            .filter(survey -> survey.getCurrentVersion().getCreatedAt().isAfter(dateTimeParam))
                             .collect(Collectors.toList());
+                } catch (RuntimeException e) {
+                    throw new CustomParameterizedException("Invalid Date: " + lastModifiedGt
+                            + "Format should be: yyyy-MM-dd'T'HH:mm");
+                }
+            }
+
         }
         return mapper.entityListToDtoList(surveys);
     }

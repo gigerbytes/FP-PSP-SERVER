@@ -21,6 +21,7 @@ import py.org.fundacionparaguaya.pspserver.surveys.entities.SnapshotIndicatorEnt
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotEconomicMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.mapper.SnapshotIndicatorMapper;
 import py.org.fundacionparaguaya.pspserver.surveys.repositories.SnapshotEconomicRepository;
+import py.org.fundacionparaguaya.pspserver.surveys.repositories.SurveyRepository;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotIndicatorPriorityService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SnapshotService;
 import py.org.fundacionparaguaya.pspserver.surveys.services.SurveyService;
@@ -78,6 +79,9 @@ public class SnapshotServiceTest {
     @Mock
     private OrganizationRepository organizationRepo;
 
+    @Mock
+    private SurveyRepository surveyRepository;
+
     private static final PersonEntity MOCK_PERSON = aPerson();
 
     private static final Snapshot MOCK_SNAPSHOT = aSnapshot();
@@ -85,7 +89,7 @@ public class SnapshotServiceTest {
     @Before
     public void setUp() {
         service = new SnapshotServiceImpl(economicRepo, economicMapper, surveyService, indicatorMapper, priorityService,
-                personMapper, familyService, organizationMapper, i18nService, organizationRepo);
+                personMapper, familyService, organizationMapper, i18nService, organizationRepo, surveyRepository);
     }
 
     @Test
