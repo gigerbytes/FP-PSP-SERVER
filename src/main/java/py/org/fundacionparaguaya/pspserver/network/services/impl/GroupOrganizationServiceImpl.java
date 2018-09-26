@@ -85,7 +85,7 @@ public class GroupOrganizationServiceImpl implements GroupOrganizationService {
         GroupOrganizationEntity group = new GroupOrganizationEntity();
         BeanUtils.copyProperties(groupOrganizationDTO, group);
 
-        OrganizationEntity organization = organizationRepository.findById(group.getOrganization().getId());
+        OrganizationEntity organization = organizationRepository.findById(groupOrganizationDTO.getOrganization().getId());
         group.setOrganization(organization);
 
         GroupOrganizationEntity master = groupOrganizationRepository.save(group);

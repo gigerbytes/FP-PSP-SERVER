@@ -5,9 +5,12 @@ import com.google.common.base.MoreObjects;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
+import py.org.fundacionparaguaya.pspserver.common.entities.LocalDateTimeConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Entity
@@ -46,6 +49,9 @@ public class GroupOrganizationEntity {
     @OneToMany(mappedBy = "group")
     private List<OrganizationEntity> organizations;
 
+    @Column(name = "created_date")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime createdDate;
 
     public Long getId() {
         return id;
@@ -86,6 +92,19 @@ public class GroupOrganizationEntity {
 
     public void setOrganizations(List<OrganizationEntity> organizations) {
         this.organizations = organizations;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    @PrePersist
+    public void preSave() {
+        this.createdDate = LocalDateTime.now(ZoneId.of("GMT+00:00"));
     }
 
     @Override
