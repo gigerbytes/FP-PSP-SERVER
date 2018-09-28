@@ -1,0 +1,326 @@
+{
+    "properties": {},
+
+    "ui:custom:fields": {
+
+        "birthdate": {
+            "ui:field": "date"
+        },
+
+        "manyPeopleHousehold":{
+            "ui:field": "numberFormat"
+        },
+
+        "income": {
+            "ui:field": "gallery"
+        },
+        "familySavings": {
+            "ui:field": "gallery"
+        },
+        "accessToCredit": {
+            "ui:field": "gallery"
+        },
+        "stableIncome": {
+            "ui:field": "gallery"
+        },
+        "documentation": {
+            "ui:field": "gallery"
+        },
+        "unpollutedEnvironment": {
+            "ui:field": "gallery"
+        },
+        "garbageDisposal": {
+            "ui:field": "gallery"
+        },
+        "drinkingWaterAccess": {
+            "ui:field": "gallery"
+        },
+        "accessToHealthServices": {
+            "ui:field": "gallery"
+        },
+        "alimentation": {
+            "ui:field": "gallery"
+        },
+        "personalHygiene": {
+            "ui:field": "gallery"
+        },
+        "sexualHealth": {
+            "ui:field": "gallery"
+        },
+        "healthyTeeth": {
+            "ui:field": "gallery"
+        },
+        "eyesight": {
+            "ui:field": "gallery"
+        },
+        "vaccinations": {
+            "ui:field": "gallery"
+        },
+        "insurance": {
+            "ui:field": "gallery"
+        },
+        "safeHouse": {
+            "ui:field": "gallery"
+        },
+        "comfortOfTheHome": {
+            "ui:field": "gallery"
+        },
+        "separateBedrooms": {
+            "ui:field": "gallery"
+        },
+        "properKitchen": {
+            "ui:field": "gallery"
+        },
+        "safeBathroom": {
+            "ui:field": "gallery"
+        },
+        "refrigerator": {
+            "ui:field": "gallery"
+        },
+        "phone": {
+            "ui:field": "gallery"
+        },
+        "clothingAndFootwear": {
+            "ui:field": "gallery"
+        },
+        "safety": {
+            "ui:field": "gallery"
+        },
+        "security": {
+            "ui:field": "gallery"
+        },
+        "electricityAccess": {
+            "ui:field": "gallery"
+        },
+        "regularMeansOfTransportation": {
+            "ui:field": "gallery"
+        },
+        "streetRoadSafety": {
+            "ui:field": "gallery"
+        },
+        "middleEducation": {
+            "ui:field": "gallery"
+        },
+        "readAndWrite": {
+            "ui:field": "gallery"
+        },
+        "schoolSuppliesAndBooks": {
+            "ui:field": "gallery"
+        },
+        "capacityToPlanAndBudget": {
+            "ui:field": "gallery"
+        },
+        "abilityToGenerateIncome": {
+            "ui:field": "gallery"
+        },
+        "informationAccess": {
+            "ui:field": "gallery"
+        },
+        "accessToEntertainment": {
+            "ui:field": "gallery"
+        },
+        "respectForDiversity": {
+            "ui:field": "gallery"
+        },
+        "awarenessOfHumanRights": {
+            "ui:field": "gallery"
+        },
+        "childLabor": {
+            "ui:field": "gallery"
+        },
+        "socialCapital": {
+            "ui:field": "gallery"
+        },
+        "influenceInPublicSector": {
+            "ui:field": "gallery"
+        },
+        "abilityToSolveProblemsAndConflicts": {
+            "ui:field": "gallery"
+        },
+        "registeredToVoteAndVotesInElections": {
+            "ui:field": "gallery"
+        },
+        "awarenessOfNeeds": {
+            "ui:field": "gallery"
+        },
+        "selfEsteem": {
+            "ui:field": "gallery"
+        },
+        "moralConscience": {
+            "ui:field": "gallery"
+        },
+        "emotionalIntelligence": {
+            "ui:field": "gallery"
+        },
+        "householdViolence": {
+            "ui:field": "gallery"
+        },
+        "entrepreneurialSpirit": {
+            "ui:field": "gallery"
+        },
+        "autonomyDecisions": {
+            "ui:field": "gallery"
+        },
+        "addiction": {
+            "ui:field": "gallery"
+        }
+    },
+
+    "ui:order": [
+        "firstName",
+        "lastName",
+        "birthdate",
+        "countryOfBirth",
+        "gender",
+        "email",
+        "postCode",
+
+        "sourceOfIncome",
+        "businessIncome",
+        "monthlySalaryIncome",
+        "otherMembersIncome",
+        "otherMembersSalary",
+        "otherMembersBusinessIncome",
+        "receiveStateIncome",
+        "housingSituation",
+        "otherUsefulInfo",
+        "memberDiedBefore5",
+        "familyCar",
+        "manyPeopleHousehold",
+        "educationPersonMostStudied",
+        "employmentStatusPrimary",
+
+        "income",
+        "familySavings",
+        "accessToCredit",
+        "stableIncome",
+        "documentation",
+        "unpollutedEnvironment",
+        "garbageDisposal",
+        "drinkingWaterAccess",
+        "accessToHealthServices",
+        "alimentation",
+        "personalHygiene",
+        "sexualHealth",
+        "healthyTeeth",
+        "eyesight",
+        "vaccinations",
+        "insurance",
+        "safeHouse",
+        "comfortOfTheHome",
+        "separateBedrooms",
+        "properKitchen",
+        "safeBathroom",
+        "refrigerator",
+        "phone",
+        "clothingAndFootwear",
+        "safety",
+        "security",
+        "electricityAccess",
+        "regularMeansOfTransportation",
+        "streetRoadSafety",
+        "middleEducation",
+        "readAndWrite",
+        "schoolSuppliesAndBooks",
+        "capacityToPlanAndBudget",
+        "abilityToGenerateIncome",
+        "informationAccess",
+        "accessToEntertainment",
+        "respectForDiversity",
+        "awarenessOfHumanRights",
+        "childLabor",
+        "socialCapital",
+        "influenceInPublicSector",
+        "abilityToSolveProblemsAndConflicts",
+        "registeredToVoteAndVotesInElections",
+        "awarenessOfNeeds",
+        "selfEsteem",
+        "moralConscience",
+        "emotionalIntelligence",
+        "householdViolence",
+        "entrepreneurialSpirit",
+        "autonomyDecisions",
+        "addiction"
+    ],
+
+    "ui:group:personal": [
+        "firstName",
+        "lastName",
+        "birthdate",
+        "countryOfBirth",
+        "gender",
+        "email",
+        "postCode"
+    ],
+
+    "ui:group:economics": [
+        "sourceOfIncome",
+        "businessIncome",
+        "monthlySalaryIncome",
+        "otherMembersIncome",
+        "otherMembersSalary",
+        "otherMembersBusinessIncome",
+        "receiveStateIncome",
+        "housingSituation",
+        "otherUsefulInfo",
+        "memberDiedBefore5",
+        "familyCar",
+        "manyPeopleHousehold",
+        "educationPersonMostStudied",
+        "employmentStatusPrimary"
+    ],
+
+    "ui:group:indicators": [
+        "income",
+        "familySavings",
+        "accessToCredit",
+        "stableIncome",
+        "documentation",
+        "unpollutedEnvironment",
+        "garbageDisposal",
+        "drinkingWaterAccess",
+        "accessToHealthServices",
+        "alimentation",
+        "personalHygiene",
+        "sexualHealth",
+        "healthyTeeth",
+        "eyesight",
+        "vaccinations",
+        "insurance",
+        "safeHouse",
+        "comfortOfTheHome",
+        "separateBedrooms",
+        "properKitchen",
+        "safeBathroom",
+        "refrigerator",
+        "phone",
+        "clothingAndFootwear",
+        "safety",
+        "security",
+        "electricityAccess",
+        "regularMeansOfTransportation",
+        "streetRoadSafety",
+        "middleEducation",
+        "readAndWrite",
+        "schoolSuppliesAndBooks",
+        "capacityToPlanAndBudget",
+        "abilityToGenerateIncome",
+        "informationAccess",
+        "accessToEntertainment",
+        "respectForDiversity",
+        "awarenessOfHumanRights",
+        "childLabor",
+        "socialCapital",
+        "influenceInPublicSector",
+        "abilityToSolveProblemsAndConflicts",
+        "registeredToVoteAndVotesInElections",
+        "awarenessOfNeeds",
+        "selfEsteem",
+        "moralConscience",
+        "emotionalIntelligence",
+        "householdViolence",
+        "entrepreneurialSpirit",
+        "autonomyDecisions",
+        "addiction"
+    ]
+}

@@ -1,0 +1,2764 @@
+{
+    "title": "US Elmira Survey",
+    "description": "US Elmira Survey",
+    "type": "object",
+    "required": [
+        "firstName",
+        "lastName",
+        "birthdate",
+        "countryOfBirth",
+        "gender",
+        "email",
+        "postCode",
+        "familyWaterAccess",
+        "memberDiedBefore5",
+        "familyCar",
+        "manyPeopleHousehold"
+    ],
+    "properties": {
+
+        "firstName": {
+            "type": "string",
+            "title": {
+                "es": "Enter your first name"
+            },
+            "shortName": {
+                "es": "First Name"
+            }
+        },
+
+        "lastName": {
+            "type": "string",
+            "title": {
+                "es": "Enter your surname"
+            },
+            "shortName": {
+                "es": "Last Name"
+            }
+        },
+
+        "birthdate": {
+            "type": "string",
+            "format": "date",
+            "title": {
+                "es": "Enter your date of birth"
+            },
+            "shortName": {
+                "es": "Birthdate"
+            }
+        },
+
+        "countryOfBirth": {
+            "type": "string",
+            "title": {
+                "es": "Enter your country of birth"
+            },
+            "shortName": {
+                "es": "Country of Birth"
+            },
+            "enum": [
+                "AF",
+                "AL",
+                "DZ",
+                "AS",
+                "AD",
+                "AO",
+                "AQ",
+                "AR",
+                "AM",
+                "AW",
+                "AU",
+                "AT",
+                "AZ",
+                "BS",
+                "BH",
+                "BD",
+                "BB",
+                "BY",
+                "BE",
+                "BZ",
+                "BJ",
+                "BM",
+                "BT",
+                "BO",
+                "BA",
+                "BW",
+                "BV",
+                "BR",
+                "IO",
+                "VG",
+                "BN",
+                "BG",
+                "BF",
+                "BI",
+                "KH",
+                "CM",
+                "CV",
+                "KY",
+                "CF",
+                "TD",
+                "CL",
+                "CN",
+                "CX",
+                "CC",
+                "CO",
+                "KM",
+                "CG",
+                "CK",
+                "CR",
+                "HR",
+                "CU",
+                "CY",
+                "CZ",
+                "DK",
+                "DJ",
+                "DM",
+                "DO",
+                "EC",
+                "AI",
+                "EG",
+                "GQ",
+                "ER",
+                "EE",
+                "ET",
+                "FK",
+                "FO",
+                "FJ",
+                "FI",
+                "FR",
+                "GF",
+                "PF",
+                "TF",
+                "GA",
+                "GM",
+                "GE",
+                "DE",
+                "GH",
+                "GI",
+                "CA",
+                "GR",
+                "GL",
+                "GP",
+                "GU",
+                "GT",
+                "GG",
+                "GY",
+                "GN",
+                "GW",
+                "HT",
+                "HM",
+                "HN",
+                "HK",
+                "HU",
+                "IS",
+                "IN",
+                "ID",
+                "IR",
+                "IQ",
+                "IE",
+                "AX",
+                "IM",
+                "IL",
+                "IT",
+                "CI",
+                "JM",
+                "JP",
+                "JO",
+                "KZ",
+                "KE",
+                "KI",
+                "KW",
+                "KG",
+                "LA",
+                "LV",
+                "LB",
+                "LS",
+                "LR",
+                "LY",
+                "LI",
+                "LT",
+                "LU",
+                "MO",
+                "MK",
+                "MG",
+                "MW",
+                "MY",
+                "MV",
+                "ML",
+                "MT",
+                "MH",
+                "MQ",
+                "MU",
+                "MR",
+                "YT",
+                "RE",
+                "MX",
+                "FM",
+                "MD",
+                "MC",
+                "MN",
+                "ME",
+                "MS",
+                "MA",
+                "MZ",
+                "MM",
+                "NA",
+                "NR",
+                "NP",
+                "NL",
+                "AN",
+                "NC",
+                "NZ",
+                "NI",
+                "NE",
+                "NG",
+                "NU",
+                "NF",
+                "KP",
+                "NO",
+                "EH",
+                "AG",
+                "OM",
+                "PK",
+                "PW",
+                "PS",
+                "PA",
+                "PG",
+                "PY",
+                "PE",
+                "PH",
+                "PN",
+                "PL",
+                "GD",
+                "PT",
+                "PR",
+                "QA",
+                "RO",
+                "RU",
+                "RW",
+                "KN",
+                "PM",
+                "WS",
+                "BL",
+                "SM",
+                "ST",
+                "SA",
+                "SN",
+                "RS",
+                "SC",
+                "SL",
+                "SG",
+                "SK",
+                "SI",
+                "SB",
+                "SO",
+                "ZA",
+                "GS",
+                "KR",
+                "ES",
+                "LK",
+                "SH",
+                "LC",
+                "VC",
+                "SD",
+                "SR",
+                "SJ",
+                "SZ",
+                "JE",
+                "SE",
+                "CH",
+                "SY",
+                "TW",
+                "TJ",
+                "TH",
+                "TH",
+                "SV",
+                "TL",
+                "TG",
+                "TK",
+                "TO",
+                "TT",
+                "TN",
+                "TR",
+                "TM",
+                "TC",
+                "TV",
+                "UG",
+                "UA",
+                "AE",
+                "GB",
+                "US",
+                "UY",
+                "UZ",
+                "VU",
+                "VA",
+                "VE",
+                "VN",
+                "VI",
+                "WF",
+                "YE"
+            ],
+            "enumNames": [
+                "Afghanistan",
+                "Albania",
+                "Algiers",
+                "American Samoa",
+                "Andorra",
+                "Angola",
+                "Antarctica",
+                "Argentina",
+                "Armenia",
+                "Aruba",
+                "Australia",
+                "Austria",
+                "Azerbaijan",
+                "Bahamas",
+                "Bahrain",
+                "Bangladesh",
+                "Barbados",
+                "Belarus",
+                "Belgium",
+                "Belize",
+                "Benin",
+                "Bermuda",
+                "Bhutan",
+                "Bolivia",
+                "Bosnia and Herzegovina",
+                "Botswana",
+                "Bouvet Island",
+                "Brazil",
+                "British Indian Ocean Territory",
+                "British Virgin Islands",
+                "Brunei",
+                "Bulgaria",
+                "Burkina Faso",
+                "Burundi",
+                "Cambodia",
+                "Cameroon",
+                "Cape Verde",
+                "Cayman Islands",
+                "Central African Republic",
+                "Chad",
+                "Chile",
+                "China",
+                "Christmas Islands",
+                "Cocos Islands",
+                "Colombia",
+                "Comoros",
+                "Congo",
+                "Cook Islands",
+                "Costa Rica",
+                "Croatia",
+                "Cuba",
+                "Cyprus",
+                "Czech Republic",
+                "Denmark",
+                "Djibouti",
+                "Domínica",
+                "Dominican Republic",
+                "Ecuador",
+                "Eel",
+                "Egypt",
+                "Equatorial Guinea",
+                "Eritrea",
+                "Estonia",
+                "Ethiopia",
+                "Falkland Islands",
+                "Faroe Islands",
+                "Fiji",
+                "Finland",
+                "France",
+                "French Guiana",
+                "French Polynesia",
+                "French Southern Territories",
+                "Gabon",
+                "Gambia",
+                "Georgia",
+                "Germany",
+                "Ghana",
+                "Gibraltar",
+                "Glen",
+                "Greece",
+                "Greenland",
+                "Guadalupe",
+                "Guam",
+                "Guatemala",
+                "Guernsey",
+                "Guiana",
+                "Guinea",
+                "Guinea-Bissau",
+                "Haiti",
+                "Heard and McDonald Islands",
+                "Honduras",
+                "Hong Kong",
+                "Hungary",
+                "Iceland",
+                "India",
+                "Indonesia",
+                "Iran",
+                "Iraq",
+                "Ireland",
+                "Islas Áland",
+                "Isle of Man",
+                "Israel",
+                "Italy",
+                "Ivory Coast",
+                "Jamaica",
+                "Japan",
+                "Jordan",
+                "Kazakhstan",
+                "Kenya",
+                "Kiribati",
+                "Kuwait",
+                "Kyrgyzstan",
+                "Laos",
+                "Latvia",
+                "Lebanon",
+                "Lesotho",
+                "Liberia",
+                "Libya",
+                "Liechtenstein",
+                "Lithuania",
+                "Luxembourg",
+                "Macao",
+                "Macedonia",
+                "Madagascar",
+                "Malawi",
+                "Malaysia",
+                "Maldives",
+                "Mali",
+                "Malt",
+                "Marshall Islands",
+                "Martinique",
+                "Mauricio",
+                "Mauritania",
+                "Mayotte",
+                "Meeting",
+                "Mexico",
+                "Micronesia",
+                "Moldova",
+                "Monaco",
+                "Mongolia",
+                "Montenegro",
+                "Montserrat",
+                "Morocco",
+                "Mozambique",
+                "Myanmar",
+                "Namibia",
+                "Nauru",
+                "Nepal",
+                "Netherlands",
+                "Netherlands Antilles",
+                "New Caledonia",
+                "New Zealand",
+                "Nicaragua",
+                "Niger",
+                "Nigeria",
+                "Niue",
+                "Norkfolk Islands",
+                "North Korea",
+                "Norway",
+                "Occidental Sahara",
+                "Old and bearded",
+                "Oman",
+                "Pakistan",
+                "Palau Islands",
+                "Palestine",
+                "Panama",
+                "Papua New Guinea",
+                "Paraguay",
+                "Peru",
+                "Philippines",
+                "Pitcairn Islands",
+                "Poland",
+                "Pomegranate",
+                "Portugal",
+                "Puerto Rico",
+                "Qatar",
+                "Romania",
+                "Russia",
+                "Rwanda",
+                "Saint Kitts and Nevis",
+                "Saint Pierre and Miquelon",
+                "Samoa",
+                "San Bartolome",
+                "San Marino",
+                "Sao Tome and Principe",
+                "Saudi Arabia",
+                "Senegal",
+                "Serbia and Montenegro",
+                "Seychelles",
+                "Sierra Leone",
+                "Singapore",
+                "Slovakia",
+                "Slovenia",
+                "Solomon Islands",
+                "Somalia",
+                "South Africa",
+                "South Georgia and the South Sandwich Islands",
+                "South Korea",
+                "Spain",
+                "Sri Lanka",
+                "St. Helen",
+                "St. lucia",
+                "St. Vincent and the Grenadines",
+                "Sudan",
+                "Surinam",
+                "Svalbard and Jan Mayen Islands",
+                "Swaziland",
+                "Sweater",
+                "Sweden",
+                "Switzerland",
+                "Syria",
+                "Taiwan",
+                "Tajikistan",
+                "Tanzania",
+                "Thailand",
+                "The Savior",
+                "Timor-Leste",
+                "Togo",
+                "Tokelau",
+                "Tonga",
+                "Trinidad and Tobago",
+                "Tunisia",
+                "Turkey",
+                "Turkmenistan",
+                "Turks and Caicos Islands",
+                "Tuvalu",
+                "Uganda",
+                "Ukraine",
+                "United Arab Emirates",
+                "United Kingdom",
+                "United States of America",
+                "Uruguay",
+                "Uzbekistan",
+                "Vanuatu",
+                "Vatican CITY",
+                "Venezuela",
+                "Vietnam",
+                "Virgin Islands of the United States of America",
+                "Wallis and Futuna",
+                "Yemen"
+            ],
+            "default": "US"
+        },
+
+        "gender": {
+            "type": "string",
+            "title": {
+                "es": "Enter your gender"
+            },
+            "shortName": {
+                "es": "Gender"
+            },
+            "enum": [
+                "F",
+                "M",
+                "O"
+            ],
+            "enumNames": [
+                "Female",
+                "Male",
+                "Prefer not to disclose"
+            ],
+            "default": "F"
+        },
+
+        "email": {
+            "type": "string",
+            "title": {
+                "es": "Email address"
+            },
+            "shortName": {
+                "es": "Email"
+            }
+        },
+
+        "postCode": {
+            "type": "string",
+            "title": {
+                "es": "Please enter your postal code"
+            },
+            "shortName": {
+                "es": "Post Code"
+            }
+        },
+
+
+        "sourceOfIncome": {
+            "type": "string",
+            "title": {
+                "es": "I make an income from"
+            },
+            "shortName": {
+                "es": "Make Income From"
+            }
+        },
+        "businessIncome": {
+            "type": "string",
+            "title": {
+                "es": "Do I own a business that generates me a weekly income?"
+            },
+            "enum": [
+                "Yes",
+                "No"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "monthlySalaryIncome": {
+            "type": "string",
+            "title": {
+                "es": "Do I have a monthly salary?"
+            },
+            "enum": [
+                "Yes",
+                "No"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "otherMembersIncome": {
+            "type": "string",
+            "title": {
+                "es": "Do my other family members have an income?"
+            },
+            "enum": [
+                "Yes",
+                "No"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "otherMembersSalary": {
+            "type": "string",
+            "title": {
+                "es": "Do they have a salary?"
+            },
+            "enum": [
+                "Yes",
+                "No"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "otherMembersBusinessIncome": {
+            "type": "string",
+            "title": {
+                "es": "Do they own a business with weekly revenues?"
+            },
+            "enum": [
+                "Yes",
+                "No"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "receiveStateIncome": {
+            "type": "string",
+            "title": {
+                "es": "My family receives income from a government program?"
+            },
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "housingSituation": {
+            "type": "string",
+            "title": {
+                "es": "What is our housing situation?"
+            },
+            "shortName": {
+                "es": "Housing Situation"
+            },
+            "enum": [
+                "OWNER",
+                "PRIVATE-RENTAL",
+                "LIVING-WITH-PARENTS",
+                "LIVING-WITH-PARTNER",
+                "HOMELESS",
+                "PREFER-NOT-TO-SAY",
+                "OTHER"
+            ],
+            "enumNames": [
+                "Owner",
+                "Private rental",
+                "Living with Parents",
+                "Living with Partner",
+                "Homeless",
+                "Prefer not to say",
+                "Other"
+            ]
+        },
+        "otherUsefulInfo": {
+            "type": "string",
+            "title": {
+                "es": "Are there family members with disabilities in our household?"
+            },
+            "shortName": {
+                "es": "Household Member with Disabilities"
+            },
+            "enum": [
+                "NO-MEMBER-DISABILITIES",
+                "PHYSICAL",
+                "MENTAL",
+                "LEARNING",
+                "SENSORY",
+                "OTHER"
+            ],
+            "enumNames": [
+                "No member with disabilities",
+                "Physical",
+                "Mental",
+                "Learning",
+                "Sensory",
+                "Other"
+            ]
+        },
+        "memberDiedBefore5": {
+            "type": "string",
+            "title": {
+                "es": "During the past five years, did any of my family members die before turning 5 years old?"
+            },
+            "enum": [
+                "YES",
+                "NO"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "familyCar": {
+            "type": "string",
+            "title": {
+                "es": "Does my family have a car or truck?"
+            },
+            "enum": [
+                "Yes",
+                "No"
+            ],
+            "enumNames": [
+                "Yes",
+                "No"
+            ]
+        },
+        "manyPeopleHousehold": {
+            "type": "number",
+            "title": {
+                "es": "How many people are in your household?"
+            },
+            "shortName": {
+                "es": "People in Household"
+            },
+            "default": 0
+        },
+        "educationPersonMostStudied": {
+            "type": "string",
+            "title": {
+                "es": "What is the highest educational level in your household?"
+            },
+            "shortName": {
+                "es": "Highest Educational Level in Household"
+            },
+            "enum": [
+                "HIGH-SCHOOL-INCOMPLETE",
+                "HIGH-SCHOOL-COMPLETE",
+                "2-YEAR-COLLEGE-INCOMPLETE",
+                "2-YEAR-COLLEGE-COMPLETE",
+                "UNIVERSITY-INCOMPLETE",
+                "UNIVERSITY-COMPLETE"
+            ],
+            "enumNames": [
+                "High School Incomplete",
+                "High School Complete",
+                "2-Year College Incomplete",
+                "2-Year College Complete",
+                "University incomplete",
+                "University complete"
+            ]
+        },
+        "employmentStatusPrimary": {
+            "type": "string",
+            "title": {
+                "es": "Employment of head of household and their partner"
+            },
+            "shortName": {
+                "es": "Employment Status"
+            },
+            "enum": [
+                "EMPLOYED",
+                "SELF-EMPLOYED",
+                "UNEMPLOYED",
+                "RETIRED",
+                "IN-EDUCATION",
+                "OTHER",
+                "NONE"
+            ],
+            "enumNames": [
+                "Employed",
+                "Self Employed",
+                "Un employed",
+                "Retired",
+                "In education",
+                "Other",
+                "None"
+            ]
+        },
+
+
+        "income": {
+            "type": "array",
+            "title": {
+                "es": "Income Above the Poverty Line"
+            },
+            "shortName": {
+                "es": "Income"
+            },
+            "description": {
+                "es": "We have enough income"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/01-1.png",
+                        "description": "My family's income is above the poverty line.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/01-2.png",
+                        "description": "My family's income is below the total poverty line but above deep poverty.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/01-3.png",
+                        "description": "My family's income is below the deep poverty line.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "familySavings": {
+            "type": "array",
+            "title": {
+                "es": "Family Savings"
+            },
+            "shortName": {
+                "es": "Savings"
+            },
+            "description": {
+                "es": "We have savings"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/02-1.png",
+                        "description": "One or more members of my family has savings for at least six months and use services from legal financial institutions.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/02-2.png",
+                        "description": "One or more members of my family has informal savings (they keep money at home, sometimes under a mattress or in a piggy bank. Or they have had a savings account for less than six months.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/02-3.png",
+                        "description": "None of my family members has savings.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "accessToCredit": {
+            "type": "array",
+            "title": {
+                "es": "Access to Credit"
+            },
+            "shortName": {
+                "es": "Credit"
+            },
+            "description": {
+                "es": "We can get credit"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/03-1.png",
+                        "description": "At least one member of my family has had access to credit from legal institutions, and with fair market conditions, in the last twelve months, or can access such a credit if they need it. Or my family members do not need to borrow money because they can finance all of their needs through their own means.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/03-2.png",
+                        "description": "At least one member of my family has had access to credit in the last twelve months, but only from non formal institutions, family loans, their bosses, etc.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/03-3.png",
+                        "description": "None of my family members has had access to credit in the last twelve months, despite wanting to do so. Or they manage to access some credit, but they are delayed with their payments for at least three months.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "stableIncome": {
+            "type": "array",
+            "title": {
+                "es": "Stable Income"
+            },
+            "shortName": {
+                "es": "Stability"
+            },
+            "description": {
+                "es": "Our monthly income doesn't change"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/04-1.png",
+                        "description": "Household has an income from one or more sources such as employment or disability or retirement/social security and it stays about the same.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/04-2.png",
+                        "description": "Household has some regular income but not always, or it is temporary, or the amount goes up and down a bit.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/04-3.png",
+                        "description": "Household income goes up and down a lot or we do not have a stable income, making it difficult to plan ahead.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "documentation": {
+            "type": "array",
+            "title": {
+                "es": "Documentation: Personal Identification"
+            },
+            "shortName": {
+                "es": "Identification"
+            },
+            "description": {
+                "es": "We have ID"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/05-1.png",
+                        "description": "All members of my family, older than 12 years old, have valid identity documents.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/05-2.png",
+                        "description": "A member of my family, older than 12 years old, does not have a valid identity document.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/05-3.png",
+                        "description": "More than one member of my family, older than 12 years old, does not have a valid Identity document.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "unpollutedEnvironment": {
+            "type": "array",
+            "title": {
+                "es": "Unpolluted Environment"
+            },
+            "shortName": {
+                "es": "Environment"
+            },
+            "description": {
+                "es": "Our neighbourhood is free of pollution"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/06-1.png",
+                        "description": "My family lives in an unpolluted environment that is free of pollution of any kind (dog dirt, garbage in the street, or bad air quality). If there was an issue in the past, steps were taken to resolve it.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/06-2.png",
+                        "description": "My family lives in an environment which is clean most of the time but sometimes the air quality is not great. My family’s health is probably at risk but we haven’t done anything to deal with it or change it and may not know how to.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/06-3.png",
+                        "description": "My family lives in an environment where there are always bad odors or poor waste management. It is a health hazard or it has already affected my health. We haven’t done anything about it because we think there is nothing that can be done to resolve the issue.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "garbageDisposal": {
+            "type": "array",
+            "title": {
+                "es": "Garbage Disposal"
+            },
+            "shortName": {
+                "es": "Garbage"
+            },
+            "description": {
+                "es": "We manage our garbage well"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/07-1.png",
+                        "description": "My family members dispose of their garbage in a trash can until it is collected . We recycle what we can and/or have a compost pile in the yard for organic materials.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/07-2.png",
+                        "description": "On a weekly basis my family members let garbage pile up around the home, or the dumpster we use may not always be emptied regularly.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/07-3.png",
+                        "description": "My family members do not dispose of garbage on a weekly basis, or we have many bags of garbage outside our home, or the dumpster we use is often overflowing and not emptied regularly.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "drinkingWaterAccess": {
+            "type": "array",
+            "title": {
+                "es": "Access to drinking water"
+            },
+            "shortName": {
+                "es": "Water"
+            },
+            "description": {
+                "es": "We have access to drinking water"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/08-1.png",
+                        "description": "My family has access to drinking water through a faucet inside of their home.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/08-2.png",
+                        "description": "My family has access to drinking water outside of their home, through a faucet, a well or a protected reservoir, a spring or protected water collection system. The distance to access drinking water is less than thirty minutes on foot, there and back, from the household.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/08-3.png",
+                        "description": "My family consumes impotable water or has to bring drinking water from a place further than thirty minutes on foot, there and back.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "accessToHealthServices": {
+            "type": "array",
+            "title": {
+                "es": "Access to health services"
+            },
+            "shortName": {
+                "es": "Health Services"
+            },
+            "description": {
+                "es": "We have access to health services"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/09-1.png",
+                        "description": "In the last three months, every time a member of my family needed medical attention he or she received it.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/09-2.png",
+                        "description": "In the last three months, when a member of my family needed basic urgent medical attention he or she could obtain it. They could not obtain specialized attention and the medical consultations, or the medications were very expensive.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/09-3.png",
+                        "description": "In the last three months, when my family needed medical attention regarding an illness or accident, we could not obtain it due to one or more of the following: we do not have access to any medical care nearby, the care that was provided was poor, or the medical consultations or the medications were too expensive.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "alimentation": {
+            "type": "array",
+            "title": {
+                "es": "Eating a Nutritious Diet"
+            },
+            "shortName": {
+                "es": "Nutrition"
+            },
+            "description": {
+                "es": "We eat a healthy diet"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/10-1.png",
+                        "description": "All members of my family: \n a). consumed a wide variety of food during the last week: 1. meat (beef, chicken, fish, lamb, etc.), 2. milk and/or dairy, 3. a variety of vegetables, 4. eggs, 5. different kinds of fruit, 6. rice, pasta, potato, cassava, corn, etc. and \n b). had, at least, three meals a day: breakfast, lunch and dinner. \n If they skipped a meal or a specific type of food, it was voluntary, and not associated with a lack of money or food (due to religious or philosophical beliefs, for example)",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/10-2.png",
+                        "description": "My family members’ diets do not include all of the components cited in the green level. However, in the past week, all members of my family had three meals a day, or if they skipped a meal, it was for voluntary reasons, not one associated with a lack of money or food.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/10-3.png",
+                        "description": "During the last week, at least once, a member of my family went to bed hungry or skipped a meal involuntarily due to a lack of money or food.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "personalHygiene": {
+            "type": "array",
+            "title": {
+                "es": "Personal Hygiene"
+            },
+            "shortName": {
+                "es": "Hygiene"
+            },
+            "description": {
+                "es": "We keep a good level of hygiene"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/11-1.png",
+                        "description": "All of my family members: \n a) wash their hands with soap every time they use the bathroom, \n b) wash their hands with soap before eating and cooking any meal, \n c) brush their teeth on a daily basis, and \n d) wash their body every day",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/11-2.png",
+                        "description": "Some members of my family do not engage in one of the hygienic practices described in the green level.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/11-3.png",
+                        "description": "Some members of my family do not engage in more than one of the hygienic practices described in the green level. Or I am not aware of my family’s hygienic practices.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "sexualHealth": {
+            "type": "array",
+            "title": {
+                "es": "Sexual Health"
+            },
+            "shortName": {
+                "es": "Sexual Health"
+            },
+            "description": {
+                "es": "We understand sexual health"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/12-1.png",
+                        "description": "All members of my family: \n a) in their reproductive years use some kind of family planning, \n b) the women that need gynecological exams are aware and have had one in the last 12 months, and \n c) those that are pregnant attend all of the requisite prenatal exams.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/12-2.png",
+                        "description": "The members of my family do not follow one of the components described in the green level.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/12-3.png",
+                        "description": "The members of my family do not follow more than one of the components described in the green level.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "healthyTeeth": {
+            "type": "array",
+            "title": {
+                "es": "Healthy Teeth"
+            },
+            "shortName": {
+                "es": "Teeth"
+            },
+            "description": {
+                "es": "We have healthy teeth"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/13-1.png",
+                        "description": "My family members do not have any dental issues, or if they do, they are being properly treated. We have a Dentist and manage our fear of dental services.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/13-2.png",
+                        "description": "One of my family members has dental problems that are not being treated due to lack of insurance or a provider, or out of fear of going to the Dentist.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/13-3.jpg",
+                        "description": "More than one of my family members has dental problems and they are not being treated due to lack of insurance or a provider, or out of fear of going to the Dentist, or the costs are prohibitive.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "eyesight": {
+            "type": "array",
+            "title": {
+                "es": "Healthy Vision"
+            },
+            "shortName": {
+                "es": "Vision"
+            },
+            "description": {
+                "es": "We have healthy vision"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/14-1.png",
+                        "description": "My family members do not have problems with their vision, or if they do, they are being properly treated (using glasses, for example).",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/14-2.png",
+                        "description": "One member of my family has problems with their vision that is not being treated although they know how to get support.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/14-3.png",
+                        "description": "More than one of my family members has problems with their vision and are not being treated or they don’t know how to get support.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "vaccinations": {
+            "type": "array",
+            "title": {
+                "es": "Vaccines"
+            },
+            "shortName": {
+                "es": "Vaccines"
+            },
+            "description": {
+                "es": "We are up to date with vaccinations"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/15-1.png",
+                        "description": "All members of my family are immunized and up-to-date with all the mandatory vaccines according to the New York State Department of Health’s vaccination calendar.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/15-2.png",
+                        "description": "One member of my family is either not immunized or not up-to-date with the New York State Department of Health’s vaccination calendar.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/15-3.png",
+                        "description": "More than one member of my family is not immunized or not up-to-date with the mandatory vaccines established by the New York State Department of Health.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "insurance": {
+            "type": "array",
+            "title": {
+                "es": "Insurance"
+            },
+            "shortName": {
+                "es": "Insurance"
+            },
+            "description": {
+                "es": "We have insurance "
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/16-1.png",
+                        "description": "All members of my family have medical insurance, and at least one member has another type of insurance as well, which can be: life insurance, homeowner’s insurance, funeral insurance, business insurance, car insurance, etc.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/16-2.png",
+                        "description": "My entire family only has medical insurance but needs other coverage listed in the green.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/16-3.png",
+                        "description": "At least one member of my family does not have medical insurance and needs medical and other coverage.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "safeHouse": {
+            "type": "array",
+            "title": {
+                "es": "Safe House"
+            },
+            "shortName": {
+                "es": "House"
+            },
+            "description": {
+                "es": "We have a safe house"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/17-1.png",
+                        "description": "My family has a home that has: \n a) tile roof, zinc sheet roof or reinforced concrete roof, \n b) solid walls made out of wood, concrete or fired materials (like clay, bricks, ceramics, concrete, or something similar), \n c) wooden floor or floor made from fired materials, \n d) hard wood or metal external doors and windows, and they all lock in a safe way using locks, padlocks, locking pins, or other similar devices, \n e) the home is prepared for different climatic conditions.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/17-2.png",
+                        "description": "My family has a home that does not include one of the components described in the green level but needs it.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/17-3.png",
+                        "description": "My family has a home that does not include two or more components described in the green level but needs them.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "comfortOfTheHome": {
+            "type": "array",
+            "title": {
+                "es": "Comfortable home"
+            },
+            "shortName": {
+                "es": "Comfort"
+            },
+            "description": {
+                "es": "We have a comfortable home"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/18-1.png",
+                        "description": "My family has: \n a) enough chairs, tables and silverware for all its members, \n b) enough beds for all its members (one per person or couple), \n c) fans or air conditioning and a heating system, and \n d) no bugs.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/18-2.png",
+                        "description": "My family does not have one of the components described in the green level, it does not exist or is insufficient.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/18-3.png",
+                        "description": "My family does not have two or more elements described in the green level, they do not exist or are insufficient.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "separateBedrooms": {
+            "type": "array",
+            "title": {
+                "es": "Separate Bedrooms"
+            },
+            "shortName": {
+                "es": "Bedrooms"
+            },
+            "description": {
+                "es": "We have separate bedrooms"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/19-1.png",
+                        "description": "On average, each bedroom is used by two or fewer members of my family. If any of the age groups (children, teenagers or adults) shares a room, it is because they want to.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/19-2.png",
+                        "description": "On average, each bedroom is used by two or fewer members of my family. Some age groups (children, teenagers or adults) share rooms unwillingly.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/19-3.png",
+                        "description": "On average, each bedroom is used by three or more members of my family.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "properKitchen": {
+            "type": "array",
+            "title": {
+                "es": "Raised and ventilated kitchen"
+            },
+            "shortName": {
+                "es": "Kitchen"
+            },
+            "description": {
+                "es": "We have proper facilities to prepare food"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/20-1.png",
+                        "description": "My family cooks in a covered and protected space. We have a raised stove and we do not use dung, wood, or charcoal.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/20-2.png",
+                        "description": "My family cooks outside or on a stove (not on a raised stove), we also do not use manure, coal or wood.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/20-3.png",
+                        "description": "My family mainly cooks using dung, wood, or charcoal.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "safeBathroom": {
+            "type": "array",
+            "title": {
+                "es": "Bathroom"
+            },
+            "shortName": {
+                "es": "Bathroom"
+            },
+            "description": {
+                "es": "We have a proper bathroom"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/21-1.png",
+                        "description": "My family has one or several bathrooms with the following characteristics: \n a) has a complete toilet, \n b) cistern, \n c) ensures privacy, \n d) has a good evacuation system, \n e) it is not shared with other families, and \n f) it is kept clean.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/21-2.png",
+                        "description": "Although my family’s bathroom does not contain all of the components described in the green level, it has some kind of toilet with water, a latrine with a slab floor and good ventilation, or organic toilet. It is not shared with another family.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/21-3.png",
+                        "description": "My family shares its bathroom or latrine with other families, or does not qualify for the yellow level.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "refrigerator": {
+            "type": "array",
+            "title": {
+                "es": "Refrigerator and other goods"
+            },
+            "shortName": {
+                "es": "Refrigerator"
+            },
+            "description": {
+                "es": "We have essential household appliances"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/22-1.png",
+                        "description": "My family has a refrigerator and two or more of the following goods: radio, TV, telephone, motorcycle, and/ or washing machine.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/22-2.png",
+                        "description": "My family has two of the following goods: radio, TV, phone, motorcycle, washing machine, and/or refrigerator. Or if there are more than two, we do not own a refrigerator.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/22-3.png",
+                        "description": "My family has one or none of the following goods: radio, TV, telephone, motorcycle, washing machine, or refrigerator.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "phone": {
+            "type": "array",
+            "title": {
+                "es": "Telephone or mobile phone"
+            },
+            "shortName": {
+                "es": "Telephone"
+            },
+            "description": {
+                "es": "We have a phone and internet access"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/23-1.png",
+                        "description": "My family has a landline or wireless service constantly at their disposal.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/23-2.png",
+                        "description": "My family has a landline or wireless service, but it can only be used sometimes.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/23-3.png",
+                        "description": "My family does not have phone service (neither landline nor wireless).",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "clothingAndFootwear": {
+            "type": "array",
+            "title": {
+                "es": "Sufficient and appropriate clothing"
+            },
+            "shortName": {
+                "es": "Clothing"
+            },
+            "description": {
+                "es": "We have the clothing we need"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/24-1.png",
+                        "description": "All members of my family have clothes and footwear that are appropriate for each season, and enough of them to change every day.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/24-2.png",
+                        "description": "All members of my family have clothes and footwear that are appropriate for each season, but not enough to change every day.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/24-3.png",
+                        "description": "At least one member of my family is lacking appropriate clothes and footwear for each season.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "safety": {
+            "type": "array",
+            "title": {
+                "es": "Personal safety"
+            },
+            "shortName": {
+                "es": "Safety"
+            },
+            "description": {
+                "es": "We feel safe where we live and work"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/25-1.png",
+                        "description": "In the last year none of my family members has suffered acts of physical violence at our current residence.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/25-2.png",
+                        "description": "In the last year at least one member of my family suffered an act of physical violence at our current residence, but it didn´t impact their normal activities or their capacity to go to work.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/25-3.png",
+                        "description": "In the last year at least one member of my family suffered an act of physical violence at our current residence and as result, that member could not go to work for an entire day or more, or the act of violence caused a death.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "security": {
+            "type": "array",
+            "title": {
+                "es": "Security of property"
+            },
+            "shortName": {
+                "es": "Security"
+            },
+            "description": {
+                "es": "We live in a secure property"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/26-1.png",
+                        "description": "In the last year my family has not suffered an act of violence and/or theft against our property and we feel safe in our home and neighborhood. We also have insurance or other coverage to replace any damaged property.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/26-2.png",
+                        "description": "In the last year my family has suffered an act of violence and/or theft against our property, and we did not have enough insurance or other coverage to replace the damaged property. We feel somewhat safe.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/26-3.png",
+                        "description": "In the last year my family has suffered more than one act of violence and/or theft against our property and we did not have any type of insurance or other coverage to replace the damaged property. We do not feel safe.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "electricityAccess": {
+            "type": "array",
+            "title": {
+                "es": "Electricity"
+            },
+            "shortName": {
+                "es": "Electricity"
+            },
+            "description": {
+                "es": "We always have electricity"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/27-1.png",
+                        "description": "My family has permanent access to electricity via a legal connection.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/27-2.png",
+                        "description": "My family has access to electricity, but it is via an illegal connection and/or insufficient (there is no electricity for four hours or more per day during peak season.)",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/27-3.png",
+                        "description": "My family does not have access to electricity.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "regularMeansOfTransportation": {
+            "type": "array",
+            "title": {
+                "es": "Regular means of transportation"
+            },
+            "shortName": {
+                "es": "Transportation"
+            },
+            "description": {
+                "es": "We have access to good transportation"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/28-1.png",
+                        "description": "My family has access to a regular and reliable means of transportation, either our own or public. If it is public, it comes by at least every hour, and the stop is less than ten minutes away from our house.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/28-2.png",
+                        "description": "My family has access to transportation, but it is irregular and unreliable. It is either our own or public. If it is public, it comes but the schedule is limited and doesn’t always meet our needs.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/28-3.png",
+                        "description": "My family does not have access to their own mode of transportation. Public transportation is either limited and does not meet our needs.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "streetRoadSafety": {
+            "type": "array",
+            "title": {
+                "es": "Street and Road Safety"
+            },
+            "shortName": {
+                "es": "Streets/Roads"
+            },
+            "description": {
+                "es": "We have safe streets and roads"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/29-1.png",
+                        "description": "The street my family lives on is clearly identified, potholes are filled in, has street lights, is plowed when snow storms occur, the speed limit is posted, and intersections have curb cutouts to accommodate those with wheelchairs or scooters.  Problems are corrected when made known to City officials.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/29-2.png",
+                        "description": "The road my family lives on lacks one or two of the attributes listed in green and it can be unsafe at times. Sometimes our complaints are heard and the corrections are made.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/29-3.png",
+                        "description": "The road my family lives on is deficient in many of the attributes listed in green and they are not addressed despite making complaints to those in charge of road maintenance. Travel can be very unsafe for a vehicle or pedestrian.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "middleEducation": {
+            "type": "array",
+            "title": {
+                "es": "Children enrolled throughout high school"
+            },
+            "shortName": {
+                "es": "Schooling"
+            },
+            "description": {
+                "es": "Our children attend school"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/30-1.png",
+                        "description": "All of my school aged family members attend school or finished high school.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/30-2.png",
+                        "description": "Among my family members there is at least one school aged child or a teenager that does not attend school.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/30-3.png",
+                        "description": "None of my family members of school age attends school.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "readAndWrite": {
+            "type": "array",
+            "title": {
+                "es": "Knows how to read, write and comprehend"
+            },
+            "shortName": {
+                "es": "Literacy"
+            },
+            "description": {
+                "es": "We can read and write in English"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/31-1.png",
+                        "description": "All of my family members aged 15 years and older can read and write with ease.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/31-2.png",
+                        "description": "All of my family members aged 15 years and older can read and write, however, it is difficult for at least one family member to read and/or write their ideas.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/31-3.png",
+                        "description": "At least one family member aged 15 years and older cannot read or write.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "schoolSuppliesAndBooks": {
+            "type": "array",
+            "title": {
+                "es": "School supplies and books"
+            },
+            "shortName": {
+                "es": "Supplies"
+            },
+            "description": {
+                "es": "Our children have school supplies"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/32-1.png",
+                        "description": "The members of my family currently attending school have all of the school supplies and books recommended by the teacher.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/32-2.png",
+                        "description": "The members of my family currently attending school do not have all of the necessary school supplies recommended by the teacher.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/32-3.png",
+                        "description": "The members of my family currently attending school lack most of the school supplies recommended by the teacher.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "capacityToPlanAndBudget": {
+            "type": "array",
+            "title": {
+                "es": "Ability to plan and budget"
+            },
+            "shortName": {
+                "es": "Budget"
+            },
+            "description": {
+                "es": "We have a budget"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/33-1.png",
+                        "description": "In my family we plan our economic future and do a monthly budget, which we routinely use to manage our expenditures.  We always paid our bills on time over the last 6 months.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/33-2.png",
+                        "description": "In my family we plan our economic future and we do a monthly budget, but we do not routinely use it to manage our expenditures. In the past 6 months we did not always pay our bills on time.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/33-3.png",
+                        "description": "In my family we do not plan our economic future and we do not have a written budget. In the past 6 moths we never paid our bills on time or we paid one and ignored others.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "abilityToGenerateIncome": {
+            "type": "array",
+            "title": {
+                "es": "Ability to generate income"
+            },
+            "shortName": {
+                "es": "Generate income"
+            },
+            "description": {
+                "es": "We know how to get a job or make money"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/34-1.png",
+                        "description": "At least one member of my family: \n a) has professional training, a GED or high school diploma, or has acquired or developed other special skills for the generation of income. This allows them to find work easily; or \n b) has their own legal business that generates enough income to sustain the home’s basic expenditures. \n We’ve always paid our bills on time over the last 6 months.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/34-2.png",
+                        "description": "At least one member of my family: \n a) has professional training, a GED or high school diploma, or has acquired or developed other special skills for the generation of income. However, there are situations in which they can’t manage to generate income; or \n b) has their own legal business that generates income, but it is insufficient to cover the basic expenditures of the home. \n We paid at least one bill late over the last 6 months.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/34-3.png",
+                        "description": "None of my family members: \n a) has professional training, a GED or high school diploma, or has acquired or developed other special skills for the generation of income; or \n b) has their own legal business. \n We never paid our bills on time over the last 6 months",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "informationAccess": {
+            "type": "array",
+            "title": {
+                "es": "Access to Information"
+            },
+            "shortName": {
+                "es": "Information"
+            },
+            "description": {
+                "es": "We are well informed"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/35-1.png",
+                        "description": "My family has multiple ways to gather information (internet, television, radio, newspaper, public library, etc).",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/35-2.png",
+                        "description": "My family has only one means included in green to gather or access information.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/35-3.png",
+                        "description": "My family does not have any means included in green to gather or access information.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "accessToEntertainment": {
+            "type": "array",
+            "title": {
+                "es": "Access to Entertainment"
+            },
+            "shortName": {
+                "es": "Entertainment"
+            },
+            "description": {
+                "es": "We get involved in activities"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/36-1.png",
+                        "description": "All of my family members have weekly recreational activities.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/36-2.png",
+                        "description": "Some members of my family have weekly recreational activities.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/36-3.png",
+                        "description": "The majority of my family members do not have weekly recreational activities.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "respectForDiversity": {
+            "type": "array",
+            "title": {
+                "es": "Respect for Diversity"
+            },
+            "shortName": {
+                "es": "Diversity"
+            },
+            "description": {
+                "es": "We respect differences"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/37-1.png",
+                        "description": "I believe that all people, regardless of their religion, ethnicity, language, race, abilities, sex, sexual orientation, and the like, deserve to be treated with respect.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/37-2.png",
+                        "description": "I believe that the majority of people should be treated with respect. However there are certain religions, ethnicities, races, sexes, sexual orientations or physical characteristics that do not deserve my respect.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/37-3.png",
+                        "description": "I do not believe that it is important to treat people with respect.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "awarenessOfHumanRights": {
+            "type": "array",
+            "title": {
+                "es": "Human rights awareness"
+            },
+            "shortName": {
+                "es": "Human Rights"
+            },
+            "description": {
+                "es": "We respect human rights"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/38-1.png",
+                        "description": "I believe that each person should have the same basic rights, and that everyone has the same responsibility to always respect these rights. Basic rights are the same regardless of sex, age, ethnic or racial origin, nationality, social class, sexual orientation, religion, disability, etc.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/38-2.png",
+                        "description": "I believe that each person should have the same basic rights. However, I do not believe that it is always my personal responsibility to respect these rights. That will depend on sex, age, ethnic or racial origin, nationality, social class, sexual orientation, religion, disability, etc.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/38-3.png",
+                        "description": "I do not believe that each person should have the same basic rights, because these rights depend on their sex, age, ethnic or racial origin, nationality, social class, sexual orientation, religion, disability, etc.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "childLabor": {
+            "type": "array",
+            "title": {
+                "es": "Child labor"
+            },
+            "shortName": {
+                "es": "Child Labor"
+            },
+            "description": {
+                "es": "Our children don't work"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/39-1.png",
+                        "description": "In my family, no boy/girl between the ages of ten to fourteen years old is working during school hours.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/39-2.png",
+                        "description": "In my family, there is at least one boy/girl between the ages of ten to fourteen who is working before or after school, but the child nevertheless goes to school regularly.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/39-3.png",
+                        "description": "In my family, there is at least one boy/girl between the ages of ten to fourteen years old that is working during school hours, and who does not attend school regularly.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "socialCapital": {
+            "type": "array",
+            "title": {
+                "es": "Forms part of a group"
+            },
+            "shortName": {
+                "es": "Community"
+            },
+            "description": {
+                "es": "We are part of a group"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/40-1.png",
+                        "description": "At least one member of my family actively and regularly participates in two or more groups, or one or more members plays a leadership role in a group.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/40-2.png",
+                        "description": "At least one member of my family actively and regularly participates in a group.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/40-3.png",
+                        "description": "No one in my family actively and regularly participates in a group.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "influenceInPublicSector": {
+            "type": "array",
+            "title": {
+                "es": "Influence in the public sector"
+            },
+            "shortName": {
+                "es": "Public Sector"
+            },
+            "description": {
+                "es": "We know how to contact public officials"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/41-1.png",
+                        "description": "My family does not have problems that require intervention by the City, or if there is a problem, we make an official request and follow up on it. Or we have organized ourselves with other people in the same situation to strengthen our position.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/41-2.png",
+                        "description": "My family has problems that require intervention by the City. We submitted a request, but we did not follow up.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/41-3.png",
+                        "description": "My family has problems that require intervention by the City, but we did not submit a request.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "abilityToSolveProblemsAndConflicts": {
+            "type": "array",
+            "title": {
+                "es": "Ability to resolve problems and conflicts"
+            },
+            "shortName": {
+                "es": "Conflict Management"
+            },
+            "description": {
+                "es": "We solve our own problems"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/42-1.png",
+                        "description": "When a problem or conflict arises, my family members have a civilized conversation  (without insults, violence, or fights) about the matter, with all parties involved, and resolve it without making it worse.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/42-2.png",
+                        "description": "When a problem or conflict arises, my family members occasionally do not have a civilized conversation (there are insults, violence or fights) about the issue at hand and the problem can escalate.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/42-3.png",
+                        "description": "When a problem or conflict arises, my family members do not have a civilized conversation, and insults, violence or fights are frequent.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "registeredToVoteAndVotesInElections": {
+            "type": "array",
+            "title": {
+                "es": "Register to vote and vote during elections"
+            },
+            "shortName": {
+                "es": "Voting"
+            },
+            "description": {
+                "es": "We vote in elections"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/43-1.png",
+                        "description": "All of the adults in my family voted in the last elections.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/43-2.png",
+                        "description": "Only some of the adults in my family voted in the last elections.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/43-3.png",
+                        "description": "Not all of the adults in my family are registered to vote, or none of the adults voted in the last elections.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "awarenessOfNeeds": {
+            "type": "array",
+            "title": {
+                "es": "Awareness of one’s needs"
+            },
+            "shortName": {
+                "es": "Life Plan"
+            },
+            "description": {
+                "es": "We have a family life plan"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/44-1.png",
+                        "description": "My family is aware that we can improve our current circumstances. For this, we have attainable goals in the medium term (6 months) and long term. We continuously work to achieve them.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/44-2.png",
+                        "description": "My family believes that we can improve our current circumstances, but we do not have medium (6 months) and long-term goals.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/44-3.png",
+                        "description": "My family believes that we cannot better our current circumstances, or we do not want to because we are comfortable as we are.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "selfEsteem": {
+            "type": "array",
+            "title": {
+                "es": "Self-esteem"
+            },
+            "shortName": {
+                "es": "Self-esteem"
+            },
+            "description": {
+                "es": "I feel confident"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/45-1.png",
+                        "description": "Generally, I feel competent, and most of the time I have a feeling of accomplishment. Or, many times, people tell me that I am competent or capable in what I do.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/45-2.png",
+                        "description": "Sometimes I feel competent and I have a feeling of accomplishment about what I do, but just as often I feel incapable. Or, people tell me that I am competent or capable in what I do, but it is not very frequent.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/45-3.png",
+                        "description": "I do not feel competent, and I almost never achieve what I want. I do not believe that people admire me for the things I do.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "moralConscience": {
+            "type": "array",
+            "title": {
+                "es": "Moral conscience"
+            },
+            "shortName": {
+                "es": "Moral Conscience"
+            },
+            "description": {
+                "es": "We make decisions together"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/46-1.png",
+                        "description": "My family takes into account who their actions might affect when they make decisions.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/46-2.png",
+                        "description": "My family often makes decisions without regards for how their actions might affect others.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/46-3.png",
+                        "description": "My family makes decisions thinking only about themselves, we did not care that the consequences of our actions would affect others.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "emotionalIntelligence": {
+            "type": "array",
+            "title": {
+                "es": "Emotional-effective capacity"
+            },
+            "shortName": {
+                "es": "Emotions"
+            },
+            "description": {
+                "es": "We control our emotions"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/47-1.png",
+                        "description": "I understand that emotions, like anger, sadness, fear, or jealousy can have a negative influence on my life and there are ways to control them. In general, I manage to control them, and I try to not act hastily or make decisions in the heat of the moment.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/47-2.png",
+                        "description": "I understand that emotions, like anger, sadness, fear, or jealousy can have a negative influence on my life and there are ways to control them. However, many times it is difficult for me and my emotions can cause me to do things that I regret later.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/47-3.png",
+                        "description": "Emotions like anger, sadness, fear, and jealousy are constants in my life and determine my actions. There is nothing I can do to change this (there is no way to control them).",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "householdViolence": {
+            "type": "array",
+            "title": {
+                "es": "Domestic violence"
+            },
+            "shortName": {
+                "es": "Domestic violence"
+            },
+            "description": {
+                "es": "We have no violence in our family"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/48-1.png",
+                        "description": "None of my family members is the target of domestic violence.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/48-2.png",
+                        "description": "Violence exists in my family. However, the victims do not believe it is normal and they take steps to avoid it.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/48-3.png",
+                        "description": "Violence exists in my family and we have not taken steps to avoid it.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "entrepreneurialSpirit": {
+            "type": "array",
+            "title": {
+                "es": "Entrepreneurial Spirit"
+            },
+            "shortName": {
+                "es": "Entrepreneurship"
+            },
+            "description": {
+                "es": "We have a entrepreneurial spirit"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/49-1.png",
+                        "description": "At least two members of my family have an entrepreneurial spirit, they do not conform to the current situation and do things to change it.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/49-2.png",
+                        "description": "One member of my family has an entrepreneurial spirit, does not conform to the current situation and wants to change it.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/49-3.png",
+                        "description": "The members of my family do not undertake new challenges. We believe that nothing can change or we do not want to change; we conform.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "autonomyDecisions": {
+            "type": "array",
+            "title": {
+                "es": "Autonomy and ability to make decisions"
+            },
+            "shortName": {
+                "es": "Autonomy"
+            },
+            "description": {
+                "es": "I have control over my life decisions"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/50-1.png",
+                        "description": "I make all decisions about the key aspects of my life and participate actively in the decisions of my family. These decisions reflect what I value, I know there are limits, but I arrange my own life within them.",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/50-2.png",
+                        "description": "I make some decisions about the key aspects of my life and participate actively in the decisions of my family. Some decisions reflect what I value and others are taken, mainly, to please others or avoid negative consequences.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/50-3.png",
+                        "description": "I do not participate in key aspects of my life or my family. I do as I am told and my decisions are made to please others or avoid negative consequences.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        },
+        "addiction": {
+            "type": "array",
+            "title": {
+                "es": "Addictive Behavior"
+            },
+            "shortName": {
+                "es": "Addiction"
+            },
+            "description": {
+                "es": "We don't have addictive behavior"
+            },
+            "items": {
+                "type": "object",
+                "enum": [
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/51-1.png",
+                        "description": "No one in my household has ever displayed behaviors such as compulsive gambling, sex, work, running, shopping or eating disorders, or struggled with drugs of any kind. Or a member has displayed such behavior in the past but has overcome it (no relapse for at least a year).",
+                        "value": "GREEN"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/51-2.png",
+                        "description": "One or more members of my household has displayed some of the behaviors mentioned one or two times and sought treatment.",
+                        "value": "YELLOW"
+                    },
+                    {
+                        "url": "https://s3.us-east-2.amazonaws.com/fp-psp-images/usa/elmira/51-3.png",
+                        "description": "One or more members of my household either currently displays some of the behaviors in mentioned or has done so more than twice. These individuals may or may not have sought treatment.",
+                        "value": "RED"
+                    },
+                    {
+                        "url": "NONE",
+                        "description": "",
+                        "value": "NONE"
+                    }
+                ]
+            },
+            "uniqueItems": true
+        }
+    }
+}
