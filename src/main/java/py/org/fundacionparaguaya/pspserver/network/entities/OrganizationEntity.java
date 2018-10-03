@@ -59,10 +59,6 @@ public class OrganizationEntity {
     @JoinColumn(name = "application_id")
     private ApplicationEntity application;
 
-    @ManyToOne(targetEntity = GroupOrganizationEntity.class)
-    @JoinColumn(name = "group_organization_id")
-    private GroupOrganizationEntity group;
-
     @OneToMany(mappedBy = "organization")
     private List<SubOrganizationEntity> subOrganizations;
 
@@ -140,14 +136,6 @@ public class OrganizationEntity {
         this.logoUrl = logoUrl;
     }
 
-    public GroupOrganizationEntity getGroup() {
-        return group;
-    }
-
-    public void setGroup(GroupOrganizationEntity group) {
-        this.group = group;
-    }
-
     public List<SubOrganizationEntity> getSubOrganizations() {
         return subOrganizations;
     }
@@ -184,7 +172,6 @@ public class OrganizationEntity {
                 .add("country", country)
                 .add("information", information)
                 .add("application", application)
-                .add("group",group)
                 .toString();
     }
 

@@ -156,9 +156,14 @@ public class OrganizationServiceImpl implements OrganizationService {
                     List<SubOrganizationEntity> subOrganizations = subOrganizationRepository.findByOrganizationId(organizationDTO.getId());
 
                     List<Long> subOrganizationsIdList = subOrganizations.stream().map(x -> x.getSubOrganization().getId()).collect(Collectors.toList());
-                    List<Long> subOrganizationsIdListDTO = organizationDTO.getSubOrganizations().stream().map(x -> x.getId()).collect(Collectors.toList());
 
-                    // intersection between saved and not saved suborganizations
+                    List<Long> subOrganizationsIdListDTO = new ArrayList<>();
+                    if(organizationDTO.getSubOrganizations() != null)
+                    {
+                        subOrganizationsIdListDTO = organizationDTO.getSubOrganizations().stream().map(x -> x.getId()).collect(Collectors.toList());
+                    }
+
+                    // intersection between saved and not saved sub-organizations
                     List<Long> intersection = subOrganizationsIdList.stream()
                             .filter(subOrganizationsIdListDTO::contains)
                             .collect(Collectors.toList());
@@ -172,19 +177,19 @@ public class OrganizationServiceImpl implements OrganizationService {
                     }
 
                     // add sub-organizations
-                    for(OrganizationDTO orgDto : organizationDTO.getSubOrganizations()) {
+                    for(Long subOrgId : subOrganizationsIdListDTO) {
 
-                        if(!intersection.contains(orgDto.getId())) {
-                            if(!orgDto.getId().equals(organization.getId())) {
+                        if(!intersection.contains(subOrgId)) {
+                            if(!subOrgId.equals(organization.getId())) {
 
                                 SubOrganizationEntity subOrganizationEntity = new SubOrganizationEntity();
 
                                 subOrganizationEntity.setApplication(organization.getApplication());
                                 subOrganizationEntity.setCreatedDate(LocalDateTime.now());
-                                subOrganizationEntity.setDescription("Sub-organizations for".concat(organization.getName()));
+                                subOrganizationEntity.setDescription("Sub-organization for: ".concat(organization.getName()));
                                 subOrganizationEntity.setOrganization(organization);
 
-                                OrganizationEntity subOrg = organizationRepository.findById(orgDto.getId());
+                                OrganizationEntity subOrg = organizationRepository.findById(subOrgId);
                                 subOrganizationEntity.setSubOrganization(subOrg);
 
                                 subOrganizationRepository.save(subOrganizationEntity);
