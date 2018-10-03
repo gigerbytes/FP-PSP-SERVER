@@ -11,7 +11,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 
 @Entity
 @Table(name = "sub_organizations", schema = "ps_network")

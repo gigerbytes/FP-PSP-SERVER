@@ -121,7 +121,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         if (organizationDTO.getFile() != null) {
             ImageDTO imageDTO = ImageParser.parse(organizationDTO.getFile(),
-                                                    applicationProperties.getAws().getOrgsImageDirectory());
+                    applicationProperties.getAws().getOrgsImageDirectory());
             String generatedURL = imageUploadService.uploadImage(imageDTO);
             organization.setLogoUrl(generatedURL);
         }
@@ -142,11 +142,11 @@ public class OrganizationServiceImpl implements OrganizationService {
 
                     if (organizationDTO.getFile() != null) {
                         ImageDTO imageDTO = ImageParser.parse(organizationDTO.getFile(),
-                                                                applicationProperties.getAws().getOrgsImageDirectory());
+                                applicationProperties.getAws().getOrgsImageDirectory());
                         String generatedURL = imageUploadService.uploadImage(imageDTO);
                         if (generatedURL != null) {
                             imageUploadService.deleteImage(organization.getLogoUrl(),
-                                                            applicationProperties.getAws().getOrgsImageDirectory());
+                                    applicationProperties.getAws().getOrgsImageDirectory());
                             organization.setLogoUrl(generatedURL);
                         }
                     }
@@ -158,8 +158,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                     List<Long> subOrganizationsIdList = subOrganizations.stream().map(x -> x.getSubOrganization().getId()).collect(Collectors.toList());
 
                     List<Long> subOrganizationsIdListDTO = new ArrayList<>();
-                    if(organizationDTO.getSubOrganizations() != null)
-                    {
+                    if (organizationDTO.getSubOrganizations() != null) {
                         subOrganizationsIdListDTO = organizationDTO.getSubOrganizations().stream().map(x -> x.getId()).collect(Collectors.toList());
                     }
 
@@ -169,31 +168,31 @@ public class OrganizationServiceImpl implements OrganizationService {
                             .collect(Collectors.toList());
 
                     // delete sub-organizations
-                    for(SubOrganizationEntity sub : subOrganizations) {
+                    for (SubOrganizationEntity sub : subOrganizations) {
 
-                        if(!intersection.contains(sub.getSubOrganization().getId())) {
+                        if (!intersection.contains(sub.getSubOrganization().getId())) {
                             subOrganizationRepository.delete(sub);
                         }
                     }
 
                     // add sub-organizations
-                    for(Long subOrgId : subOrganizationsIdListDTO) {
+                    for (Long subOrgId : subOrganizationsIdListDTO) {
 
-                        if(!intersection.contains(subOrgId)) {
-                            if(!subOrgId.equals(organization.getId())) {
+                        if (!intersection.contains(subOrgId) && !subOrgId.equals(organization.getId())) {
 
-                                SubOrganizationEntity subOrganizationEntity = new SubOrganizationEntity();
 
-                                subOrganizationEntity.setApplication(organization.getApplication());
-                                subOrganizationEntity.setCreatedDate(LocalDateTime.now());
-                                subOrganizationEntity.setDescription("Sub-organization for: ".concat(organization.getName()));
-                                subOrganizationEntity.setOrganization(organization);
+                            SubOrganizationEntity subOrganizationEntity = new SubOrganizationEntity();
 
-                                OrganizationEntity subOrg = organizationRepository.findById(subOrgId);
-                                subOrganizationEntity.setSubOrganization(subOrg);
+                            subOrganizationEntity.setApplication(organization.getApplication());
+                            subOrganizationEntity.setCreatedDate(LocalDateTime.now());
+                            subOrganizationEntity.setDescription("Sub-organization for: ".concat(organization.getName()));
+                            subOrganizationEntity.setOrganization(organization);
 
-                                subOrganizationRepository.save(subOrganizationEntity);
-                            }
+                            OrganizationEntity subOrg = organizationRepository.findById(subOrgId);
+                            subOrganizationEntity.setSubOrganization(subOrg);
+
+                            subOrganizationRepository.save(subOrganizationEntity);
+
                         }
                     }
 
@@ -211,14 +210,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         OrganizationEntity organizationEntity = organizationRepository.findOne(organizationId);
 
-        if(organizationEntity != null) {
+        if (organizationEntity != null) {
 
             OrganizationDTO organizationDTO = organizationMapper.entityToDto(organizationEntity);
 
-            if(organizationEntity.getSubOrganizations() != null) {
+            if (organizationEntity.getSubOrganizations() != null) {
 
                 List<OrganizationDTO> subOrganizations = new ArrayList<>();
-                for(SubOrganizationEntity subOrganizationEntity: organizationEntity.getSubOrganizations()) {
+                for (SubOrganizationEntity subOrganizationEntity : organizationEntity.getSubOrganizations()) {
 
                     subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
                 }
@@ -228,9 +227,8 @@ public class OrganizationServiceImpl implements OrganizationService {
             }
 
             return organizationDTO;
-        }
-        else {
-            throw  new UnknownResourceException("Organization does not exist");
+        } else {
+            throw new UnknownResourceException("Organization does not exist");
         }
 
 //        return Optional.ofNullable(
@@ -383,11 +381,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
 
-
     @Override
     public List<OrganizationDTO> getOrganizationsByApplicationId(Long applicationId) {
         List<OrganizationEntity> organizations =
-                                            organizationRepository.findByApplicationIdAndIsActive(applicationId, true);
+                organizationRepository.findByApplicationIdAndIsActive(applicationId, true);
         return organizationMapper.entityListToDtoList(organizations);
     }
 }
