@@ -21,9 +21,11 @@ import py.org.fundacionparaguaya.pspserver.network.dtos.DashboardDTO;
 import py.org.fundacionparaguaya.pspserver.network.dtos.OrganizationDTO;
 import py.org.fundacionparaguaya.pspserver.network.entities.ApplicationEntity;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
+import py.org.fundacionparaguaya.pspserver.network.entities.SubOrganizationEntity;
 import py.org.fundacionparaguaya.pspserver.network.mapper.OrganizationMapper;
 import py.org.fundacionparaguaya.pspserver.network.repositories.ApplicationRepository;
 import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepository;
+import py.org.fundacionparaguaya.pspserver.network.repositories.SubOrganizationRepository;
 import py.org.fundacionparaguaya.pspserver.network.services.OrganizationService;
 import py.org.fundacionparaguaya.pspserver.security.dtos.UserDetailsDTO;
 import py.org.fundacionparaguaya.pspserver.security.services.UserService;
@@ -39,10 +41,13 @@ import py.org.fundacionparaguaya.pspserver.system.dtos.ImageDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageParser;
 import py.org.fundacionparaguaya.pspserver.system.services.ImageUploadService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.springframework.data.jpa.domain.Specifications.where;
@@ -75,12 +80,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final UserService userService;
 
+    private final SubOrganizationRepository subOrganizationRepository;
+
     public OrganizationServiceImpl(OrganizationRepository organizationRepository,
                                    ApplicationRepository applicationRepository, OrganizationMapper organizationMapper,
                                    FamilyService familyService, SnapshotEconomicRepository snapshotEconomicRepo,
                                    SnapshotIndicatorMapper indicatorMapper, SnapshotServiceImpl snapshotServiceImpl,
                                    ImageUploadService imageUploadService, ApplicationProperties applicationProperties,
-                                   UserService userService) {
+                                   UserService userService, SubOrganizationRepository subOrganizationRepository) {
         this.organizationRepository = organizationRepository;
         this.applicationRepository = applicationRepository;
         this.organizationMapper = organizationMapper;
@@ -91,6 +98,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.imageUploadService = imageUploadService;
         this.applicationProperties = applicationProperties;
         this.userService = userService;
+        this.subOrganizationRepository = subOrganizationRepository;
     }
 
     @Override
@@ -142,6 +150,48 @@ public class OrganizationServiceImpl implements OrganizationService {
                             organization.setLogoUrl(generatedURL);
                         }
                     }
+
+
+                    // list all sub-organizations for this organization
+                    List<SubOrganizationEntity> subOrganizations = subOrganizationRepository.findByOrganizationId(organizationDTO.getId());
+
+                    List<Long> subOrganizationsIdList = subOrganizations.stream().map(x -> x.getSubOrganization().getId()).collect(Collectors.toList());
+                    List<Long> subOrganizationsIdListDTO = organizationDTO.getSubOrganizations().stream().map(x -> x.getId()).collect(Collectors.toList());
+
+                    // intersection between saved and not saved suborganizations
+                    List<Long> intersection = subOrganizationsIdList.stream()
+                            .filter(subOrganizationsIdListDTO::contains)
+                            .collect(Collectors.toList());
+
+                    // delete sub-organizations
+                    for(SubOrganizationEntity sub : subOrganizations) {
+
+                        if(!intersection.contains(sub.getSubOrganization().getId())) {
+                            subOrganizationRepository.delete(sub);
+                        }
+                    }
+
+                    // add sub-organizations
+                    for(OrganizationDTO orgDto : organizationDTO.getSubOrganizations()) {
+
+                        if(!intersection.contains(orgDto.getId())) {
+                            if(!orgDto.getId().equals(organization.getId())) {
+
+                                SubOrganizationEntity subOrganizationEntity = new SubOrganizationEntity();
+
+                                subOrganizationEntity.setApplication(organization.getApplication());
+                                subOrganizationEntity.setCreatedDate(LocalDateTime.now());
+                                subOrganizationEntity.setDescription("Sub-organizations for".concat(organization.getName()));
+                                subOrganizationEntity.setOrganization(organization);
+
+                                OrganizationEntity subOrg = organizationRepository.findById(orgDto.getId());
+                                subOrganizationEntity.setSubOrganization(subOrg);
+
+                                subOrganizationRepository.save(subOrganizationEntity);
+                            }
+                        }
+                    }
+
                     LOG.debug("Changed Information for Organization: {}", organization);
                     return organizationRepository.save(organization);
                 })
@@ -153,10 +203,35 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationDTO getOrganizationById(Long organizationId) {
         checkArgument(organizationId > 0, "Argument was %s but expected nonnegative", organizationId);
 
-        return Optional.ofNullable(
-                organizationRepository.findOne(organizationId))
-                .map(organizationMapper::entityToDto)
-                .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
+
+        OrganizationEntity organizationEntity = organizationRepository.findOne(organizationId);
+
+        if(organizationEntity != null) {
+
+            OrganizationDTO organizationDTO = organizationMapper.entityToDto(organizationEntity);
+
+            if(organizationEntity.getSubOrganizations() != null) {
+
+                List<OrganizationDTO> subOrganizations = new ArrayList<>();
+                for(SubOrganizationEntity subOrganizationEntity: organizationEntity.getSubOrganizations()) {
+
+                    subOrganizations.add(organizationMapper.entityToDto(subOrganizationEntity.getSubOrganization()));
+                }
+
+                // set the sub-organizations dto list
+                organizationDTO.setSubOrganizations(subOrganizations);
+            }
+
+            return organizationDTO;
+        }
+        else {
+            throw  new UnknownResourceException("Organization does not exist");
+        }
+
+//        return Optional.ofNullable(
+//                organizationRepository.findOne(organizationId))
+//                .map(organizationMapper::entityToDto)
+//                .orElseThrow(() -> new UnknownResourceException("Organization does not exist"));
     }
 
 

@@ -14,30 +14,27 @@ import java.time.ZoneId;
 import java.util.List;
 
 @Entity
-@Table(name = "groups_organizations", schema = "ps_network")
-public class GroupOrganizationEntity {
+@Table(name = "sub_organizations", schema = "ps_network")
+public class SubOrganizationEntity {
 
     @Id
     @GenericGenerator(
-            name = "groupsOrganizationsSequenceGenerator",
+            name = "subOrganizationsSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
                     @Parameter(name = SequenceStyleGenerator.SCHEMA,
                             value = "ps_network"),
                     @Parameter(name = SequenceStyleGenerator.SEQUENCE_PARAM,
-                            value = "organizations_id_seq"),
+                            value = "sub_organizations_id_seq"),
                     @Parameter(name = SequenceStyleGenerator.INITIAL_PARAM,
                             value = "1"),
                     @Parameter(name = SequenceStyleGenerator.INCREMENT_PARAM,
                             value = "1")
             }
     )
-    @GeneratedValue(generator = "groupsOrganizationsSequenceGenerator")
+    @GeneratedValue(generator = "subOrganizationsSequenceGenerator")
     @Column(name = "id")
     private Long id;
-
-    @NotNull
-    private String name;
 
     @NotNull
     private String description;
@@ -46,8 +43,9 @@ public class GroupOrganizationEntity {
     @JoinColumn(name = "organization_id")
     private OrganizationEntity organization;
 
-    @OneToMany(mappedBy = "group")
-    private List<OrganizationEntity> organizations;
+    @ManyToOne(targetEntity = OrganizationEntity.class)
+    @JoinColumn(name = "sub_organization_id")
+    private OrganizationEntity subOrganization;
 
     @Column(name = "created_date")
     @Convert(converter = LocalDateTimeConverter.class)
@@ -65,14 +63,6 @@ public class GroupOrganizationEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -80,7 +70,6 @@ public class GroupOrganizationEntity {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     public OrganizationEntity getOrganization() {
         return organization;
@@ -90,12 +79,12 @@ public class GroupOrganizationEntity {
         this.organization = organization;
     }
 
-    public List<OrganizationEntity> getOrganizations() {
-        return organizations;
+    public OrganizationEntity getSubOrganization() {
+        return subOrganization;
     }
 
-    public void setOrganizations(List<OrganizationEntity> organizations) {
-        this.organizations = organizations;
+    public void setSubOrganization(OrganizationEntity subOrganization) {
+        this.subOrganization = subOrganization;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -127,7 +116,7 @@ public class GroupOrganizationEntity {
         if (id == null || obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        GroupOrganizationEntity toCompare = (GroupOrganizationEntity) obj;
+        SubOrganizationEntity toCompare = (SubOrganizationEntity) obj;
         return id.equals(toCompare.id);
     }
 
@@ -140,13 +129,13 @@ public class GroupOrganizationEntity {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
-                .add("name", name)
                 .add("description", description)
                 .add("organization", organization)
+                .add("application",application)
                 .toString();
     }
 
-    public static GroupOrganizationEntity of() {
-        return new GroupOrganizationEntity();
+    public static SubOrganizationEntity of() {
+        return new SubOrganizationEntity();
     }
 }
