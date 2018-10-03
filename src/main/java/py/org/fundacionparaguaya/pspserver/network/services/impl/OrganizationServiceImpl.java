@@ -41,7 +41,6 @@ import py.org.fundacionparaguaya.pspserver.system.dtos.ImageDTO;
 import py.org.fundacionparaguaya.pspserver.system.dtos.ImageParser;
 import py.org.fundacionparaguaya.pspserver.system.services.ImageUploadService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,9 +50,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.springframework.data.jpa.domain.Specifications.where;
-import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.byFilter;
-import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.byLoggedUser;
-import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.isActive;
+import static py.org.fundacionparaguaya.pspserver.network.specifications.OrganizationSpecification.*;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
