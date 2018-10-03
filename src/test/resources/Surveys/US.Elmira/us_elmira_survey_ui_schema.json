@@ -2,15 +2,15 @@
     "properties": {},
 
     "ui:custom:fields": {
-
+        "familyUbication": {
+            "ui:field": "gmap"
+        },
         "birthdate": {
             "ui:field": "date"
         },
-
         "manyPeopleHousehold":{
             "ui:field": "numberFormat"
         },
-
         "income": {
             "ui:field": "gallery"
         },
@@ -189,6 +189,7 @@
         "manyPeopleHousehold",
         "educationPersonMostStudied",
         "employmentStatusPrimary",
+        "familyUbication",
 
         "income",
         "familySavings",
@@ -267,7 +268,8 @@
         "familyCar",
         "manyPeopleHousehold",
         "educationPersonMostStudied",
-        "employmentStatusPrimary"
+        "employmentStatusPrimary",
+        "familyUbication"
     ],
 
     "ui:group:indicators": [

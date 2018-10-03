@@ -820,6 +820,16 @@
                 "None"
             ]
         },
+        "familyUbication": {
+            "type": "string",
+            "title": {
+                "es": "Please select the geographic location of your household"
+            },
+            "shortName": {
+                "es": "Family Location"
+            },
+            "default": "42.095726, -76.815604"
+        },
 
 
         "income": {
