@@ -21,6 +21,7 @@ import py.org.fundacionparaguaya.pspserver.families.entities.FamilyEntity;
 import py.org.fundacionparaguaya.pspserver.families.services.FamilyService;
 import py.org.fundacionparaguaya.pspserver.network.dtos.*;
 import py.org.fundacionparaguaya.pspserver.network.entities.*;
+import py.org.fundacionparaguaya.pspserver.network.mapper.ApplicationMapper;
 import py.org.fundacionparaguaya.pspserver.network.mapper.GroupOrganizationMapper;
 import py.org.fundacionparaguaya.pspserver.network.mapper.OrganizationMapper;
 import py.org.fundacionparaguaya.pspserver.network.repositories.ApplicationRepository;
@@ -60,14 +61,19 @@ public class GroupOrganizationServiceImpl implements GroupOrganizationService {
     private GroupOrganizationMapper groupOrganizationMapper;
     private OrganizationRepository organizationRepository;
     private OrganizationMapper organizationMapper;
+    private ApplicationRepository applicationRepository;
+    private ApplicationMapper applicationMapper;
 
     public GroupOrganizationServiceImpl(GroupOrganizationRepository groupOrganizationRepository, GroupOrganizationMapper groupOrganizationMapper,
-                                        OrganizationRepository organizationRepository,  OrganizationMapper organizationMapper) {
+                                        OrganizationRepository organizationRepository, OrganizationMapper organizationMapper, ApplicationRepository applicationRepository,
+                                        ApplicationMapper applicationMapper) {
 
         this.groupOrganizationRepository = groupOrganizationRepository;
         this.groupOrganizationMapper = groupOrganizationMapper;
         this.organizationRepository = organizationRepository;
         this.organizationMapper = organizationMapper;
+        this.applicationRepository = applicationRepository;
+        this.applicationMapper = applicationMapper;
     }
 
     @Override
@@ -85,8 +91,13 @@ public class GroupOrganizationServiceImpl implements GroupOrganizationService {
         GroupOrganizationEntity group = new GroupOrganizationEntity();
         BeanUtils.copyProperties(groupOrganizationDTO, group);
 
+        // organization reference
         OrganizationEntity organization = organizationRepository.findById(groupOrganizationDTO.getOrganization().getId());
         group.setOrganization(organization);
+
+        // application reference
+        ApplicationEntity applicationEntity = applicationRepository.findById(groupOrganizationDTO.getApplication().getId());
+        group.setApplication(applicationEntity);
 
         GroupOrganizationEntity master = groupOrganizationRepository.save(group);
 
@@ -126,13 +137,13 @@ public class GroupOrganizationServiceImpl implements GroupOrganizationService {
 
         List<OrganizationDTO> organizations = new ArrayList<>();
 
-        for(OrganizationEntity org : group.getOrganizations())
-        {
+        for (OrganizationEntity org : group.getOrganizations()) {
             organizations.add(organizationMapper.entityToDto(org));
         }
 
         groupDto.setOrganizations(organizations);
         groupDto.setOrganization(organizationMapper.entityToDto(organizationRepository.findById(group.getOrganization().getId())));
+        groupDto.setApplication(applicationMapper.entityToDto(applicationRepository.findById(group.getApplication().getId())));
 
         return groupDto;
     }

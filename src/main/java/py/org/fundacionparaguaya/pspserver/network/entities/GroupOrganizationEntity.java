@@ -53,6 +53,10 @@ public class GroupOrganizationEntity {
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdDate;
 
+    @ManyToOne(targetEntity = ApplicationEntity.class)
+    @JoinColumn(name = "application_id")
+    private ApplicationEntity application;
+
     public Long getId() {
         return id;
     }
@@ -100,6 +104,14 @@ public class GroupOrganizationEntity {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public ApplicationEntity getApplication() {
+        return application;
+    }
+
+    public void setApplication(ApplicationEntity application) {
+        this.application = application;
     }
 
     @PrePersist

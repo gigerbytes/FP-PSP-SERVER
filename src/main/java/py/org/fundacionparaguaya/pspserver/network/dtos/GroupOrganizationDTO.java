@@ -22,16 +22,19 @@ public class GroupOrganizationDTO implements Serializable {
 
     private List<OrganizationDTO> organizations;
 
+    private ApplicationDTO application;
+
 
     public GroupOrganizationDTO() {
     }
 
-    public GroupOrganizationDTO(Long id, @NotNull String name, String description, OrganizationDTO organization, List<OrganizationDTO> organizations) {
+    public GroupOrganizationDTO(Long id, @NotNull String name, String description, OrganizationDTO organization, List<OrganizationDTO> organizations, ApplicationDTO application) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.organization = organization;
         this.organizations = organizations;
+        this.application = application;
     }
 
 
@@ -80,12 +83,21 @@ public class GroupOrganizationDTO implements Serializable {
         this.organizations = organizations;
     }
 
+    public ApplicationDTO getApplication() {
+        return application;
+    }
+
+    public void setApplication(ApplicationDTO application) {
+        this.application = application;
+    }
+
     public static class Builder {
         private Long id;
         private String name;
         private String description;
         private OrganizationDTO organization;
         private List<OrganizationDTO> organizations;
+        private ApplicationDTO application;
 
         public GroupOrganizationDTO.Builder id(Long groupOrganizationId) {
             this.id = groupOrganizationId; return this;
@@ -107,9 +119,13 @@ public class GroupOrganizationDTO implements Serializable {
             this.organizations = organizations; return this;
         }
 
+        public GroupOrganizationDTO.Builder application(ApplicationDTO application) {
+            this.application = application; return this;
+        }
+
         public GroupOrganizationDTO build() {
             return new GroupOrganizationDTO(
-                    id, name,  description, organization, organizations);
+                    id, name,  description, organization, organizations,application);
         }
     }
 
@@ -123,6 +139,7 @@ public class GroupOrganizationDTO implements Serializable {
                 .add("id", id).add("name", name)
                 .add("description", description)
                 .add("organization", organization)
+                .add("application",application)
                 .toString();
     }
 }

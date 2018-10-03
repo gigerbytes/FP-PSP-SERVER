@@ -5,8 +5,10 @@ CREATE TABLE ps_network.groups_organizations
     description character varying(50),
     created_date date NOT NULL,
     organization_id bigint NOT NULL,
+    application_id bigint NOT NULL,
     constraint  groups_organizations_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_organization_id FOREIGN KEY (organization_id) REFERENCES ps_network.organizations (id)
+    CONSTRAINT fk_organization_id FOREIGN KEY (organization_id) REFERENCES ps_network.organizations (id),
+    CONSTRAINT fk_application_id FOREIGN KEY (application_id) REFERENCES ps_network.applications (id)
 );
 
 --CREATE SEQUENCE ps_network.groups_organizations_id_seq;
