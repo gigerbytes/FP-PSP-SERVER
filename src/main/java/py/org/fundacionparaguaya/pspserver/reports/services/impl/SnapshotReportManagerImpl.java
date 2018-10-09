@@ -1,5 +1,6 @@
 package py.org.fundacionparaguaya.pspserver.reports.services.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,6 +12,8 @@ import py.org.fundacionparaguaya.pspserver.families.entities.PersonEntity;
 import py.org.fundacionparaguaya.pspserver.families.repositories.FamilyRepository;
 import py.org.fundacionparaguaya.pspserver.families.specifications.FamilySpecification;
 import py.org.fundacionparaguaya.pspserver.network.entities.OrganizationEntity;
+import py.org.fundacionparaguaya.pspserver.network.entities.SubOrganizationEntity;
+import py.org.fundacionparaguaya.pspserver.network.repositories.OrganizationRepository;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.FamilySnapshotDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.OrganizationFamilyDTO;
 import py.org.fundacionparaguaya.pspserver.reports.dtos.ReportDTO;
@@ -64,18 +67,21 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
 
     private final I18n i18n;
 
+    private final OrganizationRepository organizationRepository;
+
     public SnapshotReportManagerImpl(FamilyRepository familyRepository,
                                      FamilyDTOMapper familyReportMapper,
                                      SnapshotEconomicRepository snapshotRepository,
                                      SnapshotIndicatorMapper snapshotMapper,
                                      SurveyRepository surveyRepository,
-                                     I18n i18n) {
+                                     I18n i18n, OrganizationRepository organizationRepository) {
         this.familyRepository = familyRepository;
         this.familyReportMapper = familyReportMapper;
         this.snapshotRepository = snapshotRepository;
         this.snapshotMapper = snapshotMapper;
         this.surveyRepository = surveyRepository;
         this.i18n = i18n;
+        this.organizationRepository = organizationRepository;
     }
 
     @Override
@@ -300,6 +306,22 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                     .createdAtBetween2Dates(filters.getDateFrom(),
                             filters.getDateTo());
 
+
+            // diegotorres: this is for the multiple project feature
+            if(StringUtils.equals("all",filters.getInclude()) && filters.getOrganizationId() != null
+                    && filters.getOrganizationId().size()==1) {
+
+                OrganizationEntity organizationEntity = organizationRepository.findById(filters.getOrganizationId().get(0));
+
+                if(organizationEntity.getSubOrganizations() != null && !organizationEntity.getSubOrganizations().isEmpty()){
+
+                    for(SubOrganizationEntity subOrganization : organizationEntity.getSubOrganizations()) {
+
+                        filters.getOrganizationId().add(subOrganization.getSubOrganization().getId());
+                    }
+                }
+            }
+
             snapshots = snapshotRepository.findAll(
                     where(SnapshotEconomicSpecification.forSurvey(filters.getSurveyId()))
                             .and(SnapshotEconomicSpecification.byApplication(filters.getApplicationId()))
@@ -379,6 +401,8 @@ public class SnapshotReportManagerImpl implements SnapshotReportManager {
                 if (snapshot.getFamily().getOrganization() != null) {
                     data.put(i18n.translate("snapshot.report.header.organizationName"),
                             snapshot.getFamily().getOrganization().getName());
+
+                    data.put(i18n.translate("snapshot.report.header.familyCode"),"ORG. NAME: "+snapshot.getFamily().getOrganization().getName() + ". FAMILY CODE: " + snapshot.getFamily().getCode());
                 }
             }
             data.put(i18n.translate("snapshot.report.header.createdAt"), snapshot.getCreatedAtLocalDateString());
